@@ -16,120 +16,120 @@ datasource db {
 
 /// Tipos de documento de identidad válidos en Perú
 enum DocumentType {
-  DNI       @map("dni")       /// Documento Nacional de Identidad
-  RUC       @map("ruc")       /// Registro Único de Contribuyentes
-  CE        @map("ce")        /// Carné de Extranjería
-  PASSPORT  @map("passport")  /// Pasaporte
+  DNI       /// Documento Nacional de Identidad
+  RUC       /// Registro Único de Contribuyentes
+  CE        /// Carné de Extranjería
+  PASSPORT  /// Pasaporte
 }
 
 /// Estados generales para entidades del sistema
 enum EntityStatus {
-  ACTIVE    @map("active")    /// Activo
-  INACTIVE  @map("inactive")  /// Inactivo
-  SUSPENDED @map("suspended") /// Suspendido
-  DELETED   @map("deleted")   /// Eliminado
+  ACTIVE    /// Activo
+  INACTIVE  /// Inactivo
+  SUSPENDED /// Suspendido
+  DELETED   /// Eliminado
 }
 
 /// Roles de usuario en el sistema
 enum UserRole {
-  ADMIN       @map("admin")       /// Administrador
-  SELLER      @map("seller")      /// Vendedor
-  WAREHOUSE   @map("warehouse")   /// Almacén
-  MANAGER     @map("manager")     /// Gerente
-  CASHIER     @map("cashier")     /// Cajero
+  ADMIN       /// Administrador
+  SELLER      /// Vendedor
+  WAREHOUSE   /// Almacén
+  MANAGER     /// Gerente
+  CASHIER     /// Cajero
 }
 
 /// Unidades de medida para productos
 enum UnitOfMeasure {
-  UNIT      @map("unit")      /// Unidad
-  KILOGRAM  @map("kilogram")  /// Kilogramo
-  LITER     @map("liter")     /// Litro
-  METER     @map("meter")     /// Metro
-  BOX       @map("box")       /// Caja
-  PACK      @map("pack")      /// Paquete
-  DOZEN     @map("dozen")     /// Docena
+  UNIT      /// Unidad
+  KILOGRAM  /// Kilogramo
+  LITER     /// Litro
+  METER     /// Metro
+  BOX       /// Caja
+  PACK      /// Paquete
+  DOZEN     /// Docena
 }
 
 /// Tipos de comprobantes de venta
 enum VoucherType {
-  RECEIPT     @map("receipt")     /// Boleta de venta
-  INVOICE     @map("invoice")     /// Factura
-  SALE_NOTE   @map("sale_note")   /// Nota de venta
-  PROFORMA    @map("proforma")    /// Proforma
-  CREDIT_NOTE @map("credit_note") /// Nota de crédito
-  DEBIT_NOTE  @map("debit_note")  /// Nota de débito
+  RECEIPT     /// Boleta de venta
+  INVOICE     /// Factura
+  SALE_NOTE   /// Nota de venta
+  PROFORMA    /// Proforma
+  CREDIT_NOTE /// Nota de crédito
+  DEBIT_NOTE  /// Nota de débito
 }
 
 /// Métodos de pago aceptados
 enum PaymentMethod {
-  CASH      @map("cash")      /// Efectivo
-  CARD      @map("card")      /// Tarjeta
-  YAPE      @map("yape")      /// Yape
-  PLIN      @map("plin")      /// Plin
-  TRANSFER  @map("transfer")  /// Transferencia bancaria
+  CASH      /// Efectivo
+  CARD      /// Tarjeta
+  YAPE      /// Yape
+  PLIN      /// Plin
+  TRANSFER  /// Transferencia bancaria
 }
 
 /// Estados de ventas
 enum SaleStatus {
-  PENDING   @map("pending")   /// Pendiente
-  COMPLETED @map("completed") /// Completada
-  CANCELLED @map("cancelled") /// Cancelada
-  REFUNDED  @map("refunded")  /// Reembolsada
+  PENDING   /// Pendiente
+  COMPLETED /// Completada
+  CANCELLED /// Cancelada
+  REFUNDED  /// Reembolsada
 }
 
 /// Estados de compras
 enum PurchaseStatus {
-  PENDING    @map("pending")    /// Pendiente
-  REGISTERED @map("registered") /// Registrada
-  CANCELLED  @map("cancelled")  /// Cancelada
-  RECEIVED   @map("received")   /// Recibida
+  PENDING    /// Pendiente
+  REGISTERED /// Registrada
+  CANCELLED  /// Cancelada
+  RECEIVED   /// Recibida
 }
 
 /// Tipos de documentos de compra
 enum PurchaseDocumentType {
-  INVOICE @map("invoice") /// Factura
-  RECEIPT @map("receipt") /// Recibo
-  NOTE    @map("note")    /// Nota
-  ORDER   @map("order")   /// Orden de compra
+  INVOICE /// Factura
+  RECEIPT /// Recibo
+  NOTE    /// Nota
+  ORDER   /// Orden de compra
 }
 
 /// Estados de SUNAT
 enum SunatStatus {
-  PENDING  @map("pending")  /// Pendiente
-  ACCEPTED @map("accepted") /// Aceptado
-  REJECTED @map("rejected") /// Rechazado
-  ERROR    @map("error")    /// Error
+  PENDING  /// Pendiente
+  ACCEPTED /// Aceptado
+  REJECTED /// Rechazado
+  ERROR    /// Error
 }
 
 /// Ambientes de SUNAT
 enum SunatEnvironment {
-  PRODUCTION @map("production") /// Producción
-  TEST       @map("test")       /// Pruebas
+  PRODUCTION /// Producción
+  TEST       /// Pruebas
 }
 
 /// Tipos de movimientos de inventario
 enum MovementType {
-  ENTRY      @map("entry")      /// Entrada
-  EXIT       @map("exit")       /// Salida
-  ADJUSTMENT @map("adjustment") /// Ajuste
-  RETURN     @map("return")     /// Devolución
-  TRANSFER   @map("transfer")   /// Transferencia
-  LOSS       @map("loss")       /// Pérdida
+  ENTRY      /// Entrada
+  EXIT       /// Salida
+  ADJUSTMENT /// Ajuste
+  RETURN     /// Devolución
+  TRANSFER   /// Transferencia
+  LOSS       /// Pérdida
 }
 
 /// Tipos de referencia para movimientos
 enum ReferenceType {
-  PURCHASE @map("purchase") /// Compra
-  SALE     @map("sale")     /// Venta
-  TRANSFER @map("transfer") /// Transferencia
-  RETURN   @map("return")   /// Devolución
+  PURCHASE /// Compra
+  SALE     /// Venta
+  TRANSFER /// Transferencia
+  RETURN   /// Devolución
 }
 
 /// Estados de caja registradora
 enum CashRegisterStatus {
-  OPEN   @map("open")   /// Abierta
-  CLOSED @map("closed") /// Cerrada
-  LOCKED @map("locked") /// Bloqueada
+  OPEN   /// Abierta
+  CLOSED /// Cerrada
+  LOCKED /// Bloqueada
 }
 
 // ============================================
