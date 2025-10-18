@@ -44,6 +44,7 @@ export class SupplierController {
   @ApiOperation({ summary: 'Crear un nuevo proveedor con persona automáticamente' })
   @ApiResponse({ status: 201, description: 'Proveedor y persona creados exitosamente', type: SupplierWithPersonResponseDto })
   @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
+  @ApiResponse({ status: 404, description: 'Tienda no encontrada' })
   @ApiResponse({ status: 409, description: 'Ya existe una persona con este documento' })
   async createSupplierWithPerson(
     @Body() createSupplierWithPersonDto: CreateSupplierWithPersonDto

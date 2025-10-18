@@ -44,6 +44,7 @@ export class CustomerController {
   @ApiOperation({ summary: 'Crear un nuevo cliente con persona automáticamente' })
   @ApiResponse({ status: 201, description: 'Cliente y persona creados exitosamente', type: CustomerWithPersonResponseDto })
   @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
+  @ApiResponse({ status: 404, description: 'Tienda no encontrada' })
   @ApiResponse({ status: 409, description: 'Ya existe una persona con este documento' })
   async createCustomerWithPerson(
     @Body() createCustomerWithPersonDto: CreateCustomerWithPersonDto
