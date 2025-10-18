@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Patch,
   Delete,
   Body,
   Param,
@@ -69,8 +70,8 @@ export class PersonController {
     return this.personService.listPersons(query);
   }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Actualizar datos de una persona' })
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar datos de una persona (actualización parcial)' })
   @ApiParam({ name: 'id', description: 'ID único de la persona', type: 'string' })
   @ApiResponse({ status: 200, description: 'Persona actualizada exitosamente', type: PersonResponseDto })
   @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
