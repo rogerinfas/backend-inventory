@@ -79,3 +79,44 @@ export class InvalidStatusChangeError extends DomainError {
     super(`No se puede cambiar el estado de ${currentStatus} a ${newStatus}`);
   }
 }
+
+// Store specific errors
+export class StoreNotFoundError extends DomainError {
+  readonly code = 'STORE_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Tienda con ID ${id} no encontrada`);
+  }
+}
+
+export class StoreAlreadyExistsError extends DomainError {
+  readonly code = 'STORE_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(field: string, value: string) {
+    super(`Ya existe una tienda con ${field}: ${value}`);
+  }
+}
+
+export class StoreDeletedError extends DomainError {
+  readonly code = 'STORE_DELETED';
+  readonly statusCode = 410;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. La tienda con ID ${id} está eliminada`);
+  }
+}
+
+export class InvalidRucError extends DomainError {
+  readonly code = 'INVALID_RUC';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(ruc: string) {
+    super(`RUC inválido: ${ruc}. Debe tener exactamente 11 dígitos`);
+  }
+}
