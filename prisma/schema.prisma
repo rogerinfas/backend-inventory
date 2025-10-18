@@ -48,7 +48,77 @@ model Person {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
   
+  // Relations
+  suppliers       Supplier[]
+  customers       Customer[]
+  //users           User[]
+  
   @@index([documentNumber])
   @@index([status])
   @@map("persons")
+}
+
+/// Gestión de tiendas/empresas
+model Store {
+  id                String   @id @default(uuid())
+  businessName      String   @map("business_name")
+  ruc               String   @unique
+  legalName         String   @map("legal_name")
+  address           String?
+  phone             String?
+  email             String?
+  logoUrl           String?  @map("logo_url")
+  status            EntityStatus @default(ACTIVE)
+  registeredAt      DateTime @default(now()) @map("registered_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  //users             User[]
+  //products          Product[]
+  suppliers         Supplier[]
+  //purchases         Purchase[]
+  customers         Customer[]
+  //sales             Sale[]
+  //voucherSeries     VoucherSeries[]
+  //sunatConfig       SunatConfig?
+  //cashRegisters     CashRegister[]
+
+  @@index([status])
+  @@map("stores")
+}
+
+/// Gestión de clientes
+model Customer {
+  id              String   @id @default(uuid())
+  storeId         String   @map("store_id")
+  personId        String   @map("person_id")
+  status          EntityStatus @default(ACTIVE)
+  registeredAt    DateTime @default(now()) @map("registered_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store           Store    @relation(fields: [storeId], references: [id])
+  person          Person   @relation(fields: [personId], references: [id])
+  //sales           Sale[]
+
+  @@index([status])
+  @@map("customers")
+}
+
+/// Gestión de proveedores
+model Supplier {
+  id            String   @id @default(uuid())
+  storeId       String   @map("store_id")
+  personId      String   @map("person_id")
+  status        EntityStatus @default(ACTIVE)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store         Store    @relation(fields: [storeId], references: [id])
+  person        Person   @relation(fields: [personId], references: [id])
+  //purchases     Purchase[]
+
+  @@index([status])
+  @@map("suppliers")
 }

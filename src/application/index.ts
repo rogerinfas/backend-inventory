@@ -1,6 +1,5 @@
 // DTOs
-export * from './dto/person';
-export * from './dto/error';
+export * from './dto';
 
 // Errors
 export * from './errors';
@@ -11,7 +10,7 @@ export * from './errors';
 export * from './mappers';
 
 // Use Cases
-export * from './use-cases/person';
+export * from './use-cases';
 
 // Services
 export * from './services';
