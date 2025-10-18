@@ -6,7 +6,7 @@ import { EntityStatus } from '../../../domain/enums/entity-status.enum';
 
 export class UserQueryDto {
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El ID de la tienda debe ser una cadena de texto' })
   @ApiProperty({ 
     description: 'ID de la tienda', 
     required: false,
@@ -15,7 +15,7 @@ export class UserQueryDto {
   storeId?: string;
 
   @IsOptional()
-  @IsEnum(UserRole)
+  @IsEnum(UserRole, { message: 'El rol debe ser ADMIN, SELLER, WAREHOUSE, MANAGER o CASHIER' })
   @ApiProperty({ 
     enum: UserRole, 
     description: 'Rol del usuario', 
@@ -25,7 +25,7 @@ export class UserQueryDto {
   role?: UserRole;
 
   @IsOptional()
-  @IsEnum(EntityStatus)
+  @IsEnum(EntityStatus, { message: 'El estado debe ser ACTIVE, INACTIVE, SUSPENDED o DELETED' })
   @ApiProperty({ 
     enum: EntityStatus, 
     description: 'Estado del usuario', 
@@ -35,7 +35,7 @@ export class UserQueryDto {
   status?: EntityStatus;
 
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El término de búsqueda debe ser una cadena de texto' })
   @ApiProperty({ 
     description: 'Término de búsqueda (nombre, email)', 
     required: false,
@@ -45,8 +45,8 @@ export class UserQueryDto {
 
   @IsOptional()
   @Type(() => Number)
-  @IsNumber()
-  @Min(1)
+  @IsNumber({}, { message: 'El número de página debe ser un número' })
+  @Min(1, { message: 'El número de página debe ser mayor a 0' })
   @ApiProperty({ 
     description: 'Número de página', 
     required: false, 
@@ -58,9 +58,9 @@ export class UserQueryDto {
 
   @IsOptional()
   @Type(() => Number)
-  @IsNumber()
-  @Min(1)
-  @Max(100)
+  @IsNumber({}, { message: 'El límite debe ser un número' })
+  @Min(1, { message: 'El límite debe ser mayor a 0' })
+  @Max(100, { message: 'El límite no puede exceder 100' })
   @ApiProperty({ 
     description: 'Elementos por página', 
     required: false, 
@@ -72,7 +72,7 @@ export class UserQueryDto {
   limit?: number = 10;
 
   @IsOptional()
-  @IsEnum(['createdAt', 'updatedAt', 'lastLoginAt', 'email'])
+  @IsEnum(['createdAt', 'updatedAt', 'lastLoginAt', 'email'], { message: 'El campo de ordenamiento debe ser createdAt, updatedAt, lastLoginAt o email' })
   @ApiProperty({ 
     enum: ['createdAt', 'updatedAt', 'lastLoginAt', 'email'], 
     description: 'Campo por el cual ordenar', 
@@ -83,7 +83,7 @@ export class UserQueryDto {
   sortBy?: 'createdAt' | 'updatedAt' | 'lastLoginAt' | 'email' = 'createdAt';
 
   @IsOptional()
-  @IsEnum(['asc', 'desc'])
+  @IsEnum(['asc', 'desc'], { message: 'El orden debe ser asc o desc' })
   @ApiProperty({ 
     enum: ['asc', 'desc'], 
     description: 'Orden de clasificación', 

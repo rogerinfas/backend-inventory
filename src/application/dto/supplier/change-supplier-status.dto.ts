@@ -8,7 +8,7 @@ export class ChangeSupplierStatusDto {
     enum: EntityStatus,
     example: EntityStatus.ACTIVE,
   })
-  @IsEnum(EntityStatus, { message: 'Estado inválido' })
+  @IsEnum(EntityStatus, { message: 'El estado debe ser ACTIVE, INACTIVE, SUSPENDED o DELETED' })
   status: EntityStatus;
 
   @ApiPropertyOptional({
@@ -17,7 +17,7 @@ export class ChangeSupplierStatusDto {
     maxLength: 255,
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La razón debe ser una cadena de texto' })
   @MaxLength(255, { message: 'La razón no puede exceder 255 caracteres' })
   reason?: string;
 }

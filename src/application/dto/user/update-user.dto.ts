@@ -5,7 +5,7 @@ import { EntityStatus } from '../../../domain/enums/entity-status.enum';
 
 export class UpdateUserDto {
   @IsOptional()
-  @IsEnum(UserRole)
+  @IsEnum(UserRole, { message: 'El rol debe ser ADMIN, SELLER, WAREHOUSE, MANAGER o CASHIER' })
   @ApiProperty({ 
     enum: UserRole, 
     description: 'Rol del usuario', 
@@ -15,7 +15,7 @@ export class UpdateUserDto {
   role?: UserRole;
 
   @IsOptional()
-  @IsEnum(EntityStatus)
+  @IsEnum(EntityStatus, { message: 'El estado debe ser ACTIVE, INACTIVE, SUSPENDED o DELETED' })
   @ApiProperty({ 
     enum: EntityStatus, 
     description: 'Estado del usuario', 
@@ -25,9 +25,9 @@ export class UpdateUserDto {
   status?: EntityStatus;
 
   @IsOptional()
-  @IsString()
-  @MinLength(8)
-  @MaxLength(100)
+  @IsString({ message: 'La contraseña debe ser una cadena de texto' })
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
+  @MaxLength(100, { message: 'La contraseña no puede exceder 100 caracteres' })
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
     message: 'La contraseña debe contener al menos una letra minúscula, una mayúscula, un número y un carácter especial'
   })

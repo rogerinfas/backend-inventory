@@ -19,7 +19,7 @@ export class StoreQueryDto {
     maxLength: 100
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El término de búsqueda debe ser una cadena de texto' })
   @MaxLength(100, { message: 'El término de búsqueda no puede exceder 100 caracteres' })
   search?: string;
 
@@ -55,7 +55,7 @@ export class StoreQueryDto {
     example: 'businessName'
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El campo de ordenamiento debe ser una cadena de texto' })
   sortBy?: 'businessName' | 'legalName' | 'registeredAt' | 'updatedAt';
 
   @ApiPropertyOptional({
@@ -64,6 +64,6 @@ export class StoreQueryDto {
     example: 'asc'
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El orden debe ser una cadena de texto' })
   sortOrder?: 'asc' | 'desc';
 }

@@ -17,7 +17,7 @@ export class ChangeStoreStatusDto {
     maxLength: 200
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La razón debe ser una cadena de texto' })
   @MaxLength(200, { message: 'La razón no puede exceder 200 caracteres' })
   reason?: string;
 }

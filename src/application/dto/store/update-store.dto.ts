@@ -9,7 +9,7 @@ export class UpdateStoreDto {
     maxLength: 100
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El nombre comercial debe ser una cadena de texto' })
   @MinLength(2, { message: 'El nombre comercial debe tener al menos 2 caracteres' })
   @MaxLength(100, { message: 'El nombre comercial no puede exceder 100 caracteres' })
   businessName?: string;
@@ -21,7 +21,7 @@ export class UpdateStoreDto {
     maxLength: 100
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La razón social debe ser una cadena de texto' })
   @MinLength(2, { message: 'La razón social debe tener al menos 2 caracteres' })
   @MaxLength(100, { message: 'La razón social no puede exceder 100 caracteres' })
   legalName?: string;
@@ -32,7 +32,7 @@ export class UpdateStoreDto {
     maxLength: 200
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La dirección debe ser una cadena de texto' })
   @MaxLength(200, { message: 'La dirección no puede exceder 200 caracteres' })
   address?: string;
 
@@ -42,7 +42,7 @@ export class UpdateStoreDto {
     maxLength: 20
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El teléfono debe ser una cadena de texto' })
   @MaxLength(20, { message: 'El teléfono no puede exceder 20 caracteres' })
   phone?: string;
 
@@ -62,7 +62,7 @@ export class UpdateStoreDto {
     maxLength: 500
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La URL del logo debe ser una cadena de texto' })
   @MaxLength(500, { message: 'La URL del logo no puede exceder 500 caracteres' })
   logoUrl?: string;
 }

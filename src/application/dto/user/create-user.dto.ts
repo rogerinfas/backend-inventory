@@ -3,30 +3,30 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../../../domain/enums/user-role.enum';
 
 export class CreateUserDto {
-  @IsUUID()
+  @IsUUID('4', { message: 'El ID de la tienda debe ser un UUID válido' })
   @ApiProperty({ 
     description: 'ID de la tienda',
     example: '550e8400-e29b-41d4-a716-446655440000'
   })
   storeId: string;
 
-  @IsUUID()
+  @IsUUID('4', { message: 'El ID de la persona debe ser un UUID válido' })
   @ApiProperty({ 
     description: 'ID de la persona',
     example: '123e4567-e89b-12d3-a456-426614174000'
   })
   personId: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'El formato del correo electrónico no es válido' })
   @ApiProperty({ 
     description: 'Correo electrónico',
     example: 'usuario@ejemplo.com'
   })
   email: string;
 
-  @IsString()
-  @MinLength(8)
-  @MaxLength(100)
+  @IsString({ message: 'La contraseña debe ser una cadena de texto' })
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
+  @MaxLength(100, { message: 'La contraseña no puede exceder 100 caracteres' })
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
     message: 'La contraseña debe contener al menos una letra minúscula, una mayúscula, un número y un carácter especial'
   })

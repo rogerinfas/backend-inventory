@@ -5,7 +5,7 @@ import { UserRole } from '../../../domain/enums/user-role.enum';
 import { IsValidDocumentNumber } from '../../validators';
 
 export class CreateUserWithPersonDto {
-  @IsEnum(DocumentType)
+  @IsEnum(DocumentType, { message: 'El tipo de documento debe ser DNI, RUC, CE o PASSPORT' })
   @ApiProperty({ 
     enum: DocumentType, 
     description: 'Tipo de documento',
@@ -13,16 +13,17 @@ export class CreateUserWithPersonDto {
   })
   documentType: DocumentType;
 
-  @IsValidDocumentNumber()
+  @IsString({ message: 'El número de documento debe ser una cadena de texto' })
+  @IsValidDocumentNumber({ message: 'El formato del número de documento no es válido para el tipo seleccionado' })
   @ApiProperty({ 
     description: 'Número de documento',
     example: '12345678'
   })
   documentNumber: string;
 
-  @IsString()
-  @MinLength(2)
-  @MaxLength(100)
+  @IsString({ message: 'Los nombres deben ser una cadena de texto' })
+  @MinLength(2, { message: 'Los nombres deben tener al menos 2 caracteres' })
+  @MaxLength(100, { message: 'Los nombres no pueden exceder 100 caracteres' })
   @Matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, { message: 'Los nombres solo pueden contener letras y espacios' })
   @ApiProperty({ 
     description: 'Nombres completos',
@@ -31,9 +32,9 @@ export class CreateUserWithPersonDto {
   names: string;
 
   @IsOptional()
-  @IsString()
-  @MinLength(2)
-  @MaxLength(200)
+  @IsString({ message: 'La razón social debe ser una cadena de texto' })
+  @MinLength(2, { message: 'La razón social debe tener al menos 2 caracteres' })
+  @MaxLength(200, { message: 'La razón social no puede exceder 200 caracteres' })
   @Matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,&-]+$/, { message: 'La razón social contiene caracteres no válidos' })
   @ApiProperty({ 
     description: 'Razón social', 
@@ -43,9 +44,9 @@ export class CreateUserWithPersonDto {
   legalName?: string;
 
   @IsOptional()
-  @IsString()
-  @MinLength(10)
-  @MaxLength(200)
+  @IsString({ message: 'La dirección debe ser una cadena de texto' })
+  @MinLength(10, { message: 'La dirección debe tener al menos 10 caracteres' })
+  @MaxLength(200, { message: 'La dirección no puede exceder 200 caracteres' })
   @Matches(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,#-]+$/, { message: 'La dirección contiene caracteres no válidos' })
   @ApiProperty({ 
     description: 'Dirección', 
@@ -54,7 +55,7 @@ export class CreateUserWithPersonDto {
   })
   address?: string;
 
-  @IsString()
+  @IsString({ message: 'El teléfono debe ser una cadena de texto' })
   @Matches(/^\+51[0-9]{9}$/, { message: 'El formato del teléfono no es válido. Use formato +51XXXXXXXXX' })
   @ApiProperty({ 
     description: 'Teléfono en formato +51XXXXXXXXX',
@@ -69,9 +70,9 @@ export class CreateUserWithPersonDto {
   })
   email: string;
 
-  @IsString()
-  @MinLength(8)
-  @MaxLength(100)
+  @IsString({ message: 'La contraseña debe ser una cadena de texto' })
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
+  @MaxLength(100, { message: 'La contraseña no puede exceder 100 caracteres' })
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
     message: 'La contraseña debe contener al menos una letra minúscula, una mayúscula, un número y un carácter especial'
   })
@@ -83,8 +84,7 @@ export class CreateUserWithPersonDto {
   })
   password: string;
 
-
-  @IsUUID()
+  @IsUUID('4', { message: 'El ID de la tienda debe ser un UUID válido' })
   @ApiProperty({ 
     description: 'ID de la tienda',
     example: '550e8400-e29b-41d4-a716-446655440000'
