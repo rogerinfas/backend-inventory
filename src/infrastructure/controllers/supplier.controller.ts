@@ -15,8 +15,10 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/
 import { SupplierService } from '../../application/services/supplier.service';
 import {
   CreateSupplierDto,
+  CreateSupplierWithPersonDto,
   UpdateSupplierDto,
   SupplierResponseDto,
+  SupplierWithPersonResponseDto,
   SupplierQueryDto,
   ChangeSupplierStatusDto,
 } from '../../application/dto/supplier';
@@ -29,12 +31,24 @@ export class SupplierController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crear un nuevo proveedor' })
+  @ApiOperation({ summary: 'Crear un nuevo proveedor con persona existente' })
   @ApiResponse({ status: 201, description: 'Proveedor creado exitosamente', type: SupplierResponseDto })
   @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
   @ApiResponse({ status: 409, description: 'Ya existe un proveedor para esta tienda y persona' })
   async createSupplier(@Body() createSupplierDto: CreateSupplierDto): Promise<SupplierResponseDto> {
     return this.supplierService.createSupplier(createSupplierDto);
+  }
+
+  @Post('with-person')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear un nuevo proveedor con persona automáticamente' })
+  @ApiResponse({ status: 201, description: 'Proveedor y persona creados exitosamente', type: SupplierWithPersonResponseDto })
+  @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
+  @ApiResponse({ status: 409, description: 'Ya existe una persona con este documento' })
+  async createSupplierWithPerson(
+    @Body() createSupplierWithPersonDto: CreateSupplierWithPersonDto
+  ): Promise<SupplierWithPersonResponseDto> {
+    return this.supplierService.createSupplierWithPerson(createSupplierWithPersonDto);
   }
 
   @Get(':id')

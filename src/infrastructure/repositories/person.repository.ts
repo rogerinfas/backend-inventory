@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { PersonRepository } from '../../domain/repositories';
+import { PersonRepository, PrismaTransaction } from '../../domain/repositories';
 import { Person } from '../../domain/entities/person.entity';
 import { DocumentType } from '../../domain/enums/document-type.enum';
 import { EntityStatus } from '../../domain/enums/entity-status.enum';
@@ -10,8 +10,9 @@ import { PersonQueryDto } from '../../application/dto/person';
 export class PersonPrismaRepository implements PersonRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: string): Promise<Person | null> {
-    const personData = await this.prisma.person.findUnique({
+  async findById(id: string, tx?: PrismaTransaction): Promise<Person | null> {
+    const prisma = tx || this.prisma;
+    const personData = await prisma.person.findUnique({
       where: { id },
     });
 
@@ -34,8 +35,9 @@ export class PersonPrismaRepository implements PersonRepository {
     );
   }
 
-  async findByDocumentNumber(documentNumber: string): Promise<Person | null> {
-    const personData = await this.prisma.person.findUnique({
+  async findByDocumentNumber(documentNumber: string, tx?: PrismaTransaction): Promise<Person | null> {
+    const prisma = tx || this.prisma;
+    const personData = await prisma.person.findUnique({
       where: { documentNumber },
     });
 
@@ -58,8 +60,9 @@ export class PersonPrismaRepository implements PersonRepository {
     );
   }
 
-  async findByEmail(email: string): Promise<Person | null> {
-    const personData = await this.prisma.person.findFirst({
+  async findByEmail(email: string, tx?: PrismaTransaction): Promise<Person | null> {
+    const prisma = tx || this.prisma;
+    const personData = await prisma.person.findFirst({
       where: { email },
     });
 
@@ -82,7 +85,7 @@ export class PersonPrismaRepository implements PersonRepository {
     );
   }
 
-  async findMany(filters: PersonQueryDto): Promise<Person[]> {
+  async findMany(filters: PersonQueryDto, tx?: PrismaTransaction): Promise<Person[]> {
     const where: any = {};
 
     if (filters.documentType) {
@@ -101,7 +104,8 @@ export class PersonPrismaRepository implements PersonRepository {
       ];
     }
 
-    const personsData = await this.prisma.person.findMany({
+    const prisma = tx || this.prisma;
+    const personsData = await prisma.person.findMany({
       where,
       skip: filters.offset || 0,
       take: filters.limit || 10,
@@ -127,8 +131,9 @@ export class PersonPrismaRepository implements PersonRepository {
     );
   }
 
-  async save(person: Person): Promise<Person> {
-    const personData = await this.prisma.person.create({
+  async save(person: Person, tx?: PrismaTransaction): Promise<Person> {
+    const prisma = tx || this.prisma;
+    const personData = await prisma.person.create({
       data: {
         id: person.id,
         documentType: person.document.type,
@@ -159,8 +164,42 @@ export class PersonPrismaRepository implements PersonRepository {
     );
   }
 
-  async update(person: Person): Promise<Person> {
-    const personData = await this.prisma.person.update({
+  async createWithTransaction(person: Person, tx?: PrismaTransaction): Promise<Person> {
+    const prisma = tx || this.prisma;
+    const personData = await prisma.person.create({
+      data: {
+        id: person.id,
+        documentType: person.document.type,
+        documentNumber: person.document.number,
+        names: person.names,
+        legalName: person.legalName,
+        address: person.address,
+        phone: person.phone?.value || null,
+        email: person.email?.value || null,
+        status: person.status,
+        createdAt: person.createdAt,
+        updatedAt: person.updatedAt,
+      },
+    });
+
+    return Person.fromPersistence(
+      personData.id,
+      personData.documentType as DocumentType,
+      personData.documentNumber,
+      personData.names,
+      personData.legalName,
+      personData.address,
+      personData.phone,
+      personData.email,
+      personData.status as EntityStatus,
+      personData.createdAt,
+      personData.updatedAt
+    );
+  }
+
+  async update(person: Person, tx?: PrismaTransaction): Promise<Person> {
+    const prisma = tx || this.prisma;
+    const personData = await prisma.person.update({
       where: { id: person.id },
       data: {
         names: person.names,
@@ -188,20 +227,22 @@ export class PersonPrismaRepository implements PersonRepository {
     );
   }
 
-  async delete(id: string): Promise<void> {
-    await this.prisma.person.delete({
+  async delete(id: string, tx?: PrismaTransaction): Promise<void> {
+    const prisma = tx || this.prisma;
+    await prisma.person.delete({
       where: { id },
     });
   }
 
-  async exists(id: string): Promise<boolean> {
-    const count = await this.prisma.person.count({
+  async exists(id: string, tx?: PrismaTransaction): Promise<boolean> {
+    const prisma = tx || this.prisma;
+    const count = await prisma.person.count({
       where: { id },
     });
     return count > 0;
   }
 
-  async count(filters: Partial<PersonQueryDto>): Promise<number> {
+  async count(filters: Partial<PersonQueryDto>, tx?: PrismaTransaction): Promise<number> {
     const where: any = {};
 
     if (filters.documentType) {
@@ -220,6 +261,7 @@ export class PersonPrismaRepository implements PersonRepository {
       ];
     }
 
-    return this.prisma.person.count({ where });
+    const prisma = tx || this.prisma;
+    return prisma.person.count({ where });
   }
 }

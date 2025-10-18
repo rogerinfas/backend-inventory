@@ -1,5 +1,6 @@
 // Customer use cases exports
 export { CreateCustomerUseCase } from './create-customer.use-case';
+export { CreateCustomerWithPersonUseCase } from './create-customer-with-person.use-case';
 export { UpdateCustomerUseCase } from './update-customer.use-case';
 export { GetCustomerByIdUseCase } from './get-customer-by-id.use-case';
 export { ListCustomersUseCase } from './list-customers.use-case';

@@ -1,5 +1,6 @@
 import { Supplier } from '../../domain/entities/supplier.entity';
-import { CreateSupplierDto, SupplierResponseDto, SupplierQueryDto } from '../dto/supplier';
+import { Person } from '../../domain/entities/person.entity';
+import { CreateSupplierDto, SupplierResponseDto, SupplierQueryDto, SupplierWithPersonResponseDto, SupplierPersonDataDto } from '../dto/supplier';
 import { SupplierQueryFilters } from '../../domain/repositories/supplier.repository';
 
 export class SupplierMapper {
@@ -41,5 +42,32 @@ export class SupplierMapper {
   // Múltiples entidades → DTOs de respuesta
   static toResponseDtoList(suppliers: Supplier[]): SupplierResponseDto[] {
     return suppliers.map(supplier => this.toResponseDto(supplier));
+  }
+
+  // Entidad + Person → DTO de respuesta con datos de Person
+  static toResponseDtoWithPerson(supplier: Supplier, person: Person): SupplierWithPersonResponseDto {
+    const personData: SupplierPersonDataDto = {
+      id: person.id,
+      documentType: person.document.type,
+      documentNumber: person.document.number,
+      names: person.names,
+      legalName: person.legalName || undefined,
+      address: person.address || undefined,
+      phone: person.phone?.value,
+      email: person.email?.value,
+      status: person.status,
+      createdAt: person.createdAt,
+      updatedAt: person.updatedAt,
+    };
+
+    return {
+      id: supplier.id,
+      storeId: supplier.storeId,
+      personId: supplier.personId,
+      status: supplier.status,
+      createdAt: supplier.createdAt,
+      updatedAt: supplier.updatedAt,
+      person: personData,
+    };
   }
 }

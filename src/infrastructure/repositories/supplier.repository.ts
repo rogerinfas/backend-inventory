@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { SupplierRepository, SupplierQueryFilters } from '../../domain/repositories/supplier.repository';
+import { PrismaTransaction } from '../../domain/repositories';
 import { Supplier } from '../../domain/entities/supplier.entity';
 import { EntityStatus } from '../../domain/enums/entity-status.enum';
 
@@ -8,8 +9,9 @@ import { EntityStatus } from '../../domain/enums/entity-status.enum';
 export class SupplierPrismaRepository implements SupplierRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: string): Promise<Supplier | null> {
-    const supplierData = await this.prisma.supplier.findUnique({
+  async findById(id: string, tx?: PrismaTransaction): Promise<Supplier | null> {
+    const prisma = tx || this.prisma;
+    const supplierData = await prisma.supplier.findUnique({
       where: { id },
     });
 
@@ -27,8 +29,9 @@ export class SupplierPrismaRepository implements SupplierRepository {
     );
   }
 
-  async findByStoreId(storeId: string): Promise<Supplier[]> {
-    const suppliersData = await this.prisma.supplier.findMany({
+  async findByStoreId(storeId: string, tx?: PrismaTransaction): Promise<Supplier[]> {
+    const prisma = tx || this.prisma;
+    const suppliersData = await prisma.supplier.findMany({
       where: { storeId },
     });
 
@@ -44,8 +47,9 @@ export class SupplierPrismaRepository implements SupplierRepository {
     );
   }
 
-  async findByPersonId(personId: string): Promise<Supplier | null> {
-    const supplierData = await this.prisma.supplier.findFirst({
+  async findByPersonId(personId: string, tx?: PrismaTransaction): Promise<Supplier | null> {
+    const prisma = tx || this.prisma;
+    const supplierData = await prisma.supplier.findFirst({
       where: { personId },
     });
 
@@ -63,8 +67,9 @@ export class SupplierPrismaRepository implements SupplierRepository {
     );
   }
 
-  async findByStoreAndPerson(storeId: string, personId: string): Promise<Supplier | null> {
-    const supplierData = await this.prisma.supplier.findFirst({
+  async findByStoreAndPerson(storeId: string, personId: string, tx?: PrismaTransaction): Promise<Supplier | null> {
+    const prisma = tx || this.prisma;
+    const supplierData = await prisma.supplier.findFirst({
       where: {
         storeId,
         personId,
@@ -85,7 +90,35 @@ export class SupplierPrismaRepository implements SupplierRepository {
     );
   }
 
-  async findMany(filters?: SupplierQueryFilters): Promise<Supplier[]> {
+  async findByStoreAndDocument(storeId: string, documentNumber: string, tx?: PrismaTransaction): Promise<Supplier | null> {
+    const prisma = tx || this.prisma;
+    const supplierData = await prisma.supplier.findFirst({
+      where: {
+        storeId,
+        person: {
+          documentNumber
+        }
+      },
+      include: {
+        person: true
+      }
+    });
+
+    if (!supplierData) {
+      return null;
+    }
+
+    return Supplier.fromPersistence(
+      supplierData.id,
+      supplierData.storeId,
+      supplierData.personId,
+      supplierData.status as EntityStatus,
+      supplierData.createdAt,
+      supplierData.updatedAt,
+    );
+  }
+
+  async findMany(filters?: SupplierQueryFilters, tx?: PrismaTransaction): Promise<Supplier[]> {
     const where: any = {};
 
     if (filters?.storeId) {
@@ -108,7 +141,8 @@ export class SupplierPrismaRepository implements SupplierRepository {
       ];
     }
 
-    const suppliersData = await this.prisma.supplier.findMany({
+    const prisma = tx || this.prisma;
+    const suppliersData = await prisma.supplier.findMany({
       where,
       skip: filters?.offset || 0,
       take: filters?.limit || 10,
@@ -129,8 +163,9 @@ export class SupplierPrismaRepository implements SupplierRepository {
     );
   }
 
-  async save(supplier: Supplier): Promise<Supplier> {
-    const supplierData = await this.prisma.supplier.create({
+  async save(supplier: Supplier, tx?: PrismaTransaction): Promise<Supplier> {
+    const prisma = tx || this.prisma;
+    const supplierData = await prisma.supplier.create({
       data: {
         id: supplier.id,
         storeId: supplier.storeId,
@@ -151,8 +186,32 @@ export class SupplierPrismaRepository implements SupplierRepository {
     );
   }
 
-  async update(supplier: Supplier): Promise<Supplier> {
-    const supplierData = await this.prisma.supplier.update({
+  async createWithTransaction(supplier: Supplier, tx?: PrismaTransaction): Promise<Supplier> {
+    const prisma = tx || this.prisma;
+    const supplierData = await prisma.supplier.create({
+      data: {
+        id: supplier.id,
+        storeId: supplier.storeId,
+        personId: supplier.personId,
+        status: supplier.status,
+        createdAt: supplier.createdAt,
+        updatedAt: supplier.updatedAt,
+      },
+    });
+
+    return Supplier.fromPersistence(
+      supplierData.id,
+      supplierData.storeId,
+      supplierData.personId,
+      supplierData.status as EntityStatus,
+      supplierData.createdAt,
+      supplierData.updatedAt,
+    );
+  }
+
+  async update(supplier: Supplier, tx?: PrismaTransaction): Promise<Supplier> {
+    const prisma = tx || this.prisma;
+    const supplierData = await prisma.supplier.update({
       where: { id: supplier.id },
       data: {
         status: supplier.status,
@@ -170,21 +229,23 @@ export class SupplierPrismaRepository implements SupplierRepository {
     );
   }
 
-  async delete(id: string): Promise<void> {
-    await this.prisma.supplier.update({
+  async delete(id: string, tx?: PrismaTransaction): Promise<void> {
+    const prisma = tx || this.prisma;
+    await prisma.supplier.update({
       where: { id },
       data: { status: EntityStatus.DELETED },
     });
   }
 
-  async exists(id: string): Promise<boolean> {
-    const count = await this.prisma.supplier.count({
+  async exists(id: string, tx?: PrismaTransaction): Promise<boolean> {
+    const prisma = tx || this.prisma;
+    const count = await prisma.supplier.count({
       where: { id },
     });
     return count > 0;
   }
 
-  async count(filters?: SupplierQueryFilters): Promise<number> {
+  async count(filters?: SupplierQueryFilters, tx?: PrismaTransaction): Promise<number> {
     const where: any = {};
 
     if (filters?.storeId) {
@@ -207,6 +268,7 @@ export class SupplierPrismaRepository implements SupplierRepository {
       ];
     }
 
-    return this.prisma.supplier.count({ where });
+    const prisma = tx || this.prisma;
+    return prisma.supplier.count({ where });
   }
 }

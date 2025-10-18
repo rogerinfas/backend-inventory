@@ -1,5 +1,6 @@
 import { Supplier } from '../entities/supplier.entity';
 import { EntityStatus } from '../enums/entity-status.enum';
+import { PrismaTransaction } from './person.repository';
 
 export interface SupplierQueryFilters {
   storeId?: string;
@@ -13,14 +14,16 @@ export interface SupplierQueryFilters {
 }
 
 export interface SupplierRepository {
-  findById(id: string): Promise<Supplier | null>;
-  findByStoreId(storeId: string): Promise<Supplier[]>;
-  findByPersonId(personId: string): Promise<Supplier | null>;
-  findByStoreAndPerson(storeId: string, personId: string): Promise<Supplier | null>;
-  findMany(filters?: SupplierQueryFilters): Promise<Supplier[]>;
-  save(supplier: Supplier): Promise<Supplier>;
-  update(supplier: Supplier): Promise<Supplier>;
-  delete(id: string): Promise<void>;
-  exists(id: string): Promise<boolean>;
-  count(filters?: SupplierQueryFilters): Promise<number>;
+  findById(id: string, tx?: PrismaTransaction): Promise<Supplier | null>;
+  findByStoreId(storeId: string, tx?: PrismaTransaction): Promise<Supplier[]>;
+  findByPersonId(personId: string, tx?: PrismaTransaction): Promise<Supplier | null>;
+  findByStoreAndPerson(storeId: string, personId: string, tx?: PrismaTransaction): Promise<Supplier | null>;
+  findByStoreAndDocument(storeId: string, documentNumber: string, tx?: PrismaTransaction): Promise<Supplier | null>;
+  findMany(filters?: SupplierQueryFilters, tx?: PrismaTransaction): Promise<Supplier[]>;
+  save(supplier: Supplier, tx?: PrismaTransaction): Promise<Supplier>;
+  createWithTransaction(supplier: Supplier, tx?: PrismaTransaction): Promise<Supplier>;
+  update(supplier: Supplier, tx?: PrismaTransaction): Promise<Supplier>;
+  delete(id: string, tx?: PrismaTransaction): Promise<void>;
+  exists(id: string, tx?: PrismaTransaction): Promise<boolean>;
+  count(filters?: SupplierQueryFilters, tx?: PrismaTransaction): Promise<number>;
 }

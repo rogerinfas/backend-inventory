@@ -1,5 +1,6 @@
 import { Customer } from '../../domain/entities/customer.entity';
-import { CreateCustomerDto, CustomerResponseDto, CustomerQueryDto } from '../dto/customer';
+import { Person } from '../../domain/entities/person.entity';
+import { CreateCustomerDto, CustomerResponseDto, CustomerQueryDto, CustomerWithPersonResponseDto, CustomerPersonDataDto } from '../dto/customer';
 import { CustomerQueryFilters } from '../../domain/repositories/customer.repository';
 
 export class CustomerMapper {
@@ -41,5 +42,32 @@ export class CustomerMapper {
   // Múltiples entidades → DTOs de respuesta
   static toResponseDtoList(customers: Customer[]): CustomerResponseDto[] {
     return customers.map(customer => this.toResponseDto(customer));
+  }
+
+  // Entidad + Person → DTO de respuesta con datos de Person
+  static toResponseDtoWithPerson(customer: Customer, person: Person): CustomerWithPersonResponseDto {
+    const personData: CustomerPersonDataDto = {
+      id: person.id,
+      documentType: person.document.type,
+      documentNumber: person.document.number,
+      names: person.names,
+      legalName: person.legalName || undefined,
+      address: person.address || undefined,
+      phone: person.phone?.value,
+      email: person.email?.value,
+      status: person.status,
+      createdAt: person.createdAt,
+      updatedAt: person.updatedAt,
+    };
+
+    return {
+      id: customer.id,
+      storeId: customer.storeId,
+      personId: customer.personId,
+      status: customer.status,
+      registeredAt: customer.registeredAt,
+      updatedAt: customer.updatedAt,
+      person: personData,
+    };
   }
 }

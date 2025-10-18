@@ -1,14 +1,20 @@
 import { Injectable, Inject } from '@nestjs/common';
 import type { CustomerRepository } from '../../domain/repositories/customer.repository';
+import type { PersonRepository } from '../../domain/repositories/person.repository';
+import type { StoreRepository } from '../../domain/repositories/store.repository';
+import { PrismaService } from '../../infrastructure/database/prisma.service';
 import {
   CreateCustomerDto,
+  CreateCustomerWithPersonDto,
   UpdateCustomerDto,
   CustomerResponseDto,
+  CustomerWithPersonResponseDto,
   CustomerQueryDto,
   ChangeCustomerStatusDto,
 } from '../dto/customer';
 import {
   CreateCustomerUseCase,
+  CreateCustomerWithPersonUseCase,
   UpdateCustomerUseCase,
   GetCustomerByIdUseCase,
   ListCustomersUseCase,
@@ -20,14 +26,26 @@ import {
 @Injectable()
 export class CustomerService {
   private readonly createCustomerUseCase: CreateCustomerUseCase;
+  private readonly createCustomerWithPersonUseCase: CreateCustomerWithPersonUseCase;
   private readonly updateCustomerUseCase: UpdateCustomerUseCase;
   private readonly getCustomerByIdUseCase: GetCustomerByIdUseCase;
   private readonly listCustomersUseCase: ListCustomersUseCase;
   private readonly changeCustomerStatusUseCase: ChangeCustomerStatusUseCase;
   private readonly deleteCustomerUseCase: DeleteCustomerUseCase;
 
-  constructor(@Inject('CustomerRepository') customerRepository: CustomerRepository) {
+  constructor(
+    @Inject('CustomerRepository') customerRepository: CustomerRepository,
+    @Inject('PersonRepository') personRepository: PersonRepository,
+    @Inject('StoreRepository') storeRepository: StoreRepository,
+    private readonly prismaService: PrismaService,
+  ) {
     this.createCustomerUseCase = new CreateCustomerUseCase(customerRepository);
+    this.createCustomerWithPersonUseCase = new CreateCustomerWithPersonUseCase(
+      personRepository,
+      customerRepository,
+      storeRepository,
+      prismaService
+    );
     this.updateCustomerUseCase = new UpdateCustomerUseCase(customerRepository);
     this.getCustomerByIdUseCase = new GetCustomerByIdUseCase(customerRepository);
     this.listCustomersUseCase = new ListCustomersUseCase(customerRepository);
@@ -37,6 +55,10 @@ export class CustomerService {
 
   async createCustomer(dto: CreateCustomerDto): Promise<CustomerResponseDto> {
     return this.createCustomerUseCase.execute(dto);
+  }
+
+  async createCustomerWithPerson(dto: CreateCustomerWithPersonDto): Promise<CustomerWithPersonResponseDto> {
+    return this.createCustomerWithPersonUseCase.execute(dto);
   }
 
   async updateCustomer(id: string, dto: UpdateCustomerDto): Promise<CustomerResponseDto> {

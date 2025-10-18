@@ -15,8 +15,10 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/
 import { CustomerService } from '../../application/services/customer.service';
 import {
   CreateCustomerDto,
+  CreateCustomerWithPersonDto,
   UpdateCustomerDto,
   CustomerResponseDto,
+  CustomerWithPersonResponseDto,
   CustomerQueryDto,
   ChangeCustomerStatusDto,
 } from '../../application/dto/customer';
@@ -29,12 +31,24 @@ export class CustomerController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crear un nuevo cliente' })
+  @ApiOperation({ summary: 'Crear un nuevo cliente con persona existente' })
   @ApiResponse({ status: 201, description: 'Cliente creado exitosamente', type: CustomerResponseDto })
   @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
   @ApiResponse({ status: 409, description: 'Ya existe un cliente para esta tienda y persona' })
   async createCustomer(@Body() createCustomerDto: CreateCustomerDto): Promise<CustomerResponseDto> {
     return this.customerService.createCustomer(createCustomerDto);
+  }
+
+  @Post('with-person')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear un nuevo cliente con persona automáticamente' })
+  @ApiResponse({ status: 201, description: 'Cliente y persona creados exitosamente', type: CustomerWithPersonResponseDto })
+  @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
+  @ApiResponse({ status: 409, description: 'Ya existe una persona con este documento' })
+  async createCustomerWithPerson(
+    @Body() createCustomerWithPersonDto: CreateCustomerWithPersonDto
+  ): Promise<CustomerWithPersonResponseDto> {
+    return this.customerService.createCustomerWithPerson(createCustomerWithPersonDto);
   }
 
   @Get(':id')
