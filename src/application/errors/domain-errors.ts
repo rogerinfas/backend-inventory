@@ -182,3 +182,64 @@ export class SupplierDeletedError extends DomainError {
     super(`No se puede realizar la operación. El proveedor con ID ${id} está eliminado`);
   }
 }
+
+// User specific errors
+export class UserNotFoundError extends DomainError {
+  readonly code = 'USER_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Usuario con ID ${id} no encontrado`);
+  }
+}
+
+export class UserAlreadyExistsError extends DomainError {
+  readonly code = 'USER_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(field: string, value: string) {
+    super(`Ya existe un usuario con ${field}: ${value}`);
+  }
+}
+
+export class UserDeletedError extends DomainError {
+  readonly code = 'USER_DELETED';
+  readonly statusCode = 410;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. El usuario con ID ${id} está eliminado`);
+  }
+}
+
+export class InvalidPasswordError extends DomainError {
+  readonly code = 'INVALID_PASSWORD';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor() {
+    super('Contraseña inválida');
+  }
+}
+
+export class UnauthorizedError extends DomainError {
+  readonly code = 'UNAUTHORIZED';
+  readonly statusCode = 401;
+  readonly isOperational = true;
+
+  constructor(message: string = 'No autorizado') {
+    super(message);
+  }
+}
+
+export class ForbiddenError extends DomainError {
+  readonly code = 'FORBIDDEN';
+  readonly statusCode = 403;
+  readonly isOperational = true;
+
+  constructor(message: string = 'Acceso denegado') {
+    super(message);
+  }
+}

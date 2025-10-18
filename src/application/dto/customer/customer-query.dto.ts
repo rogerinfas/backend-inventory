@@ -9,7 +9,7 @@ export class CustomerQueryDto {
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El ID de la tienda debe ser una cadena de texto' })
   @IsUUID('4', { message: 'El ID de la tienda debe ser un UUID válido' })
   storeId?: string;
 
@@ -18,7 +18,7 @@ export class CustomerQueryDto {
     example: '123e4567-e89b-12d3-a456-426614174001',
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El ID de la persona debe ser una cadena de texto' })
   @IsUUID('4', { message: 'El ID de la persona debe ser un UUID válido' })
   personId?: string;
 
@@ -28,7 +28,7 @@ export class CustomerQueryDto {
     example: EntityStatus.ACTIVE,
   })
   @IsOptional()
-  @IsEnum(EntityStatus)
+  @IsEnum(EntityStatus, { message: 'El estado debe ser ACTIVE, INACTIVE, SUSPENDED o DELETED' })
   status?: EntityStatus;
 
   @ApiPropertyOptional({
@@ -36,7 +36,7 @@ export class CustomerQueryDto {
     example: 'Juan',
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El término de búsqueda debe ser una cadena de texto' })
   @MaxLength(100, { message: 'El término de búsqueda no puede exceder 100 caracteres' })
   search?: string;
 
@@ -72,9 +72,9 @@ export class CustomerQueryDto {
     enum: ['id', 'storeId', 'personId', 'status', 'registeredAt', 'updatedAt'],
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El campo de ordenamiento debe ser una cadena de texto' })
   @IsEnum(['id', 'storeId', 'personId', 'status', 'registeredAt', 'updatedAt'], {
-    message: 'Campo de ordenamiento inválido',
+    message: 'El campo de ordenamiento debe ser id, storeId, personId, status, registeredAt o updatedAt',
   })
   sortBy?: string;
 
@@ -84,7 +84,7 @@ export class CustomerQueryDto {
     enum: ['asc', 'desc'],
   })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La dirección de ordenamiento debe ser una cadena de texto' })
   @IsEnum(['asc', 'desc'], { message: 'La dirección de ordenamiento debe ser asc o desc' })
   sortOrder?: 'asc' | 'desc';
 }

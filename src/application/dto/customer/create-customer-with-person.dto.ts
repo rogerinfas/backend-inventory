@@ -80,7 +80,7 @@ export class CreateCustomerWithPersonDto {
     description: 'ID de la tienda',
     example: '550e8400-e29b-41d4-a716-446655440000'
   })
-  @IsString()
-  @IsUUID('4')
+  @IsString({ message: 'El ID de la tienda debe ser una cadena de texto' })
+  @IsUUID('4', { message: 'El ID de la tienda debe ser un UUID válido' })
   storeId: string;
 }

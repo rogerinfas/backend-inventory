@@ -30,6 +30,15 @@ enum EntityStatus {
   DELETED   /// Eliminado
 }
 
+/// Roles de usuario en el sistema
+enum UserRole {
+  ADMIN       /// Administrador
+  SELLER      /// Vendedor
+  WAREHOUSE   /// Almacén
+  MANAGER     /// Gerente
+  CASHIER     /// Cajero
+}
+
 // ============================================
 // MODELS - ENTITIES
 // ============================================
@@ -51,7 +60,7 @@ model Person {
   // Relations
   suppliers       Supplier[]
   customers       Customer[]
-  //users           User[]
+  users           User[]
   
   @@index([documentNumber])
   @@index([status])
@@ -73,7 +82,7 @@ model Store {
   updatedAt         DateTime @updatedAt @map("updated_at")
   
   // Relations
-  //users             User[]
+  users             User[]
   //products          Product[]
   suppliers         Supplier[]
   //purchases         Purchase[]
@@ -121,4 +130,30 @@ model Supplier {
 
   @@index([status])
   @@map("suppliers")
+}
+
+/// Gestión de usuarios del sistema
+model User {
+  id            String   @id @default(uuid())
+  storeId       String   @map("store_id")
+  personId      String   @map("person_id")
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  role          UserRole
+  status        EntityStatus @default(ACTIVE)
+  lastLoginAt   DateTime? @map("last_login_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store         Store    @relation(fields: [storeId], references: [id])
+  person        Person   @relation(fields: [personId], references: [id])
+  //sales         Sale[]
+  //purchases     Purchase[]
+  //inventoryMovements InventoryMovement[]
+  //cashRegisters CashRegister[]
+
+  @@index([status])
+  @@index([role])
+  @@map("users")
 }
