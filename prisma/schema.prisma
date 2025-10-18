@@ -49,8 +49,8 @@ model Person {
   updatedAt       DateTime @updatedAt @map("updated_at")
   
   // Relations
-  //suppliers       Supplier[]
-  //customers       Customer[]
+  suppliers       Supplier[]
+  customers       Customer[]
   //users           User[]
   
   @@index([documentNumber])
@@ -75,9 +75,9 @@ model Store {
   // Relations
   //users             User[]
   //products          Product[]
-  //suppliers         Supplier[]
+  suppliers         Supplier[]
   //purchases         Purchase[]
-  //customers         Customer[]
+  customers         Customer[]
   //sales             Sale[]
   //voucherSeries     VoucherSeries[]
   //sunatConfig       SunatConfig?
@@ -85,4 +85,40 @@ model Store {
 
   @@index([status])
   @@map("stores")
+}
+
+/// Gestión de clientes
+model Customer {
+  id              String   @id @default(uuid())
+  storeId         String   @map("store_id")
+  personId        String   @map("person_id")
+  status          EntityStatus @default(ACTIVE)
+  registeredAt    DateTime @default(now()) @map("registered_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store           Store    @relation(fields: [storeId], references: [id])
+  person          Person   @relation(fields: [personId], references: [id])
+  //sales           Sale[]
+
+  @@index([status])
+  @@map("customers")
+}
+
+/// Gestión de proveedores
+model Supplier {
+  id            String   @id @default(uuid())
+  storeId       String   @map("store_id")
+  personId      String   @map("person_id")
+  status        EntityStatus @default(ACTIVE)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store         Store    @relation(fields: [storeId], references: [id])
+  person        Person   @relation(fields: [personId], references: [id])
+  //purchases     Purchase[]
+
+  @@index([status])
+  @@map("suppliers")
 }

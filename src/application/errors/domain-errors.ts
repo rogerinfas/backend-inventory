@@ -120,3 +120,65 @@ export class InvalidRucError extends DomainError {
     super(`RUC inválido: ${ruc}. Debe tener exactamente 11 dígitos`);
   }
 }
+
+// Customer specific errors
+export class CustomerNotFoundError extends DomainError {
+  readonly code = 'CUSTOMER_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Cliente con ID ${id} no encontrado`);
+  }
+}
+
+export class CustomerAlreadyExistsError extends DomainError {
+  readonly code = 'CUSTOMER_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(storeId: string, personId: string) {
+    super(`Ya existe un cliente para la tienda ${storeId} y persona ${personId}`);
+  }
+}
+
+export class CustomerDeletedError extends DomainError {
+  readonly code = 'CUSTOMER_DELETED';
+  readonly statusCode = 410;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. El cliente con ID ${id} está eliminado`);
+  }
+}
+
+// Supplier specific errors
+export class SupplierNotFoundError extends DomainError {
+  readonly code = 'SUPPLIER_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Proveedor con ID ${id} no encontrado`);
+  }
+}
+
+export class SupplierAlreadyExistsError extends DomainError {
+  readonly code = 'SUPPLIER_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(storeId: string, personId: string) {
+    super(`Ya existe un proveedor para la tienda ${storeId} y persona ${personId}`);
+  }
+}
+
+export class SupplierDeletedError extends DomainError {
+  readonly code = 'SUPPLIER_DELETED';
+  readonly statusCode = 410;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. El proveedor con ID ${id} está eliminado`);
+  }
+}

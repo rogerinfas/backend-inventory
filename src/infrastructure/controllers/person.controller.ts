@@ -83,8 +83,8 @@ export class PersonController {
     return this.personService.updatePerson(id, updatePersonDto);
   }
 
-  @Put(':id/status')
-  @ApiOperation({ summary: 'Cambiar estado de una persona' })
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Cambiar estado de una persona (actualización parcial)' })
   @ApiParam({ name: 'id', description: 'ID único de la persona', type: 'string' })
   @ApiResponse({ status: 200, description: 'Estado de persona cambiado exitosamente', type: PersonResponseDto })
   @ApiResponse({ status: 400, description: 'Estado inválido' })

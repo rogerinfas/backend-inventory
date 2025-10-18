@@ -82,8 +82,8 @@ export class StoreController {
     return this.storeService.updateStore(id, updateStoreDto);
   }
 
-  @Put(':id/status')
-  @ApiOperation({ summary: 'Cambiar estado de una tienda' })
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Cambiar estado de una tienda (actualización parcial)' })
   @ApiParam({ name: 'id', description: 'ID único de la tienda', type: 'string' })
   @ApiResponse({ status: 200, description: 'Estado de tienda cambiado exitosamente', type: StoreResponseDto })
   @ApiResponse({ status: 400, description: 'Estado inválido o cambio no permitido' })
