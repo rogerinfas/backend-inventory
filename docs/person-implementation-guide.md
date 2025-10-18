@@ -25,6 +25,7 @@ Esta guía documenta la implementación completa del módulo **Person** siguiend
 - ✅ **Validaciones** robustas en todas las capas
 - ✅ **Documentación API** con Swagger
 - ✅ **Manejo de errores** centralizado
+- ✅ **PATCH para actualizaciones parciales** (mejores prácticas REST)
 
 ---
 
@@ -575,8 +576,8 @@ export class PersonController {
     return this.personService.listPersons(query);
   }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Actualizar datos de una persona' })
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar datos de una persona (actualización parcial)' })
   async updatePerson(
     @Param('id') id: string,
     @Body() updatePersonDto: UpdatePersonDto,
@@ -884,7 +885,7 @@ sequenceDiagram
     participant Repository
     participant Database
 
-    Client->>Controller: PUT /persons/:id
+    Client->>Controller: PATCH /persons/:id
     Controller->>Service: updatePerson(id, dto)
     Service->>UseCase: execute(id, dto)
     UseCase->>Repository: findById(id)
@@ -1090,10 +1091,10 @@ curl "http://localhost:9987/persons?page=1&limit=10&status=ACTIVE&search=Juan"
 }
 ```
 
-### 4. Actualizar Persona
+### 4. Actualizar Persona (Actualización Parcial)
 
 ```bash
-curl -X PUT http://localhost:9987/persons/123e4567-e89b-12d3-a456-426614174000 \
+curl -X PATCH http://localhost:9987/persons/123e4567-e89b-12d3-a456-426614174000 \
   -H "Content-Type: application/json" \
   -d '{
     "names": "Juan Carlos Pérez García",
@@ -1235,7 +1236,7 @@ CREATE INDEX "persons_status_idx" ON "persons"("status");
 | GET | `/persons/:id` | Obtener persona por ID |
 | GET | `/persons/document/:documentNumber` | Obtener persona por documento |
 | GET | `/persons` | Listar personas con filtros |
-| PUT | `/persons/:id` | Actualizar persona |
+| PATCH | `/persons/:id` | Actualizar persona (actualización parcial) |
 | PUT | `/persons/:id/status` | Cambiar estado |
 | DELETE | `/persons/:id` | Eliminar persona (soft delete) |
 

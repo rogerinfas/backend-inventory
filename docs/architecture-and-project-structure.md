@@ -29,6 +29,7 @@
 - ✅ **Swagger** para documentación de API
 - ✅ **Testing** con Jest y Supertest
 - ✅ **ESLint + Prettier** para calidad de código
+- ✅ **PATCH para actualizaciones parciales** (mejores prácticas REST)
 
 ---
 
@@ -963,12 +964,19 @@ graph TB
     subgraph "AppModule"
         A[DatabaseModule]
         B[PersonModule]
+        C[StoreModule]
     end
 
     subgraph "PersonModule"
-        C[PersonController]
-        D[PersonService]
-        E[PersonPrismaRepository]
+        D[PersonController]
+        E[PersonService]
+        F[PersonPrismaRepository]
+    end
+
+    subgraph "StoreModule"
+        G[StoreController]
+        H[StoreService]
+        I[StorePrismaRepository]
         F[PrismaService]
     end
 
@@ -1045,12 +1053,34 @@ graph TB
 - ✅ **Códigos de estado** HTTP apropiados
 - ✅ **Validación** de entrada con DTOs
 - ✅ **Manejo de errores** centralizado
+- ✅ **PATCH para actualizaciones parciales** (mejores prácticas REST)
+- ✅ **Módulos Person y Store** completamente implementados
 
 #### Documentación
 - ✅ **Swagger** para documentación de API
 - ✅ **Comentarios** en código
 - ✅ **README** actualizado
 - ✅ **Guías** de implementación
+
+#### Endpoints Disponibles
+
+**Person Module:**
+- `POST /persons` - Crear persona
+- `GET /persons/:id` - Obtener persona por ID
+- `GET /persons/document/:documentNumber` - Obtener persona por documento
+- `GET /persons` - Listar personas con filtros
+- `PATCH /persons/:id` - Actualizar persona (actualización parcial)
+- `PUT /persons/:id/status` - Cambiar estado de persona
+- `DELETE /persons/:id` - Eliminar persona (soft delete)
+
+**Store Module:**
+- `POST /stores` - Crear tienda
+- `GET /stores/:id` - Obtener tienda por ID
+- `GET /stores/ruc/:ruc` - Obtener tienda por RUC
+- `GET /stores` - Listar tiendas con filtros
+- `PATCH /stores/:id` - Actualizar tienda (actualización parcial)
+- `PUT /stores/:id/status` - Cambiar estado de tienda
+- `DELETE /stores/:id` - Eliminar tienda (soft delete)
 
 ### 5. **Seguridad**
 
