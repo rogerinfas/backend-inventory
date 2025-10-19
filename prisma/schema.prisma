@@ -39,6 +39,14 @@ enum UserRole {
   CASHIER     /// Cajero
 }
 
+/// Tipos de comprobantes de venta
+enum VoucherType {
+  RECEIPT     /// Boleta de venta
+  INVOICE     /// Factura
+  SALE_NOTE   /// Nota de venta
+  PROFORMA    /// Proforma
+}
+
 // ============================================
 // MODELS - ENTITIES
 // ============================================
@@ -88,7 +96,7 @@ model Store {
   //purchases         Purchase[]
   customers         Customer[]
   //sales             Sale[]
-  //voucherSeries     VoucherSeries[]
+  voucherSeries     VoucherSeries[]
   //sunatConfig       SunatConfig?
   //cashRegisters     CashRegister[]
 
@@ -172,4 +180,21 @@ model User {
   @@index([status])
   @@index([role])
   @@map("users")
+}
+
+/// Gestión de series de comprobantes
+model VoucherSeries {
+  id              String   @id @default(uuid())
+  storeId         String   @map("store_id")
+  voucherType     VoucherType @map("voucher_type")
+  series          String
+  currentNumber   Int      @default(1) @map("current_number")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store           Store    @relation(fields: [storeId], references: [id])
+
+  @@unique([storeId, voucherType, series])
+  @@map("voucher_series")
 }

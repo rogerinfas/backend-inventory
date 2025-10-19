@@ -274,3 +274,24 @@ export class CategoryDeletedError extends DomainError {
     super(`No se puede realizar la operación. La categoría con ID ${id} está eliminada`);
   }
 }
+
+// VoucherSeries specific errors
+export class VoucherSeriesNotFoundError extends DomainError {
+  readonly code = 'VOUCHER_SERIES_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Serie de comprobantes con ID ${id} no encontrada`);
+  }
+}
+
+export class VoucherSeriesAlreadyExistsError extends DomainError {
+  readonly code = 'VOUCHER_SERIES_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(field: string, value: string) {
+    super(`Ya existe una serie de comprobantes con ${field}: ${value}`);
+  }
+}

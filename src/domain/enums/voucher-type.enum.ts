@@ -1,0 +1,8 @@
+export enum VoucherType {
+  RECEIPT = 'RECEIPT',
+  INVOICE = 'INVOICE',
+  SALE_NOTE = 'SALE_NOTE',
+  PROFORMA = 'PROFORMA',
+  CREDIT_NOTE = 'CREDIT_NOTE',
+  DEBIT_NOTE = 'DEBIT_NOTE',
+}

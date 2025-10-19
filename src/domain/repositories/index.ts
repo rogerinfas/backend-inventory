@@ -5,3 +5,4 @@ export type { CustomerRepository, CustomerQueryFilters } from './customer.reposi
 export type { SupplierRepository, SupplierQueryFilters } from './supplier.repository';
 export type { UserRepository, UserQueryFilters } from './user.repository';
 export type { CategoryRepository, CategoryQueryFilters } from './category.repository';
+export type { VoucherSeriesRepository, VoucherSeriesQueryFilters } from './voucher-series.repository';
