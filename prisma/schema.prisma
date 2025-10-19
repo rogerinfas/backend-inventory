@@ -198,3 +198,18 @@ model VoucherSeries {
   @@unique([storeId, voucherType, series])
   @@map("voucher_series")
 }
+
+/// Marcas de productos
+model Brand {
+  id        String   @id @default(uuid())
+  name      String
+  status    EntityStatus @default(ACTIVE)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  //products  Product[]
+
+  @@index([status])
+  @@map("brands")
+}

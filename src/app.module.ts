@@ -6,10 +6,11 @@ import { SupplierModule } from './infrastructure/modules/supplier.module';
 import { UserModule } from './infrastructure/modules/user.module';
 import { CategoryModule } from './infrastructure/modules/category.module';
 import { VoucherSeriesModule } from './infrastructure/modules/voucher-series.module';
+import { BrandModule } from './infrastructure/modules/brand.module';
 import { DatabaseModule } from './infrastructure/modules/database.module';
 
 @Module({
-  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule],
+  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule],
   controllers: [],
   providers: [],
 })

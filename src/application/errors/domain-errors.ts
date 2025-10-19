@@ -295,3 +295,34 @@ export class VoucherSeriesAlreadyExistsError extends DomainError {
     super(`Ya existe una serie de comprobantes con ${field}: ${value}`);
   }
 }
+
+// Brand specific errors
+export class BrandNotFoundError extends DomainError {
+  readonly code = 'BRAND_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Marca con ID ${id} no encontrada`);
+  }
+}
+
+export class BrandAlreadyExistsError extends DomainError {
+  readonly code = 'BRAND_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(field: string, value: string) {
+    super(`Ya existe una marca con ${field}: ${value}`);
+  }
+}
+
+export class BrandDeletedError extends DomainError {
+  readonly code = 'BRAND_DELETED';
+  readonly statusCode = 410;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. La marca con ID ${id} está eliminada`);
+  }
+}

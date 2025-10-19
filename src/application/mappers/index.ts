@@ -5,3 +5,4 @@ export * from './supplier.mapper';
 export * from './user.mapper';
 export * from './category.mapper';
 export * from './voucher-series.mapper';
+export * from './brand.mapper';
