@@ -243,3 +243,34 @@ export class ForbiddenError extends DomainError {
     super(message);
   }
 }
+
+// Category specific errors
+export class CategoryNotFoundError extends DomainError {
+  readonly code = 'CATEGORY_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Categoría con ID ${id} no encontrada`);
+  }
+}
+
+export class CategoryAlreadyExistsError extends DomainError {
+  readonly code = 'CATEGORY_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(field: string, value: string) {
+    super(`Ya existe una categoría con ${field}: ${value}`);
+  }
+}
+
+export class CategoryDeletedError extends DomainError {
+  readonly code = 'CATEGORY_DELETED';
+  readonly statusCode = 410;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. La categoría con ID ${id} está eliminada`);
+  }
+}
