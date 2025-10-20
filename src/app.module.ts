@@ -7,11 +7,12 @@ import { UserModule } from './infrastructure/modules/user.module';
 import { CategoryModule } from './infrastructure/modules/category.module';
 import { VoucherSeriesModule } from './infrastructure/modules/voucher-series.module';
 import { BrandModule } from './infrastructure/modules/brand.module';
+import { ProductModule } from './infrastructure/modules/product.module';
 import { SunatConfigModule } from './infrastructure/modules/sunat-config.module';
 import { DatabaseModule } from './infrastructure/modules/database.module';
 
 @Module({
-  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, SunatConfigModule],
+  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, ProductModule, SunatConfigModule],
   controllers: [],
   providers: [],
 })

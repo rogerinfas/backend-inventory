@@ -367,3 +367,84 @@ export class InvalidSunatEnvironmentError extends DomainError {
     super(`Ambiente SUNAT inválido: ${environment}`);
   }
 }
+
+// Product specific errors
+export class ProductNotFoundError extends DomainError {
+  readonly code = 'PRODUCT_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Producto con ID ${id} no encontrado`);
+  }
+}
+
+export class ProductAlreadyExistsError extends DomainError {
+  readonly code = 'PRODUCT_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(field: string, value: string) {
+    super(`Ya existe un producto con ${field}: ${value}`);
+  }
+}
+
+export class ProductDeletedError extends DomainError {
+  readonly code = 'PRODUCT_DELETED';
+  readonly statusCode = 410;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. El producto con ID ${id} está eliminado`);
+  }
+}
+
+export class InvalidSkuError extends DomainError {
+  readonly code = 'INVALID_SKU';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(sku: string) {
+    super(`SKU inválido: ${sku}`);
+  }
+}
+
+export class InvalidPriceError extends DomainError {
+  readonly code = 'INVALID_PRICE';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(message: string) {
+    super(`Precio inválido: ${message}`);
+  }
+}
+
+export class InvalidStockError extends DomainError {
+  readonly code = 'INVALID_STOCK';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(message: string) {
+    super(`Stock inválido: ${message}`);
+  }
+}
+
+export class InsufficientStockError extends DomainError {
+  readonly code = 'INSUFFICIENT_STOCK';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(requested: number, available: number) {
+    super(`Stock insuficiente. Solicitado: ${requested}, Disponible: ${available}`);
+  }
+}
+
+export class ProductInactiveError extends DomainError {
+  readonly code = 'PRODUCT_INACTIVE';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. El producto con ID ${id} está inactivo`);
+  }
+}

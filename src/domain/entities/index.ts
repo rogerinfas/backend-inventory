@@ -7,4 +7,5 @@ export { Supplier } from './supplier.entity';
 export { Category } from './category.entity';
 export { VoucherSeries } from './voucher-series.entity';
 export { Brand } from './brand.entity';
+export { Product } from './product.entity';
 export { SunatConfig } from './sunat-config.entity';

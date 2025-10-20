@@ -61,6 +61,17 @@ enum SunatEnvironment {
   TEST       /// Pruebas
 }
 
+/// Unidades de medida para productos
+enum UnitOfMeasure {
+  UNIT      /// Unidad
+  KILOGRAM  /// Kilogramo
+  LITER     /// Litro
+  METER     /// Metro
+  BOX       /// Caja
+  PACK      /// Paquete
+  DOZEN     /// Docena
+}
+
 // ============================================
 // MODELS - ENTITIES
 // ============================================
@@ -105,7 +116,7 @@ model Store {
   
   // Relations
   users             User[]
-  //products          Product[]
+  products          Product[]
   suppliers         Supplier[]
   //purchases         Purchase[]
   customers         Customer[]
@@ -128,7 +139,7 @@ model Category {
   updatedAt   DateTime @updatedAt @map("updated_at")
   
   // Relations
-  //products    Product[]
+  products    Product[]
 
   @@index([status])
   @@map("categories")
@@ -222,10 +233,49 @@ model Brand {
   updatedAt DateTime @updatedAt @map("updated_at")
   
   // Relations
-  //products  Product[]
+  products  Product[]
 
   @@index([status])
   @@map("brands")
+}
+
+/// Gestión de productos/inventario
+model Product {
+  id            String   @id @default(uuid())
+  storeId       String   @map("store_id")
+  categoryId    String?  @map("category_id")
+  brandId       String?  @map("brand_id")
+  sku           String   @unique @map("sku_code")
+  name          String
+  description   String?
+  purchasePrice Float    @map("purchase_price")
+  salePrice     Float    @map("sale_price")
+  currentStock  Int      @default(0) @map("current_stock")
+  minimumStock  Int      @default(5) @map("minimum_stock")
+  maximumStock  Int?     @map("maximum_stock")
+  unitOfMeasure UnitOfMeasure @default(UNIT) @map("unit_of_measure")
+  imageUrl      String?  @map("image_url")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  store         Store    @relation(fields: [storeId], references: [id])
+  category      Category? @relation(fields: [categoryId], references: [id])
+  brand         Brand?   @relation(fields: [brandId], references: [id])
+  //purchaseDetails PurchaseDetail[]
+  //saleDetails   SaleDetail[]
+  //inventoryMovements InventoryMovement[]
+
+  // TODO: Implementar tabla InventoryMovement para registrar movimientos de stock
+  // - Campos: id, productId, type (ENTRY/EXIT/ADJUSTMENT), quantity, previousStock, newStock
+  // - Campos: reason, userId, createdAt, updatedAt
+  // - Relaciones: product, user
+
+  @@index([sku])
+  @@index([isActive])
+  @@index([storeId])
+  @@map("products")
 }
 
 /// Configuración de SUNAT
