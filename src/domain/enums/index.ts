@@ -6,3 +6,5 @@ export { VoucherType } from './voucher-type.enum';
 export { SunatStatus } from './sunat-status.enum';
 export { SunatEnvironment } from './sunat-environment.enum';
 export { UnitOfMeasure } from './unit-of-measure.enum';
+export { PurchaseStatus } from './purchase-status.enum';
+export { PurchaseDocumentType } from './purchase-document-type.enum';

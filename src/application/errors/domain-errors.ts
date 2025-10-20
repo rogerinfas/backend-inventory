@@ -448,3 +448,94 @@ export class ProductInactiveError extends DomainError {
     super(`No se puede realizar la operación. El producto con ID ${id} está inactivo`);
   }
 }
+
+// Purchase specific errors
+export class PurchaseNotFoundError extends DomainError {
+  readonly code = 'PURCHASE_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Compra con ID ${id} no encontrada`);
+  }
+}
+
+export class PurchaseAlreadyExistsError extends DomainError {
+  readonly code = 'PURCHASE_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(storeId: string, documentNumber: string) {
+    super(`Ya existe una compra con número de documento ${documentNumber} en la tienda ${storeId}`);
+  }
+}
+
+export class PurchaseCancelledError extends DomainError {
+  readonly code = 'PURCHASE_CANCELLED';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. La compra con ID ${id} está cancelada`);
+  }
+}
+
+export class PurchaseReceivedError extends DomainError {
+  readonly code = 'PURCHASE_RECEIVED';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede realizar la operación. La compra con ID ${id} ya fue recibida`);
+  }
+}
+
+export class InvalidPurchaseAmountError extends DomainError {
+  readonly code = 'INVALID_PURCHASE_AMOUNT';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(amount: number) {
+    super(`Monto inválido: ${amount}`);
+  }
+}
+
+export class FutureDateError extends DomainError {
+  readonly code = 'FUTURE_DATE_ERROR';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(field: string, date: string) {
+    super(`La fecha ${field} no puede ser futura: ${date}`);
+  }
+}
+
+export class PurchaseCreationError extends DomainError {
+  readonly code = 'PURCHASE_CREATION_ERROR';
+  readonly statusCode = 500;
+  readonly isOperational = false;
+
+  constructor(message: string) {
+    super(`Error al crear la compra: ${message}`);
+  }
+}
+
+export class InvalidPurchaseDetailQuantityError extends DomainError {
+  readonly code = 'INVALID_PURCHASE_DETAIL_QUANTITY';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(quantity: number) {
+    super(`Cantidad inválida: ${quantity}`);
+  }
+}
+
+export class InvalidPurchaseDetailPriceError extends DomainError {
+  readonly code = 'INVALID_PURCHASE_DETAIL_PRICE';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(price: number) {
+    super(`Precio inválido: ${price}`);
+  }
+}

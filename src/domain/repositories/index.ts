@@ -9,3 +9,5 @@ export type { VoucherSeriesRepository, VoucherSeriesQueryFilters } from './vouch
 export type { BrandRepository, BrandQueryFilters } from './brand.repository';
 export type { ProductRepository, ProductQueryFilters } from './product.repository';
 export type { SunatConfigRepository, SunatConfigQueryFilters } from './sunat-config.repository';
+export type { PurchaseRepository, PurchaseQueryFilters, PurchaseWithDetails } from './purchase.repository';
+export type { PurchaseDetailRepository, PurchaseDetailQueryFilters } from './purchase-detail.repository';

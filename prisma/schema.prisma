@@ -72,6 +72,22 @@ enum UnitOfMeasure {
   DOZEN     /// Docena
 }
 
+/// Estados de compras
+enum PurchaseStatus {
+  PENDING    /// Pendiente
+  REGISTERED /// Registrada
+  CANCELLED  /// Cancelada
+  RECEIVED   /// Recibida
+}
+
+/// Tipos de documentos de compra
+enum PurchaseDocumentType {
+  INVOICE /// Factura
+  RECEIPT /// Recibo
+  NOTE    /// Nota
+  ORDER   /// Orden de compra
+}
+
 // ============================================
 // MODELS - ENTITIES
 // ============================================
@@ -118,7 +134,7 @@ model Store {
   users             User[]
   products          Product[]
   suppliers         Supplier[]
-  //purchases         Purchase[]
+  purchases         Purchase[]
   customers         Customer[]
   //sales             Sale[]
   voucherSeries     VoucherSeries[]
@@ -175,7 +191,7 @@ model Supplier {
   // Relations
   store         Store    @relation(fields: [storeId], references: [id])
   person        Person   @relation(fields: [personId], references: [id])
-  //purchases     Purchase[]
+  purchases     Purchase[]
 
   @@index([status])
   @@map("suppliers")
@@ -198,7 +214,7 @@ model User {
   store         Store    @relation(fields: [storeId], references: [id])
   person        Person   @relation(fields: [personId], references: [id])
   //sales         Sale[]
-  //purchases     Purchase[]
+  purchases     Purchase[]
   //inventoryMovements InventoryMovement[]
   //cashRegisters CashRegister[]
 
@@ -263,7 +279,7 @@ model Product {
   store         Store    @relation(fields: [storeId], references: [id])
   category      Category? @relation(fields: [categoryId], references: [id])
   brand         Brand?   @relation(fields: [brandId], references: [id])
-  //purchaseDetails PurchaseDetail[]
+  purchaseDetails PurchaseDetail[]
   //saleDetails   SaleDetail[]
   //inventoryMovements InventoryMovement[]
 
@@ -276,6 +292,55 @@ model Product {
   @@index([isActive])
   @@index([storeId])
   @@map("products")
+}
+
+// ============================================
+// PURCHASES AND PURCHASE DETAILS
+// ============================================
+
+/// Gestión de compras
+model Purchase {
+  id              String   @id @default(uuid())
+  storeId         String   @map("store_id")
+  supplierId      String   @map("supplier_id")
+  userId          String   @map("user_id")
+  documentNumber  String?  @map("document_number")
+  documentType    PurchaseDocumentType @default(INVOICE) @map("document_type")
+  purchaseDate    DateTime @map("purchase_date")
+  subtotal        Float
+  tax             Float    @default(0)
+  discount        Float    @default(0)
+  total           Float
+  status          PurchaseStatus @default(REGISTERED)
+  notes           String?
+  registeredAt    DateTime @default(now()) @map("registered_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store           Store    @relation(fields: [storeId], references: [id])
+  supplier        Supplier @relation(fields: [supplierId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
+  details         PurchaseDetail[]
+
+  @@index([status])
+  @@index([purchaseDate])
+  @@map("purchases")
+}
+
+/// Detalles de compras
+model PurchaseDetail {
+  id          String   @id @default(uuid())
+  purchaseId  String   @map("purchase_id")
+  productId   String   @map("product_id")
+  quantity    Int
+  unitPrice   Float    @map("unit_price")
+  discount    Float    @default(0)
+  
+  // Relations
+  purchase    Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id])
+
+  @@map("purchase_details")
 }
 
 /// Configuración de SUNAT

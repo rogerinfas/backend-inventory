@@ -440,4 +440,42 @@ export class ProductPrismaRepository implements ProductRepository {
 
     return this.prisma.product.count({ where });
   }
+
+  async increaseStock(productId: string, quantity: number, storeId: string, tx?: any): Promise<Product> {
+    const prisma = tx || this.prisma;
+
+    // Validar que el producto pertenezca a la tienda indicada
+    const productData = await prisma.product.findUnique({ where: { id: productId } });
+    if (!productData || productData.storeId !== storeId) {
+      throw new Error('Producto no encontrado en la tienda indicada');
+    }
+
+    const updated = await prisma.product.update({
+      where: { id: productId },
+      data: {
+        currentStock: { increment: quantity },
+        updatedAt: new Date(),
+      },
+    });
+
+    return Product.fromPersistence(
+      updated.id,
+      updated.storeId,
+      updated.sku,
+      updated.name,
+      updated.description,
+      updated.purchasePrice,
+      updated.salePrice,
+      updated.currentStock,
+      updated.minimumStock,
+      updated.maximumStock,
+      updated.unitOfMeasure as UnitOfMeasure,
+      updated.imageUrl,
+      updated.isActive,
+      updated.createdAt,
+      updated.updatedAt,
+      updated.categoryId,
+      updated.brandId
+    );
+  }
 }

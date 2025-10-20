@@ -30,4 +30,6 @@ export interface ProductRepository {
   exists(id: string): Promise<boolean>;
   existsBySku(sku: string): Promise<boolean>;
   count(filters?: ProductQueryFilters): Promise<number>;
+  // Incrementar stock dentro de una transacción opcional, validando tienda
+  increaseStock(productId: string, quantity: number, storeId: string, tx?: any): Promise<Product>;
 }

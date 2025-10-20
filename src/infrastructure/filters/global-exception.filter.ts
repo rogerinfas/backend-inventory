@@ -34,10 +34,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         isOperational: exception.isOperational,
       };
 
-      //this.logger.warn(
-      //  `Domain Error: ${exception.code} - ${exception.message}`,
-      //  exception.stack,
-      //);
+      // Logs desactivados para errores de dominio
+      // this.logger.warn(
+      //   `Domain Error: ${exception.code} - ${exception.message}`,
+      //   exception.stack,
+      // );
     } else if (exception instanceof HttpException) {
       // Errores HTTP de NestJS
       status = exception.getStatus();
@@ -68,26 +69,42 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         };
       }
 
-      //this.logger.warn(
-      //  `HTTP Exception: ${status} - ${exception.message}`,
-      //  exception.stack,
-      //);
+      // Logs desactivados para errores HTTP
+      // this.logger.warn(
+      //   `HTTP Exception: ${status} - ${exception.message}`,
+      //   exception.stack,
+      // );
     } else {
-      // Errores no controlados
+      // Errores no controlados - mejorar el manejo
       status = HttpStatus.INTERNAL_SERVER_ERROR;
+      
+      // Intentar obtener más información del error
+      let errorMessage = 'Error interno del servidor';
+      let errorCode = 'INTERNAL_SERVER_ERROR';
+      
+      if (exception instanceof Error) {
+        errorMessage = exception.message || errorMessage;
+        errorCode = exception.name || errorCode;
+        
+        // Log completo del error para debugging (solo para errores críticos)
+        // this.logger.error(
+        //   `Unhandled Exception: ${exception.name} - ${exception.message}`,
+        //   exception.stack,
+        // );
+      } else {
+        // this.logger.error(
+        //   `Unhandled Exception (non-Error object): ${JSON.stringify(exception)}`,
+        // );
+      }
+
       errorResponse = {
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Error interno del servidor',
+        code: errorCode,
+        message: errorMessage,
         statusCode: status,
         timestamp: new Date().toISOString(),
         path: request.url,
         isOperational: false,
       };
-
-      //this.logger.error(
-      //  `Unhandled Exception: ${exception}`,
-      //  exception instanceof Error ? exception.stack : undefined,
-      //);
     }
 
     response.status(status).json(errorResponse);
