@@ -6,3 +6,4 @@ export * from './supplier.controller';
 export * from './category.controller';
 export * from './voucher-series.controller';
 export * from './brand.controller';
+export * from './sunat-config.controller';

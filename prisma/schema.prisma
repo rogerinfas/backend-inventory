@@ -47,6 +47,20 @@ enum VoucherType {
   PROFORMA    /// Proforma
 }
 
+/// Estados de SUNAT
+enum SunatStatus {
+  PENDING  /// Pendiente
+  ACCEPTED /// Aceptado
+  REJECTED /// Rechazado
+  ERROR    /// Error
+}
+
+/// Ambientes de SUNAT
+enum SunatEnvironment {
+  PRODUCTION /// Producción
+  TEST       /// Pruebas
+}
+
 // ============================================
 // MODELS - ENTITIES
 // ============================================
@@ -97,7 +111,7 @@ model Store {
   customers         Customer[]
   //sales             Sale[]
   voucherSeries     VoucherSeries[]
-  //sunatConfig       SunatConfig?
+  sunatConfig       SunatConfig?
   //cashRegisters     CashRegister[]
 
   @@index([status])
@@ -212,4 +226,23 @@ model Brand {
 
   @@index([status])
   @@map("brands")
+}
+
+/// Configuración de SUNAT
+model SunatConfig { 
+  id                  String   @id @default(uuid())
+  storeId             String   @unique @map("store_id")
+  solUsername         String   @map("sol_username")
+  solPassword         String   @map("sol_password")
+  digitalCertificate  Bytes?   @map("digital_certificate")
+  certificatePassword String?  @map("certificate_password")
+  apiUrl              String?  @map("sunat_api_url")
+  environment         SunatEnvironment @default(TEST) @map("environment")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  store               Store    @relation(fields: [storeId], references: [id])
+
+  @@map("sunat_config")
 }

@@ -7,3 +7,4 @@ export type { UserRepository, UserQueryFilters } from './user.repository';
 export type { CategoryRepository, CategoryQueryFilters } from './category.repository';
 export type { VoucherSeriesRepository, VoucherSeriesQueryFilters } from './voucher-series.repository';
 export type { BrandRepository, BrandQueryFilters } from './brand.repository';
+export type { SunatConfigRepository, SunatConfigQueryFilters } from './sunat-config.repository';

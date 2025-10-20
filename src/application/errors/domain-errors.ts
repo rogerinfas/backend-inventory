@@ -326,3 +326,44 @@ export class BrandDeletedError extends DomainError {
     super(`No se puede realizar la operación. La marca con ID ${id} está eliminada`);
   }
 }
+
+// SunatConfig specific errors
+export class SunatConfigNotFoundError extends DomainError {
+  readonly code = 'SUNAT_CONFIG_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Configuración SUNAT con ID ${id} no encontrada`);
+  }
+}
+
+export class SunatConfigAlreadyExistsError extends DomainError {
+  readonly code = 'SUNAT_CONFIG_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(storeId: string) {
+    super(`Ya existe una configuración SUNAT para la tienda ${storeId}`);
+  }
+}
+
+export class InvalidSunatCredentialsError extends DomainError {
+  readonly code = 'INVALID_SUNAT_CREDENTIALS';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(message: string) {
+    super(`Credenciales SUNAT inválidas: ${message}`);
+  }
+}
+
+export class InvalidSunatEnvironmentError extends DomainError {
+  readonly code = 'INVALID_SUNAT_ENVIRONMENT';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(environment: string) {
+    super(`Ambiente SUNAT inválido: ${environment}`);
+  }
+}

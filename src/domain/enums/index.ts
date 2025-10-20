@@ -3,3 +3,5 @@ export { DocumentType } from './document-type.enum';
 export { EntityStatus } from './entity-status.enum';
 export { UserRole } from './user-role.enum';
 export { VoucherType } from './voucher-type.enum';
+export { SunatStatus } from './sunat-status.enum';
+export { SunatEnvironment } from './sunat-environment.enum';

@@ -6,3 +6,4 @@ export * from './user.mapper';
 export * from './category.mapper';
 export * from './voucher-series.mapper';
 export * from './brand.mapper';
+export * from './sunat-config.mapper';

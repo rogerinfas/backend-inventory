@@ -6,4 +6,5 @@ export * from './supplier.module';
 export * from './category.module';
 export * from './voucher-series.module';
 export * from './brand.module';
+export * from './sunat-config.module';
 export * from './database.module';

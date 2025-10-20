@@ -6,3 +6,4 @@ export * from './supplier.repository';
 export * from './category.repository';
 export * from './voucher-series.repository';
 export * from './brand.repository';
+export * from './sunat-config.repository';
