@@ -21,6 +21,7 @@ export class ProductService {
   private readonly addStockUseCase: any;
   private readonly removeStockUseCase: any;
   private readonly updateStockUseCase: any;
+  private readonly updateReservedStockUseCase: any;
 
   constructor(@Inject('ProductRepository') productRepository: ProductRepository) {
     // Importar use cases dinámicamente para evitar dependencias circulares
@@ -32,7 +33,8 @@ export class ProductService {
       DeleteProductUseCase,
       AddStockUseCase,
       RemoveStockUseCase,
-      UpdateStockUseCase
+      UpdateStockUseCase,
+      UpdateReservedStockUseCase
     } = require('../use-cases/product');
 
     this.createProductUseCase = new CreateProductUseCase(productRepository);
@@ -43,6 +45,7 @@ export class ProductService {
     this.addStockUseCase = new AddStockUseCase(productRepository);
     this.removeStockUseCase = new RemoveStockUseCase(productRepository);
     this.updateStockUseCase = new UpdateStockUseCase(productRepository);
+    this.updateReservedStockUseCase = new UpdateReservedStockUseCase(productRepository);
   }
 
   async createProduct(dto: CreateProductDto): Promise<ProductResponseDto> {
@@ -75,6 +78,10 @@ export class ProductService {
 
   async updateStock(id: string, dto: UpdateStockDto): Promise<ProductResponseDto> {
     return this.updateStockUseCase.execute(id, dto);
+  }
+
+  async updateReservedStock(productId: string, storeId: string, reservedStock: number) {
+    return this.updateReservedStockUseCase.execute(productId, storeId, reservedStock);
   }
 
   // TODO: Implementar método para consultar historial de movimientos de inventario

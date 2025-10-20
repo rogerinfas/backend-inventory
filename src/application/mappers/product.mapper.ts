@@ -32,6 +32,8 @@ export class ProductMapper {
       purchasePrice: product.purchasePrice,
       salePrice: product.salePrice,
       currentStock: product.currentStock,
+      reservedStock: product.reservedStock,
+      availableStock: product.currentStock - product.reservedStock,
       minimumStock: product.minimumStock,
       maximumStock: product.maximumStock,
       unitOfMeasure: product.unitOfMeasure,

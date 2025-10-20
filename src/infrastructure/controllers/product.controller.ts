@@ -562,6 +562,32 @@ export class ProductController {
     return this.productService.updateStock(id, updateStockDto);
   }
 
+  @Patch(':id/stores/:storeId/reserved-stock')
+  @ApiOperation({
+    summary: 'Actualizar reservedStock de un producto',
+    description: 'Actualiza el stock reservado del producto. Debe ser menor o igual al currentStock.'
+  })
+  @ApiParam({ name: 'id', description: 'ID del producto', example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiParam({ name: 'storeId', description: 'ID de la tienda', example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        reservedStock: { type: 'number', example: 5, minimum: 0 },
+      },
+      required: ['reservedStock']
+    }
+  })
+  @ApiResponse({ status: 200, description: 'Reserved stock actualizado' })
+  @ApiBadRequestResponse({ description: 'reservedStock inválido o mayor a currentStock' })
+  async updateReservedStock(
+    @Param('id') id: string,
+    @Param('storeId') storeId: string,
+    @Body() body: { reservedStock: number },
+  ) {
+    return this.productService.updateReservedStock(id, storeId, body.reservedStock);
+  }
+
   // TODO: Implementar endpoint para consultar historial de movimientos de inventario
   // @Get(':id/inventory-movements')
   // @ApiOperation({

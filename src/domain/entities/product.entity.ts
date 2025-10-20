@@ -17,6 +17,7 @@ export class Product {
     private _purchasePrice: Price,
     private _salePrice: Price,
     private _currentStock: Stock,
+    private _reservedStock: Stock,
     private _minimumStock: Stock,
     private _maximumStock: Stock | null,
     private _unitOfMeasure: UnitOfMeasure,
@@ -53,6 +54,7 @@ export class Product {
       new Price(purchasePrice),
       new Price(salePrice),
       new Stock(0), // Stock inicial siempre es 0
+      new Stock(0), // Reserved stock inicial 0
       new Stock(minimumStock),
       null, // Maximum stock opcional
       unitOfMeasure,
@@ -74,6 +76,7 @@ export class Product {
     purchasePrice: number,
     salePrice: number,
     currentStock: number,
+    reservedStock: number,
     minimumStock: number,
     maximumStock: number | null,
     unitOfMeasure: UnitOfMeasure,
@@ -84,7 +87,7 @@ export class Product {
     categoryId: string | null,
     brandId: string | null
   ): Product {
-    return new Product(
+    const product = new Product(
       id,
       storeId,
       new Sku(sku),
@@ -93,6 +96,7 @@ export class Product {
       new Price(purchasePrice),
       new Price(salePrice),
       new Stock(currentStock),
+      new Stock(reservedStock),
       new Stock(minimumStock),
       maximumStock ? new Stock(maximumStock) : null,
       unitOfMeasure,
@@ -103,6 +107,8 @@ export class Product {
       categoryId,
       brandId
     );
+    product.ensureReservedNotExceedsCurrent();
+    return product;
   }
 
   // Getters
@@ -136,6 +142,10 @@ export class Product {
 
   get currentStock(): number {
     return this._currentStock.value;
+  }
+
+  get reservedStock(): number {
+    return this._reservedStock.value;
   }
 
   get minimumStock(): number {
@@ -241,18 +251,37 @@ export class Product {
   addStock(quantity: number): void {
     const stockToAdd = new Stock(quantity);
     this._currentStock = this._currentStock.add(stockToAdd);
+    this.ensureReservedNotExceedsCurrent();
     this._updatedAt = new Date();
   }
 
   removeStock(quantity: number): void {
     const stockToRemove = new Stock(quantity);
     this._currentStock = this._currentStock.subtract(stockToRemove);
+    this.ensureReservedNotExceedsCurrent();
     this._updatedAt = new Date();
   }
 
   setStock(quantity: number): void {
     this._currentStock = new Stock(quantity);
+    this.ensureReservedNotExceedsCurrent();
     this._updatedAt = new Date();
+  }
+
+  updateReservedStock(quantity: number): void {
+    const newReserved = new Stock(quantity);
+    if (newReserved.value > this._currentStock.value) {
+      throw new Error('El reservedStock no puede ser mayor que el currentStock');
+    }
+    this._reservedStock = newReserved;
+    this._updatedAt = new Date();
+  }
+
+  private ensureReservedNotExceedsCurrent(): void {
+    if (this._reservedStock && this._reservedStock.value > this._currentStock.value) {
+      // Ajuste defensivo: en dominio, preferimos evitar estados inválidos
+      this._reservedStock = new Stock(this._currentStock.value);
+    }
   }
 
   // Métodos de estado

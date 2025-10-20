@@ -1,10 +1,11 @@
 // Product Use Cases exports
-export { CreateProductUseCase } from './create-product.use-case';
-export { UpdateProductUseCase } from './update-product.use-case';
-export { GetProductByIdUseCase } from './get-product-by-id.use-case';
-export { ListProductsUseCase } from './list-products.use-case';
+export * from './create-product.use-case';
+export * from './update-product.use-case';
+export * from './get-product-by-id.use-case';
+export * from './list-products.use-case';
+export * from './delete-product.use-case';
+export * from './add-stock.use-case';
+export * from './remove-stock.use-case';
+export * from './update-stock.use-case';
 export type { ListProductsResult } from './list-products.use-case';
-export { DeleteProductUseCase } from './delete-product.use-case';
-export { AddStockUseCase } from './add-stock.use-case';
-export { RemoveStockUseCase } from './remove-stock.use-case';
-export { UpdateStockUseCase } from './update-stock.use-case';
+export * from './update-reserved-stock.use-case';

@@ -267,6 +267,7 @@ model Product {
   purchasePrice Float    @map("purchase_price")
   salePrice     Float    @map("sale_price")
   currentStock  Int      @default(0) @map("current_stock")
+  reservedStock Int      @default(0) @map("reserved_stock")
   minimumStock  Int      @default(5) @map("minimum_stock")
   maximumStock  Int?     @map("maximum_stock")
   unitOfMeasure UnitOfMeasure @default(UNIT) @map("unit_of_measure")

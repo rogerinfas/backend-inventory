@@ -59,6 +59,20 @@ export class ProductResponseDto {
   currentStock: number;
 
   @ApiProperty({
+    description: 'Stock reservado del producto',
+    example: 5,
+    type: 'integer'
+  })
+  reservedStock: number;
+
+  @ApiProperty({
+    description: 'Stock disponible para venta (currentStock - reservedStock)',
+    example: 20,
+    type: 'integer'
+  })
+  availableStock: number;
+
+  @ApiProperty({
     description: 'Stock mínimo del producto',
     example: 10,
     type: 'integer'

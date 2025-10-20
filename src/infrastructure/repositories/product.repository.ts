@@ -26,6 +26,7 @@ export class ProductPrismaRepository implements ProductRepository {
       productData.purchasePrice,
       productData.salePrice,
       productData.currentStock,
+      productData.reservedStock,
       productData.minimumStock,
       productData.maximumStock,
       productData.unitOfMeasure as UnitOfMeasure,
@@ -56,6 +57,7 @@ export class ProductPrismaRepository implements ProductRepository {
       productData.purchasePrice,
       productData.salePrice,
       productData.currentStock,
+      productData.reservedStock,
       productData.minimumStock,
       productData.maximumStock,
       productData.unitOfMeasure as UnitOfMeasure,
@@ -83,6 +85,7 @@ export class ProductPrismaRepository implements ProductRepository {
         productData.purchasePrice,
         productData.salePrice,
         productData.currentStock,
+        productData.reservedStock,
         productData.minimumStock,
         productData.maximumStock,
         productData.unitOfMeasure as UnitOfMeasure,
@@ -111,6 +114,7 @@ export class ProductPrismaRepository implements ProductRepository {
         productData.purchasePrice,
         productData.salePrice,
         productData.currentStock,
+        productData.reservedStock,
         productData.minimumStock,
         productData.maximumStock,
         productData.unitOfMeasure as UnitOfMeasure,
@@ -139,6 +143,7 @@ export class ProductPrismaRepository implements ProductRepository {
         productData.purchasePrice,
         productData.salePrice,
         productData.currentStock,
+        productData.reservedStock,
         productData.minimumStock,
         productData.maximumStock,
         productData.unitOfMeasure as UnitOfMeasure,
@@ -206,6 +211,7 @@ export class ProductPrismaRepository implements ProductRepository {
         productData.purchasePrice,
         productData.salePrice,
         productData.currentStock,
+        productData.reservedStock,
         productData.minimumStock,
         productData.maximumStock,
         productData.unitOfMeasure as UnitOfMeasure,
@@ -247,6 +253,7 @@ export class ProductPrismaRepository implements ProductRepository {
         productData.purchasePrice,
         productData.salePrice,
         productData.currentStock,
+        productData.reservedStock,
         productData.minimumStock,
         productData.maximumStock,
         productData.unitOfMeasure as UnitOfMeasure,
@@ -284,6 +291,7 @@ export class ProductPrismaRepository implements ProductRepository {
         productData.purchasePrice,
         productData.salePrice,
         productData.currentStock,
+        productData.reservedStock,
         productData.minimumStock,
         productData.maximumStock,
         productData.unitOfMeasure as UnitOfMeasure,
@@ -308,6 +316,7 @@ export class ProductPrismaRepository implements ProductRepository {
         purchasePrice: product.purchasePrice,
         salePrice: product.salePrice,
         currentStock: product.currentStock,
+        reservedStock: product.reservedStock,
         minimumStock: product.minimumStock,
         maximumStock: product.maximumStock,
         unitOfMeasure: product.unitOfMeasure,
@@ -329,6 +338,7 @@ export class ProductPrismaRepository implements ProductRepository {
       productData.purchasePrice,
       productData.salePrice,
       productData.currentStock,
+      productData.reservedStock,
       productData.minimumStock,
       productData.maximumStock,
       productData.unitOfMeasure as UnitOfMeasure,
@@ -350,6 +360,7 @@ export class ProductPrismaRepository implements ProductRepository {
         purchasePrice: product.purchasePrice,
         salePrice: product.salePrice,
         currentStock: product.currentStock,
+        reservedStock: product.reservedStock,
         minimumStock: product.minimumStock,
         maximumStock: product.maximumStock,
         unitOfMeasure: product.unitOfMeasure,
@@ -370,6 +381,7 @@ export class ProductPrismaRepository implements ProductRepository {
       productData.purchasePrice,
       productData.salePrice,
       productData.currentStock,
+      productData.reservedStock,
       productData.minimumStock,
       productData.maximumStock,
       productData.unitOfMeasure as UnitOfMeasure,
@@ -467,6 +479,53 @@ export class ProductPrismaRepository implements ProductRepository {
       updated.purchasePrice,
       updated.salePrice,
       updated.currentStock,
+      updated.reservedStock,
+      updated.minimumStock,
+      updated.maximumStock,
+      updated.unitOfMeasure as UnitOfMeasure,
+      updated.imageUrl,
+      updated.isActive,
+      updated.createdAt,
+      updated.updatedAt,
+      updated.categoryId,
+      updated.brandId
+    );
+  }
+
+  async setReservedStock(productId: string, reservedStock: number, storeId: string, tx?: any): Promise<Product> {
+    const prisma = tx || this.prisma;
+
+    const productData = await prisma.product.findUnique({ where: { id: productId } });
+    if (!productData || productData.storeId !== storeId) {
+      throw new Error('Producto no encontrado en la tienda indicada');
+    }
+    if (reservedStock < 0) {
+      throw new Error('El incremento de reservedStock debe ser >= 0');
+    }
+
+    const newReserved = productData.reservedStock + reservedStock;
+    if (newReserved > productData.currentStock) {
+      throw new Error('El reservedStock no puede ser mayor que el currentStock');
+    }
+
+    const updated = await prisma.product.update({
+      where: { id: productId },
+      data: {
+        reservedStock: newReserved,
+        updatedAt: new Date(),
+      },
+    });
+
+    return Product.fromPersistence(
+      updated.id,
+      updated.storeId,
+      updated.sku,
+      updated.name,
+      updated.description,
+      updated.purchasePrice,
+      updated.salePrice,
+      updated.currentStock,
+      updated.reservedStock,
       updated.minimumStock,
       updated.maximumStock,
       updated.unitOfMeasure as UnitOfMeasure,
