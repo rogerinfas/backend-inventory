@@ -24,14 +24,38 @@ async function bootstrap() {
   );
 
   // Configurar CORS
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://localhost:3001', // Frontend Next.js
+      'http://localhost:3000', // Backend (por si acaso)
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    credentials: true,
+  });
 
   // Configurar Swagger
   const config = new DocumentBuilder()
     .setTitle('Backend Inventory API')
     .setDescription('API para gestión de inventario con Clean Architecture')
     .setVersion('1.0')
+    .addTag('auth', 'Autenticación')
+    .addTag('users', 'Gestión de usuarios')
     .addTag('persons', 'Gestión de personas')
+    .addTag('stores', 'Gestión de tiendas')
+    .addTag('customers', 'Gestión de clientes')
+    .addTag('suppliers', 'Gestión de proveedores')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Ingresa tu token JWT',
+        in: 'header',
+      },
+      'JWT',
+    )
     .build();
   
   const document = SwaggerModule.createDocument(app, config);
