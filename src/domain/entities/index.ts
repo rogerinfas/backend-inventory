@@ -11,5 +11,3 @@ export { Product } from './product.entity';
 export { SunatConfig } from './sunat-config.entity';
 export { Purchase } from './purchase.entity';
 export { PurchaseDetail } from './purchase-detail.entity';
-export { Sale } from './sale.entity';
-export { SaleDetail } from './sale-detail.entity';

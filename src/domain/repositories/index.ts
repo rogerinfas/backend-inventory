@@ -11,4 +11,3 @@ export type { ProductRepository, ProductQueryFilters } from './product.repositor
 export type { SunatConfigRepository, SunatConfigQueryFilters } from './sunat-config.repository';
 export type { PurchaseRepository, PurchaseQueryFilters, PurchaseWithDetails } from './purchase.repository';
 export type { PurchaseDetailRepository, PurchaseDetailQueryFilters } from './purchase-detail.repository';
-export type { SaleRepository, SaleQueryFilters, SaleWithDetails } from './sale.repository';

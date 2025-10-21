@@ -88,22 +88,6 @@ enum PurchaseDocumentType {
   ORDER   /// Orden de compra
 }
 
-/// Estados de ventas
-enum SaleStatus {
-  PENDING   /// Pendiente
-  COMPLETED /// Completada
-  CANCELLED /// Cancelada
-  REFUNDED  /// Reembolsada
-}
-
-/// Tipos de documentos de venta
-enum SaleDocumentType {
-  INVOICE /// Factura
-  RECEIPT /// Recibo
-  TICKET  /// Boleta
-  QUOTE   /// Cotización
-}
-
 // ============================================
 // MODELS - ENTITIES
 // ============================================
@@ -152,7 +136,7 @@ model Store {
   suppliers         Supplier[]
   purchases         Purchase[]
   customers         Customer[]
-  sales             Sale[]
+  //sales             Sale[]
   voucherSeries     VoucherSeries[]
   sunatConfig       SunatConfig?
   //cashRegisters     CashRegister[]
@@ -189,7 +173,7 @@ model Customer {
   // Relations
   store           Store    @relation(fields: [storeId], references: [id])
   person          Person   @relation(fields: [personId], references: [id])
-  sales           Sale[]
+  //sales           Sale[]
 
   @@index([status])
   @@map("customers")
@@ -229,7 +213,7 @@ model User {
   // Relations
   store         Store    @relation(fields: [storeId], references: [id])
   person        Person   @relation(fields: [personId], references: [id])
-  sales         Sale[]
+  //sales         Sale[]
   purchases     Purchase[]
   //inventoryMovements InventoryMovement[]
   //cashRegisters CashRegister[]
@@ -297,7 +281,7 @@ model Product {
   category      Category? @relation(fields: [categoryId], references: [id])
   brand         Brand?   @relation(fields: [brandId], references: [id])
   purchaseDetails PurchaseDetail[]
-  saleDetails      SaleDetail[]
+  //saleDetails   SaleDetail[]
   //inventoryMovements InventoryMovement[]
 
   // TODO: Implementar tabla InventoryMovement para registrar movimientos de stock
@@ -358,58 +342,6 @@ model PurchaseDetail {
   product     Product  @relation(fields: [productId], references: [id])
 
   @@map("purchase_details")
-}
-
-/// Gestión de ventas
-model Sale {
-  id              String   @id @default(uuid())
-  storeId         String   @map("store_id")
-  customerId      String   @map("customer_id")
-  userId          String   @map("user_id")
-  documentNumber  String?  @map("document_number")
-  documentType    SaleDocumentType @default(INVOICE) @map("document_type")
-  saleDate        DateTime @map("sale_date")
-  subtotal        Float
-  tax             Float    @default(0)
-  discount        Float    @default(0)
-  total           Float
-  status          SaleStatus @default(PENDING)
-  notes           String?
-  registeredAt    DateTime @default(now()) @map("registered_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  
-  // TODO: Campos SUNAT comentados para futura implementación
-  // sunatDocumentType String? @map("sunat_document_type")
-  // sunatSerial       String? @map("sunat_serial")
-  // sunatCorrelative  String? @map("sunat_correlative")
-  // sunatStatus       String? @map("sunat_status")
-  // sunatResponse     String? @map("sunat_response")
-  
-  // Relations
-  store           Store    @relation(fields: [storeId], references: [id])
-  customer        Customer @relation(fields: [customerId], references: [id])
-  user            User     @relation(fields: [userId], references: [id])
-  details         SaleDetail[]
-
-  @@index([status])
-  @@index([saleDate])
-  @@map("sales")
-}
-
-/// Detalles de ventas
-model SaleDetail {
-  id          String   @id @default(uuid())
-  saleId      String   @map("sale_id")
-  productId   String   @map("product_id")
-  quantity    Int
-  unitPrice   Float    @map("unit_price")
-  discount    Float    @default(0)
-  
-  // Relations
-  sale        Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  product     Product  @relation(fields: [productId], references: [id])
-
-  @@map("sale_details")
 }
 
 /// Configuración de SUNAT
