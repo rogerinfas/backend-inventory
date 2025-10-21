@@ -510,6 +510,27 @@ export class FutureDateError extends DomainError {
   }
 }
 
+// Sale specific errors
+export class SaleNotFoundError extends DomainError {
+  readonly code = 'SALE_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Venta con ID ${id} no encontrada`);
+  }
+}
+
+export class SaleCreationError extends DomainError {
+  readonly code = 'SALE_CREATION_ERROR';
+  readonly statusCode = 500;
+  readonly isOperational = false;
+
+  constructor(message: string) {
+    super(`Error al crear la venta: ${message}`);
+  }
+}
+
 export class PurchaseCreationError extends DomainError {
   readonly code = 'PURCHASE_CREATION_ERROR';
   readonly statusCode = 500;
