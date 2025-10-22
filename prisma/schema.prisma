@@ -36,7 +36,6 @@ enum UserRole {
   SELLER      /// Vendedor
   WAREHOUSE   /// Almacén
   MANAGER     /// Gerente
-  CASHIER     /// Cajero
 }
 
 /// Tipos de comprobantes de venta
