@@ -6,5 +6,4 @@ export enum UserRole {
   SELLER = 'SELLER',     /// Vendedor
   WAREHOUSE = 'WAREHOUSE', /// Almacén
   MANAGER = 'MANAGER',   /// Gerente
-  CASHIER = 'CASHIER',   /// Cajero
 }

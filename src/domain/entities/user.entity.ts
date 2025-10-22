@@ -119,7 +119,7 @@ export class User {
    * Verifica si el usuario puede vender
    */
   canSell(): boolean {
-    return [UserRole.ADMIN, UserRole.MANAGER, UserRole.SELLER, UserRole.CASHIER].includes(this.role);
+    return [UserRole.ADMIN, UserRole.MANAGER, UserRole.SELLER].includes(this.role);
   }
 
   /**

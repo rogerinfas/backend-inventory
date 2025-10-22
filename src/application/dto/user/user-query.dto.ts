@@ -15,7 +15,7 @@ export class UserQueryDto {
   storeId?: string;
 
   @IsOptional()
-  @IsEnum(UserRole, { message: 'El rol debe ser ADMIN, SELLER, WAREHOUSE, MANAGER o CASHIER' })
+  @IsEnum(UserRole, { message: 'El rol debe ser ADMIN, SELLER, WAREHOUSE o MANAGER' })
   @ApiProperty({ 
     enum: UserRole, 
     description: 'Rol del usuario', 

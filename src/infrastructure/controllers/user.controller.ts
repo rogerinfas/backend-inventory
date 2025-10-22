@@ -8,7 +8,8 @@ import {
   Delete, 
   Query,
   HttpCode,
-  HttpStatus
+  HttpStatus,
+  UseGuards
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -16,7 +17,9 @@ import {
   ApiResponse, 
   ApiParam, 
   ApiQuery,
-  ApiBody 
+  ApiBody,
+  ApiBearerAuth,
+  ApiSecurity
 } from '@nestjs/swagger';
 import { UserService } from '../../application/services/user.service';
 import {
@@ -30,9 +33,13 @@ import {
   ListUsersResponseDto,
 } from '../../application/dto/user';
 import type { ListUsersResult } from '../../application/use-cases/user';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@ApiSecurity('JWT')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -40,7 +47,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ 
     summary: 'Crear usuario',
-    description: 'Crea un nuevo usuario asociado a una persona existente. El rol se asigna automáticamente como SELLER por seguridad.'
+    description: 'Crea un nuevo usuario asociado a una persona existente. El rol se asigna automáticamente como SELLER por seguridad. Requiere autenticación JWT.'
   })
   @ApiBody({ type: CreateUserDto })
   @ApiResponse({ 
@@ -51,6 +58,10 @@ export class UserController {
   @ApiResponse({ 
     status: 400, 
     description: 'Datos de entrada inválidos' 
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token de acceso requerido o inválido' 
   })
   @ApiResponse({ 
     status: 409, 
@@ -64,7 +75,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ 
     summary: 'Crear usuario con persona asociada',
-    description: 'Crea un nuevo usuario junto con su persona asociada en una sola operación atómica. El rol se asigna automáticamente como SELLER por seguridad.'
+    description: 'Crea un nuevo usuario junto con su persona asociada en una sola operación atómica. El rol se asigna automáticamente como SELLER por seguridad. Requiere autenticación JWT.'
   })
   @ApiBody({ type: CreateUserWithPersonDto })
   @ApiResponse({ 
@@ -75,6 +86,10 @@ export class UserController {
   @ApiResponse({ 
     status: 400, 
     description: 'Datos de entrada inválidos' 
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token de acceso requerido o inválido' 
   })
   @ApiResponse({ 
     status: 404, 
@@ -91,7 +106,7 @@ export class UserController {
   @Get()
   @ApiOperation({ 
     summary: 'Listar usuarios',
-    description: 'Obtiene una lista paginada de usuarios con filtros opcionales'
+    description: 'Obtiene una lista paginada de usuarios con filtros opcionales. Requiere autenticación JWT.'
   })
   @ApiQuery({ name: 'storeId', required: false, description: 'ID de la tienda' })
   @ApiQuery({ name: 'role', required: false, description: 'Rol del usuario' })
@@ -106,6 +121,10 @@ export class UserController {
     description: 'Lista de usuarios obtenida exitosamente',
     type: ListUsersResponseDto 
   })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token de acceso requerido o inválido' 
+  })
   async listUsers(@Query() query: UserQueryDto): Promise<ListUsersResult> {
     return this.userService.listUsers(query);
   }
@@ -113,13 +132,17 @@ export class UserController {
   @Get(':id')
   @ApiOperation({ 
     summary: 'Obtener usuario por ID',
-    description: 'Obtiene un usuario específico por su ID'
+    description: 'Obtiene un usuario específico por su ID. Requiere autenticación JWT.'
   })
   @ApiParam({ name: 'id', description: 'ID único del usuario' })
   @ApiResponse({ 
     status: 200, 
     description: 'Usuario obtenido exitosamente',
     type: UserResponseDto 
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token de acceso requerido o inválido' 
   })
   @ApiResponse({ 
     status: 404, 
@@ -132,7 +155,7 @@ export class UserController {
   @Patch(':id')
   @ApiOperation({ 
     summary: 'Actualizar usuario',
-    description: 'Actualiza un usuario existente'
+    description: 'Actualiza un usuario existente. Requiere autenticación JWT.'
   })
   @ApiParam({ name: 'id', description: 'ID único del usuario' })
   @ApiBody({ type: UpdateUserDto })
@@ -144,6 +167,10 @@ export class UserController {
   @ApiResponse({ 
     status: 400, 
     description: 'Datos de entrada inválidos' 
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token de acceso requerido o inválido' 
   })
   @ApiResponse({ 
     status: 404, 
@@ -167,7 +194,7 @@ export class UserController {
   @Patch(':id/status')
   @ApiOperation({ 
     summary: 'Cambiar estado del usuario',
-    description: 'Cambia el estado de un usuario (ACTIVE, INACTIVE, SUSPENDED, DELETED)'
+    description: 'Cambia el estado de un usuario (ACTIVE, INACTIVE, SUSPENDED, DELETED). Requiere autenticación JWT.'
   })
   @ApiParam({ name: 'id', description: 'ID único del usuario' })
   @ApiBody({ type: ChangeUserStatusDto })
@@ -179,6 +206,10 @@ export class UserController {
   @ApiResponse({ 
     status: 400, 
     description: 'Datos de entrada inválidos' 
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token de acceso requerido o inválido' 
   })
   @ApiResponse({ 
     status: 404, 
@@ -199,12 +230,16 @@ export class UserController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ 
     summary: 'Eliminar usuario',
-    description: 'Elimina un usuario (soft delete)'
+    description: 'Elimina un usuario (soft delete). Requiere autenticación JWT.'
   })
   @ApiParam({ name: 'id', description: 'ID único del usuario' })
   @ApiResponse({ 
     status: 204, 
     description: 'Usuario eliminado exitosamente' 
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token de acceso requerido o inválido' 
   })
   @ApiResponse({ 
     status: 404, 
