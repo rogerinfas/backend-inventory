@@ -199,7 +199,7 @@ model Supplier {
 /// Gestión de usuarios del sistema
 model User {
   id            String   @id @default(uuid())
-  storeId       String   @map("store_id")
+  storeId       String?  @map("store_id") // Opcional para usuarios admin generales
   personId      String   @map("person_id")
   email         String   @unique
   passwordHash  String   @map("password_hash")
@@ -210,7 +210,7 @@ model User {
   updatedAt     DateTime @updatedAt @map("updated_at")
   
   // Relations
-  store         Store    @relation(fields: [storeId], references: [id])
+  store         Store?   @relation(fields: [storeId], references: [id])
   person        Person   @relation(fields: [personId], references: [id])
   //sales         Sale[]
   purchases     Purchase[]
@@ -219,6 +219,7 @@ model User {
 
   @@index([status])
   @@index([role])
+  @@index([storeId])
   @@map("users")
 }
 

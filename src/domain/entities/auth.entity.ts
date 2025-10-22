@@ -5,7 +5,7 @@ export interface AuthPayload {
   sub: string; // user id
   email: string;
   role: UserRole;
-  storeId: string;
+  storeId: string | null;
   iat?: number;
   exp?: number;
 }
@@ -21,7 +21,7 @@ export interface AuthResult {
     id: string;
     email: string;
     role: UserRole;
-    storeId: string;
+    storeId: string | null;
     person: {
       id: string;
       names: string;

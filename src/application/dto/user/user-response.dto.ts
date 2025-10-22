@@ -6,8 +6,8 @@ export class UserResponseDto {
   @ApiProperty({ description: 'ID único del usuario' })
   id: string;
 
-  @ApiProperty({ description: 'ID de la tienda' })
-  storeId: string;
+  @ApiProperty({ description: 'ID de la tienda', required: false })
+  storeId?: string;
 
   @ApiProperty({ description: 'ID de la persona' })
   personId: string;

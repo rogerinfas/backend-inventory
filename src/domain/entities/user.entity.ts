@@ -7,7 +7,7 @@ import { UserRole } from '../enums/user-role.enum';
 export class User {
   private constructor(
     public readonly id: string,
-    public readonly storeId: string,
+    public readonly storeId: string | null, // Opcional para usuarios admin generales
     public readonly personId: string,
     public readonly email: string,
     public readonly passwordHash: string,
@@ -23,7 +23,7 @@ export class User {
    */
   static create(
     id: string,
-    storeId: string,
+    storeId: string | null,
     personId: string,
     email: string,
     passwordHash: string,
@@ -49,7 +49,7 @@ export class User {
    */
   static fromPersistence(
     id: string,
-    storeId: string,
+    storeId: string | null,
     personId: string,
     email: string,
     passwordHash: string,
@@ -106,6 +106,20 @@ export class User {
    */
   isAdmin(): boolean {
     return this.role === UserRole.ADMIN;
+  }
+
+  /**
+   * Verifica si el usuario es administrador general (sin tienda asociada)
+   */
+  isGeneralAdmin(): boolean {
+    return this.role === UserRole.ADMIN && this.storeId === null;
+  }
+
+  /**
+   * Verifica si el usuario está asociado a una tienda
+   */
+  hasStore(): boolean {
+    return this.storeId !== null;
   }
 
   /**

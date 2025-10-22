@@ -10,7 +10,7 @@ import { AuthInfrastructureService } from '../services/auth-infrastructure.servi
 
 interface UserWithRelations {
   id: string;
-  storeId: string;
+  storeId: string | null;
   personId: string;
   email: string;
   passwordHash: string;
@@ -44,7 +44,7 @@ interface UserWithRelations {
     status: EntityStatus;
     registeredAt: Date;
     updatedAt: Date;
-  };
+  } | null;
 }
 
 @Injectable()
@@ -91,7 +91,7 @@ export class AuthPrismaRepository implements AuthRepository {
         createdAt: user.person.createdAt,
         updatedAt: user.person.updatedAt,
       },
-      store: {
+      store: user.store ? {
         id: user.store.id,
         businessName: user.store.businessName,
         ruc: user.store.ruc,
@@ -103,7 +103,7 @@ export class AuthPrismaRepository implements AuthRepository {
         status: user.store.status as EntityStatus,
         registeredAt: user.store.registeredAt,
         updatedAt: user.store.updatedAt,
-      },
+      } : null,
     };
   }
 

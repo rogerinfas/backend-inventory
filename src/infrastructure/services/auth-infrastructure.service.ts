@@ -8,7 +8,7 @@ interface UserWithRelations {
   id: string;
   email: string;
   role: any;
-  storeId: string;
+  storeId: string | null;
   person: {
     id: string;
     names: string;

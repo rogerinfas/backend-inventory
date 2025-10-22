@@ -6,7 +6,7 @@ interface UserWithRelations {
   passwordHash: string;
   role: any;
   status: any;
-  storeId: string;
+  storeId: string | null;
   person: {
     id: string;
     names: string;

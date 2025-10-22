@@ -56,6 +56,14 @@ export interface UserRepository {
   findByStoreAndDocument(storeId: string, documentNumber: string, tx?: PrismaTransaction): Promise<User | null>;
 
   /**
+   * Buscar usuarios por rol
+   * @param role - Rol de usuario
+   * @param tx - Transacción opcional
+   * @returns Lista de usuarios con el rol especificado
+   */
+  findByRole(role: UserRole, tx?: PrismaTransaction): Promise<User[]>;
+
+  /**
    * Buscar múltiples usuarios con filtros opcionales
    * @param filters - Filtros de búsqueda
    * @param tx - Transacción opcional

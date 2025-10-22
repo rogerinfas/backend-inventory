@@ -51,7 +51,7 @@ export class UserMapper {
   static toResponseDto(user: User): UserResponseDto {
     return {
       id: user.id,
-      storeId: user.storeId,
+      storeId: user.storeId || undefined,
       personId: user.personId,
       email: user.email,
       role: user.role,

@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './infrastructure/filters/global-exception.filter';
+import { AdminInitializationService } from './application/services/admin-initialization.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -63,6 +64,10 @@ async function bootstrap() {
   app.use('/api-reference', apiReference({
     content:document,
   }));
+
+  // Inicializar administrador general
+  const adminInitService = app.get(AdminInitializationService);
+  await adminInitService.initializeGeneralAdmin();
 
   await app.listen(process.env.PORT ?? 5000);
   console.log(`🚀 Aplicación ejecutándose en puerto ${process.env.PORT ?? 5000}`);

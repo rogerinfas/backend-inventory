@@ -117,6 +117,28 @@ export class UserPrismaRepository implements UserRepository {
     );
   }
 
+  async findByRole(role: UserRole, tx?: PrismaTransaction): Promise<User[]> {
+    const client = tx || this.prisma;
+    const usersData = await client.user.findMany({
+      where: { role },
+    });
+
+    return usersData.map(userData => 
+      User.fromPersistence(
+        userData.id,
+        userData.storeId,
+        userData.personId,
+        userData.email,
+        userData.passwordHash,
+        userData.role as UserRole,
+        userData.status as EntityStatus,
+        userData.lastLoginAt,
+        userData.createdAt,
+        userData.updatedAt
+      )
+    );
+  }
+
   async findMany(filters?: UserQueryFilters, tx?: PrismaTransaction): Promise<User[]> {
     const client = tx || this.prisma;
     

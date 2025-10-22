@@ -35,7 +35,7 @@ export class AuthResponseDto {
     id: string;
     email: string;
     role: string;
-    storeId: string;
+    storeId: string | null;
     person: {
       id: string;
       names: string;
