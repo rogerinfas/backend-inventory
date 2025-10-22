@@ -18,8 +18,7 @@ import {
   ApiParam, 
   ApiQuery,
   ApiBody,
-  ApiBearerAuth,
-  ApiSecurity
+  ApiBearerAuth
 } from '@nestjs/swagger';
 import { UserService } from '../../application/services/user.service';
 import {
@@ -39,7 +38,6 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
-@ApiSecurity('JWT')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
