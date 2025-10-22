@@ -26,8 +26,8 @@ async function bootstrap() {
   // Configurar CORS
   app.enableCors({
     origin: [
-      'http://localhost:3001', // Frontend Next.js
-      'http://localhost:3000', // Backend (por si acaso)
+      'http://localhost:3000', // Frontend Next.js
+      'http://localhost:5000', // Backend (por si acaso)
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
@@ -64,9 +64,9 @@ async function bootstrap() {
     content:document,
   }));
 
-  await app.listen(process.env.PORT ?? 9987);
-  console.log(`🚀 Aplicación ejecutándose en puerto ${process.env.PORT ?? 9987}`);
-  console.log(`📚 Documentación API disponible en http://localhost:${process.env.PORT ?? 9987}/api`);
-  console.log(`📚 Documentación API SCALAR disponible en http://localhost:${process.env.PORT ?? 9987}/api-reference`);
+  await app.listen(process.env.PORT ?? 5000);
+  console.log(`🚀 Aplicación ejecutándose en puerto ${process.env.PORT ?? 5000}`);
+  console.log(`📚 Documentación API disponible en http://localhost:${process.env.PORT ?? 5000}/api`);
+  console.log(`📚 Documentación API SCALAR disponible en http://localhost:${process.env.PORT ?? 5000}/api-reference`);
 }
 bootstrap();
