@@ -34,7 +34,7 @@ export class AdminInitializationService {
       const result = await this.createGeneralAdminUseCase.execute({
         email: 'admin@inventario.com',
         password: 'admin123',
-        documentNumber: '12345678',
+        documentNumber: '72190044',
         names: 'Administrador General',
         legalName: 'Administrador General del Sistema',
         phone: '999888777',

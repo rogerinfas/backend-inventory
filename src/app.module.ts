@@ -13,9 +13,10 @@ import { PurchaseModule } from './infrastructure/modules/purchase.module';
 import { DatabaseModule } from './infrastructure/modules/database.module';
 import { AuthModule } from './infrastructure/modules/auth.module';
 import { AdminInitializationModule } from './infrastructure/modules/admin-initialization.module';
+import { StoreInitializationModule } from './infrastructure/modules/store-initialization.module';
 
 @Module({
-  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, ProductModule, SunatConfigModule, PurchaseModule, AuthModule, AdminInitializationModule],
+  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, ProductModule, SunatConfigModule, PurchaseModule, AuthModule, AdminInitializationModule, StoreInitializationModule],
   controllers: [],
   providers: [],
 })
