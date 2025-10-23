@@ -537,4 +537,54 @@ export class ProductPrismaRepository implements ProductRepository {
       updated.brandId
     );
   }
+
+  async decreaseStock(productId: string, quantity: number, storeId: string, tx?: any): Promise<Product> {
+    const prisma = tx || this.prisma;
+    
+    // Verificar que el producto existe y pertenece a la tienda
+    const productData = await prisma.product.findFirst({
+      where: { id: productId, storeId },
+    });
+    
+    if (!productData) {
+      throw new Error('Producto no encontrado en la tienda indicada');
+    }
+    
+    if (quantity <= 0) {
+      throw new Error('La cantidad a decrementar debe ser mayor a 0');
+    }
+    
+    if (productData.currentStock < quantity) {
+      throw new Error(`Stock insuficiente. Disponible: ${productData.currentStock}, Solicitado: ${quantity}`);
+    }
+
+    const updated = await prisma.product.update({
+      where: { id: productId },
+      data: {
+        currentStock: productData.currentStock - quantity,
+        updatedAt: new Date(),
+      },
+    });
+
+    return Product.fromPersistence(
+      updated.id,
+      updated.storeId,
+      updated.sku,
+      updated.name,
+      updated.description,
+      updated.purchasePrice,
+      updated.salePrice,
+      updated.currentStock,
+      updated.reservedStock,
+      updated.minimumStock,
+      updated.maximumStock,
+      updated.unitOfMeasure as UnitOfMeasure,
+      updated.imageUrl,
+      updated.isActive,
+      updated.createdAt,
+      updated.updatedAt,
+      updated.categoryId,
+      updated.brandId
+    );
+  }
 }

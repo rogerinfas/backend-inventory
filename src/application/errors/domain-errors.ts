@@ -539,3 +539,77 @@ export class InvalidPurchaseDetailPriceError extends DomainError {
     super(`Precio inválido: ${price}`);
   }
 }
+
+// ============================================
+// SALE ERRORS
+// ============================================
+
+export class SaleNotFoundError extends DomainError {
+  readonly code = 'SALE_NOT_FOUND';
+  readonly statusCode = 404;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Venta con ID ${id} no encontrada`);
+  }
+}
+
+export class SaleAlreadyExistsError extends DomainError {
+  readonly code = 'SALE_ALREADY_EXISTS';
+  readonly statusCode = 409;
+  readonly isOperational = true;
+
+  constructor(storeId: string, documentNumber: string) {
+    super(`Ya existe una venta con número de documento ${documentNumber} en la tienda ${storeId}`);
+  }
+}
+
+export class SaleCancelledError extends DomainError {
+  readonly code = 'SALE_CANCELLED';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`La venta ${id} ya está cancelada`);
+  }
+}
+
+export class SaleCompletedError extends DomainError {
+  readonly code = 'SALE_COMPLETED';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`La venta ${id} ya está completada`);
+  }
+}
+
+export class SaleAlreadyCompletedError extends DomainError {
+  readonly code = 'SALE_ALREADY_COMPLETED';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`La venta ${id} ya está completada`);
+  }
+}
+
+export class SaleNotPendingError extends DomainError {
+  readonly code = 'SALE_NOT_PENDING';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`Solo se pueden actualizar ventas pendientes. La venta ${id} no está en estado pendiente`);
+  }
+}
+
+export class SaleRefundError extends DomainError {
+  readonly code = 'SALE_REFUND_ERROR';
+  readonly statusCode = 400;
+  readonly isOperational = true;
+
+  constructor(id: string) {
+    super(`No se puede procesar devolución de la venta ${id} en su estado actual`);
+  }
+}

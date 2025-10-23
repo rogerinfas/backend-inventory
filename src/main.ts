@@ -50,6 +50,7 @@ async function bootstrap() {
     .addTag('stores', 'Gestión de tiendas')
     .addTag('customers', 'Gestión de clientes')
     .addTag('suppliers', 'Gestión de proveedores')
+    .addTag('sales', 'Gestión de ventas')
     .addBearerAuth(
       {
         type: 'http',

@@ -10,13 +10,14 @@ import { BrandModule } from './infrastructure/modules/brand.module';
 import { ProductModule } from './infrastructure/modules/product.module';
 import { SunatConfigModule } from './infrastructure/modules/sunat-config.module';
 import { PurchaseModule } from './infrastructure/modules/purchase.module';
+import { SaleModule } from './infrastructure/modules/sale.module';
 import { DatabaseModule } from './infrastructure/modules/database.module';
 import { AuthModule } from './infrastructure/modules/auth.module';
 import { AdminInitializationModule } from './infrastructure/modules/admin-initialization.module';
 import { StoreInitializationModule } from './infrastructure/modules/store-initialization.module';
 
 @Module({
-  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, ProductModule, SunatConfigModule, PurchaseModule, AuthModule, AdminInitializationModule, StoreInitializationModule],
+  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, ProductModule, SunatConfigModule, PurchaseModule, SaleModule, AuthModule, AdminInitializationModule, StoreInitializationModule],
   controllers: [],
   providers: [],
 })

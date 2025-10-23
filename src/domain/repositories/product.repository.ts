@@ -32,6 +32,8 @@ export interface ProductRepository {
   count(filters?: ProductQueryFilters): Promise<number>;
   // Incrementar stock dentro de una transacción opcional, validando tienda
   increaseStock(productId: string, quantity: number, storeId: string, tx?: any): Promise<Product>;
+  // Decrementar stock dentro de una transacción opcional, validando tienda y stock disponible
+  decreaseStock(productId: string, quantity: number, storeId: string, tx?: any): Promise<Product>;
   // Establecer reservedStock (validando que sea <= currentStock y tienda)
   setReservedStock(productId: string, reservedStock: number, storeId: string, tx?: any): Promise<Product>;
 }

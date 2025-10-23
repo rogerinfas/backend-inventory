@@ -7,3 +7,4 @@ export * from './supplier';
 export * from './category';
 export * from './voucher-series';
 export * from './brand';
+export * from './sale';

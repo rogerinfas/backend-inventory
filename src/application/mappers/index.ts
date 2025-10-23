@@ -8,3 +8,4 @@ export * from './voucher-series.mapper';
 export * from './brand.mapper';
 export * from './sunat-config.mapper';
 export * from './purchase.mapper';
+export * from './sale.mapper';
