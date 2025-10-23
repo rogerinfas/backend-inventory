@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { LoginUseCase, LoginUseCaseInput, LoginUseCaseOutput } from '../use-cases/auth/login.use-case';
 import { ValidateTokenUseCase, ValidateTokenUseCaseInput, ValidateTokenUseCaseOutput } from '../use-cases/auth/validate-token.use-case';
-import { LoginDto, AuthResponseDto } from '../dto/auth';
+import { GetMeUseCase } from '../use-cases/auth/get-me.use-case';
+import { LoginDto, AuthResponseDto, MeResponseDto } from '../dto/auth';
 
 @Injectable()
 export class AuthApplicationService {
   constructor(
     private readonly loginUseCase: LoginUseCase,
     private readonly validateTokenUseCase: ValidateTokenUseCase,
+    private readonly getMeUseCase: GetMeUseCase,
   ) {}
 
   async login(loginDto: LoginDto): Promise<AuthResponseDto> {
@@ -36,5 +38,9 @@ export class AuthApplicationService {
     }
 
     return result.data?.isValid || false;
+  }
+
+  async me(userId: string): Promise<MeResponseDto> {
+    return this.getMeUseCase.execute(userId);
   }
 }

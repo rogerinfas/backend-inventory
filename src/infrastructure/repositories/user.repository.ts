@@ -3,6 +3,7 @@ import { PrismaService } from '../database/prisma.service';
 import { UserRepository, UserQueryFilters } from '../../domain/repositories/user.repository';
 import { PrismaTransaction } from '../../domain/repositories';
 import { User } from '../../domain/entities/user.entity';
+import { Person } from '../../domain/entities/person.entity';
 import { UserRole } from '../../domain/enums/user-role.enum';
 import { EntityStatus } from '../../domain/enums/entity-status.enum';
 
@@ -311,5 +312,31 @@ export class UserPrismaRepository implements UserRepository {
     }
 
     return client.user.count({ where });
+  }
+
+  async findPersonById(personId: string, tx?: PrismaTransaction): Promise<Person | null> {
+    const client = tx || this.prisma;
+    
+    const personData = await client.person.findUnique({
+      where: { id: personId },
+    });
+
+    if (!personData) {
+      return null;
+    }
+
+    return Person.fromPersistence(
+      personData.id,
+      personData.documentType,
+      personData.documentNumber,
+      personData.names,
+      personData.legalName,
+      personData.address,
+      personData.phone,
+      personData.email,
+      personData.status as EntityStatus,
+      personData.createdAt,
+      personData.updatedAt,
+    );
   }
 }

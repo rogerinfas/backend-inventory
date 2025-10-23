@@ -5,7 +5,9 @@ import { AuthController } from '../controllers/auth.controller';
 import { AuthApplicationService } from '../../application/services/auth.service';
 import { LoginUseCase } from '../../application/use-cases/auth/login.use-case';
 import { ValidateTokenUseCase } from '../../application/use-cases/auth/validate-token.use-case';
+import { GetMeUseCase } from '../../application/use-cases/auth/get-me.use-case';
 import { AuthPrismaRepository } from '../repositories/auth-prisma.repository';
+import { UserPrismaRepository } from '../repositories/user.repository';
 import { AuthInfrastructureService } from '../services/auth-infrastructure.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { DatabaseModule } from './database.module';
@@ -36,6 +38,7 @@ import { DatabaseModule } from './database.module';
     // Use Cases
     LoginUseCase,
     ValidateTokenUseCase,
+    GetMeUseCase,
     
     // Repositories
     {
@@ -43,6 +46,11 @@ import { DatabaseModule } from './database.module';
       useClass: AuthPrismaRepository,
     },
     AuthPrismaRepository,
+    {
+      provide: 'UserRepository',
+      useClass: UserPrismaRepository,
+    },
+    UserPrismaRepository,
     
     // Guards
     JwtAuthGuard,

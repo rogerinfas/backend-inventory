@@ -30,7 +30,7 @@ async function main() {
     update: {},
     create: {
       documentType: DocumentType.DNI,
-      documentNumber: '12345678',
+      documentNumber: '72190044',
       names: 'Administrador',
       legalName: 'Administrador del Sistema',
       email: 'admin@inventario.com',

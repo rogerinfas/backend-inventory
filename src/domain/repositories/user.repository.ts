@@ -1,4 +1,5 @@
 import { User } from '../entities/user.entity';
+import { Person } from '../entities/person.entity';
 import { UserRole } from '../enums/user-role.enum';
 import { EntityStatus } from '../enums/entity-status.enum';
 import { PrismaTransaction } from './person.repository';
@@ -117,4 +118,12 @@ export interface UserRepository {
    * @returns Número total de usuarios que coinciden
    */
   count(filters?: UserQueryFilters, tx?: PrismaTransaction): Promise<number>;
+
+  /**
+   * Buscar una persona por ID
+   * @param personId - ID de la persona
+   * @param tx - Transacción opcional
+   * @returns Persona encontrada o null
+   */
+  findPersonById(personId: string, tx?: PrismaTransaction): Promise<Person | null>;
 }

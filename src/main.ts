@@ -24,6 +24,9 @@ async function bootstrap() {
     }),
   );
 
+  // Configurar prefijo global para todas las rutas
+  app.setGlobalPrefix('api');
+
   // Configurar CORS
   app.enableCors({
     origin: [
@@ -62,7 +65,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.use('/api-reference', apiReference({
-    content:document,
+    content: document,
   }));
 
   // Inicializar administrador general
@@ -73,5 +76,6 @@ async function bootstrap() {
   console.log(`🚀 Aplicación ejecutándose en puerto ${process.env.PORT ?? 5000}`);
   console.log(`📚 Documentación API disponible en http://localhost:${process.env.PORT ?? 5000}/api`);
   console.log(`📚 Documentación API SCALAR disponible en http://localhost:${process.env.PORT ?? 5000}/api-reference`);
+  console.log(`🔗 API Base URL: http://localhost:${process.env.PORT ?? 5000}/api`);
 }
 bootstrap();
