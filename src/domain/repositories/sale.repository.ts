@@ -10,7 +10,6 @@ export interface SaleQueryFilters {
   endDate?: Date;
   documentNumber?: string;
   series?: string;
-  search?: string;
   page?: number;
   limit?: number;
   offset?: number;

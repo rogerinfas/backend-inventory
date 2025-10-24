@@ -30,14 +30,6 @@ export class VoucherSeriesQueryDto {
   series?: string;
 
   @IsOptional()
-  @IsString()
-  @ApiPropertyOptional({
-    description: 'Buscar por texto en serie o descripción',
-    example: 'B001'
-  })
-  search?: string;
-
-  @IsOptional()
   @Type(() => Number)
   @IsNumber({}, { message: 'La página debe ser un número' })
   @Min(1, { message: 'La página debe ser mayor a 0' })

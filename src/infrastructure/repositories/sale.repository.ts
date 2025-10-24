@@ -142,15 +142,6 @@ export class SalePrismaRepository implements SaleRepository {
     if (filters.documentNumber) where.documentNumber = { contains: filters.documentNumber };
     if (filters.series) where.series = filters.series;
     
-    // Búsqueda por texto en número de documento, serie o notas
-    if (filters.search) {
-      where.OR = [
-        { documentNumber: { contains: filters.search, mode: 'insensitive' } },
-        { series: { contains: filters.search, mode: 'insensitive' } },
-        { notes: { contains: filters.search, mode: 'insensitive' } },
-      ];
-    }
-    
     if (filters.startDate || filters.endDate) {
       where.saleDate = {};
       if (filters.startDate) where.saleDate.gte = filters.startDate;
@@ -190,15 +181,6 @@ export class SalePrismaRepository implements SaleRepository {
     if (filters.documentType) where.documentType = filters.documentType;
     if (filters.documentNumber) where.documentNumber = { contains: filters.documentNumber };
     if (filters.series) where.series = filters.series;
-    
-    // Búsqueda por texto en número de documento, serie o notas
-    if (filters.search) {
-      where.OR = [
-        { documentNumber: { contains: filters.search, mode: 'insensitive' } },
-        { series: { contains: filters.search, mode: 'insensitive' } },
-        { notes: { contains: filters.search, mode: 'insensitive' } },
-      ];
-    }
     
     if (filters.startDate || filters.endDate) {
       where.saleDate = {};

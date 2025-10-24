@@ -117,7 +117,6 @@ export class SaleMapper {
       endDate: query.endDate ? new Date(query.endDate) : undefined,
       documentNumber: query.documentNumber,
       series: query.series,
-      search: query.search,
       page: query.page,
       limit: query.limit,
       offset: query.page && query.limit ? (query.page - 1) * query.limit : undefined,

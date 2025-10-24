@@ -116,23 +116,4 @@ export class PurchaseMapper {
     
     return this.toResponseDto(purchase, details);
   }
-
-  static toQueryFilters(query: any): any {
-    return {
-      storeId: query.storeId,
-      supplierId: query.supplierId,
-      userId: query.userId,
-      status: query.status,
-      documentType: query.documentType,
-      startDate: query.startDate ? new Date(query.startDate) : undefined,
-      endDate: query.endDate ? new Date(query.endDate) : undefined,
-      documentNumber: query.documentNumber,
-      search: query.search,
-      page: query.page,
-      limit: query.limit,
-      offset: query.page && query.limit ? (query.page - 1) * query.limit : undefined,
-      sortBy: query.sortBy,
-      sortOrder: query.sortOrder,
-    };
-  }
 }

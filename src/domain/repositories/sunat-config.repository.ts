@@ -6,7 +6,6 @@ import { SunatConfig } from '../entities/sunat-config.entity';
 export interface SunatConfigQueryFilters {
   storeId?: string;
   environment?: string;
-  search?: string;
 }
 
 /**
