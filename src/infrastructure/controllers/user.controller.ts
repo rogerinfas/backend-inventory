@@ -8,8 +8,7 @@ import {
   Delete, 
   Query,
   HttpCode,
-  HttpStatus,
-  UseGuards
+  HttpStatus
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -32,11 +31,9 @@ import {
   ListUsersResponseDto,
 } from '../../application/dto/user';
 import type { ListUsersResult } from '../../application/use-cases/user';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
 export class UserController {
   constructor(private readonly userService: UserService) {}

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { PersonModule } from './infrastructure/modules/person.module';
 import { StoreModule } from './infrastructure/modules/store.module';
 import { CustomerModule } from './infrastructure/modules/customer.module';
@@ -15,10 +16,16 @@ import { DatabaseModule } from './infrastructure/modules/database.module';
 import { AuthModule } from './infrastructure/modules/auth.module';
 import { AdminInitializationModule } from './infrastructure/modules/admin-initialization.module';
 import { StoreInitializationModule } from './infrastructure/modules/store-initialization.module';
+import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
 
 @Module({
   imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, ProductModule, SunatConfigModule, PurchaseModule, SaleModule, AuthModule, AdminInitializationModule, StoreInitializationModule],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

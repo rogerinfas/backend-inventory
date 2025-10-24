@@ -478,9 +478,9 @@ async function main() {
             email: customerData.email,
             passwordHash: password,
             role: UserRole.SELLER, // Rol de vendedor para clientes
-            status: EntityStatus.ACTIVE,
-          },
-        });
+      status: EntityStatus.ACTIVE,
+    },
+  });
       }
     }
     

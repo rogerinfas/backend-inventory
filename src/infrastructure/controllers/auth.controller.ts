@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nes
 import { AuthApplicationService } from '../../application/services/auth.service';
 import { LoginDto, AuthResponseDto, MeResponseDto } from '../../application/dto/auth';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { Public } from '../decorators/public.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -10,6 +11,7 @@ export class AuthController {
   constructor(private readonly authService: AuthApplicationService) {}
 
   @Post('login')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ 
     summary: 'Iniciar sesión',
@@ -34,7 +36,6 @@ export class AuthController {
   }
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ 
