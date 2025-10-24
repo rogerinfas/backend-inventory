@@ -79,6 +79,14 @@ export class PurchaseQueryDto {
   documentNumber?: string;
 
   @IsOptional()
+  @IsString()
+  @ApiPropertyOptional({
+    description: 'Buscar por texto en número de documento, serie o notas',
+    example: 'F001'
+  })
+  search?: string;
+
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   @Min(1)

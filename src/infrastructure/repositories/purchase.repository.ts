@@ -140,6 +140,14 @@ export class PurchasePrismaRepository implements PurchaseRepository {
     if (filters.status) where.status = filters.status;
     if (filters.documentType) where.documentType = filters.documentType;
     if (filters.documentNumber) where.documentNumber = filters.documentNumber;
+    
+    // Búsqueda por texto en número de documento o notas
+    if (filters.search) {
+      where.OR = [
+        { documentNumber: { contains: filters.search, mode: 'insensitive' } },
+        { notes: { contains: filters.search, mode: 'insensitive' } },
+      ];
+    }
 
     if (filters.startDate || filters.endDate) {
       where.purchaseDate = {};
@@ -263,6 +271,14 @@ export class PurchasePrismaRepository implements PurchaseRepository {
     if (filters.status) where.status = filters.status;
     if (filters.documentType) where.documentType = filters.documentType;
     if (filters.documentNumber) where.documentNumber = filters.documentNumber;
+    
+    // Búsqueda por texto en número de documento o notas
+    if (filters.search) {
+      where.OR = [
+        { documentNumber: { contains: filters.search, mode: 'insensitive' } },
+        { notes: { contains: filters.search, mode: 'insensitive' } },
+      ];
+    }
 
     if (filters.startDate || filters.endDate) {
       where.purchaseDate = {};

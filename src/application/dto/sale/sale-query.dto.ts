@@ -79,6 +79,14 @@ export class SaleQueryDto {
   series?: string;
 
   @IsOptional()
+  @IsString()
+  @ApiPropertyOptional({
+    description: 'Buscar por texto en número de documento, serie o notas',
+    example: 'B001'
+  })
+  search?: string;
+
+  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   @Min(1)

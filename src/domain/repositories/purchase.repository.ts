@@ -10,6 +10,7 @@ export interface PurchaseQueryFilters {
   startDate?: Date;
   endDate?: Date;
   documentNumber?: string;
+  search?: string;
   page?: number;
   limit?: number;
   sortBy?: 'purchaseDate' | 'total' | 'status' | 'registeredAt';

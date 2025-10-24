@@ -25,6 +25,14 @@ export class SunatConfigQueryDto {
   environment?: SunatEnvironment;
 
   @IsOptional()
+  @IsString()
+  @ApiPropertyOptional({
+    description: 'Buscar por texto en nombre de usuario SOL o descripción',
+    example: 'usuario'
+  })
+  search?: string;
+
+  @IsOptional()
   @Type(() => Number)
   @ApiPropertyOptional({ 
     description: 'Número de página para paginación (empezando desde 1)',

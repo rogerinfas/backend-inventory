@@ -5,6 +5,7 @@ export interface VoucherSeriesQueryFilters {
   storeId?: string;
   voucherType?: VoucherType;
   series?: string;
+  search?: string;
   offset?: number;
   limit?: number;
   sortBy?: string;
