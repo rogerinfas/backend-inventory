@@ -31,30 +31,6 @@ export class CreateUserWithPersonDto {
   })
   names: string;
 
-  @IsOptional()
-  @IsString({ message: 'La razón social debe ser una cadena de texto' })
-  @MinLength(2, { message: 'La razón social debe tener al menos 2 caracteres' })
-  @MaxLength(200, { message: 'La razón social no puede exceder 200 caracteres' })
-  @Matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,&-]+$/, { message: 'La razón social contiene caracteres no válidos' })
-  @ApiProperty({ 
-    description: 'Razón social', 
-    required: false,
-    example: 'Empresa ABC S.A.C.'
-  })
-  legalName?: string;
-
-  @IsOptional()
-  @IsString({ message: 'La dirección debe ser una cadena de texto' })
-  @MinLength(10, { message: 'La dirección debe tener al menos 10 caracteres' })
-  @MaxLength(200, { message: 'La dirección no puede exceder 200 caracteres' })
-  @Matches(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,#-]+$/, { message: 'La dirección contiene caracteres no válidos' })
-  @ApiProperty({ 
-    description: 'Dirección', 
-    required: false,
-    example: 'Av. Principal 123, Lima, Perú'
-  })
-  address?: string;
-
   @IsString({ message: 'El teléfono debe ser una cadena de texto' })
   @Matches(/^\+51[0-9]{9}$/, { message: 'El formato del teléfono no es válido. Use formato +51XXXXXXXXX' })
   @ApiProperty({ 
@@ -65,7 +41,7 @@ export class CreateUserWithPersonDto {
 
   @IsEmail({}, { message: 'El formato del email no es válido' })
   @ApiProperty({ 
-    description: 'Correo electrónico de la persona',
+    description: 'Correo electrónico del usuario',
     example: 'juan.perez@ejemplo.com'
   })
   email: string;

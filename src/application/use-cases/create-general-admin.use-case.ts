@@ -59,10 +59,7 @@ export class CreateGeneralAdminUseCase {
         DocumentType.DNI,
         request.documentNumber,
         request.names,
-        request.legalName || request.names,
-        request.address,
         request.phone,
-        request.email,
       );
 
       await this.personRepository.save(person);

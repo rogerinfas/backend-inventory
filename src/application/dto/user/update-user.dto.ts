@@ -5,12 +5,12 @@ import { EntityStatus } from '../../../domain/enums/entity-status.enum';
 
 export class UpdateUserDto {
   @IsOptional()
-  @IsEnum(UserRole, { message: 'El rol debe ser ADMIN, SELLER, WAREHOUSE, MANAGER' })
+  @IsEnum(UserRole, { message: 'El rol debe ser SUPERADMIN, ADMIN o SELLER' })
   @ApiProperty({ 
     enum: UserRole, 
     description: 'Rol del usuario', 
     required: false,
-    example: UserRole.MANAGER
+    example: UserRole.ADMIN
   })
   role?: UserRole;
 

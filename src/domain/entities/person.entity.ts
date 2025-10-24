@@ -1,5 +1,4 @@
 import { Document } from '../value-objects/document.value-object';
-import { Email } from '../value-objects/email.value-object';
 import { Phone } from '../value-objects/phone.value-object';
 import { DocumentType } from '../enums/document-type.enum';
 import { EntityStatus } from '../enums/entity-status.enum';
@@ -12,10 +11,7 @@ export class Person {
     private readonly _id: string,
     private readonly _document: Document,
     private _names: string,
-    private _legalName: string | null,
-    private _address: string | null,
     private _phone: Phone | null,
-    private _email: Email | null,
     private _status: EntityStatus,
     private readonly _createdAt: Date,
     private _updatedAt: Date
@@ -26,24 +22,17 @@ export class Person {
     documentType: DocumentType,
     documentNumber: string,
     names: string,
-    legalName?: string,
-    address?: string,
-    phone?: string,
-    email?: string
+    phone?: string
   ): Person {
     const document = new Document(documentType, documentNumber);
     const phoneValue = phone ? new Phone(phone) : null;
-    const emailValue = email ? new Email(email) : null;
     const now = new Date();
 
     return new Person(
       id,
       document,
       names,
-      legalName || null,
-      address || null,
       phoneValue,
-      emailValue,
       EntityStatus.ACTIVE,
       now,
       now
@@ -55,26 +44,19 @@ export class Person {
     documentType: DocumentType,
     documentNumber: string,
     names: string,
-    legalName: string | null,
-    address: string | null,
     phone: string | null,
-    email: string | null,
     status: EntityStatus,
     createdAt: Date,
     updatedAt: Date
   ): Person {
     const document = new Document(documentType, documentNumber);
     const phoneValue = phone ? new Phone(phone) : null;
-    const emailValue = email ? new Email(email) : null;
 
     return new Person(
       id,
       document,
       names,
-      legalName,
-      address,
       phoneValue,
-      emailValue,
       status,
       createdAt,
       updatedAt
@@ -94,20 +76,8 @@ export class Person {
     return this._names;
   }
 
-  get legalName(): string | null {
-    return this._legalName;
-  }
-
-  get address(): string | null {
-    return this._address;
-  }
-
   get phone(): Phone | null {
     return this._phone;
-  }
-
-  get email(): Email | null {
-    return this._email;
   }
 
   get status(): EntityStatus {
@@ -131,23 +101,8 @@ export class Person {
     this._updatedAt = new Date();
   }
 
-  updateLegalName(legalName: string | null): void {
-    this._legalName = legalName?.trim() || null;
-    this._updatedAt = new Date();
-  }
-
-  updateAddress(address: string | null): void {
-    this._address = address?.trim() || null;
-    this._updatedAt = new Date();
-  }
-
   updatePhone(phone: string | null): void {
     this._phone = phone ? new Phone(phone) : null;
-    this._updatedAt = new Date();
-  }
-
-  updateEmail(email: string | null): void {
-    this._email = email ? new Email(email) : null;
     this._updatedAt = new Date();
   }
 

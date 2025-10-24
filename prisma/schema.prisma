@@ -32,10 +32,9 @@ enum EntityStatus {
 
 /// Roles de usuario en el sistema
 enum UserRole {
-  ADMIN       /// Administrador
-  SELLER      /// Vendedor
-  WAREHOUSE   /// Almacén
-  MANAGER     /// Gerente
+  SUPERADMIN  /// Super Administrador (administrador de todo el sitio)
+  ADMIN       /// Administrador de tienda
+  SELLER      /// Vendedor (trabajadores que se encargan de compras, ventas, caja, etc.)
 }
 
 /// Tipos de comprobantes de venta
@@ -105,10 +104,7 @@ model Person {
   documentType    DocumentType @map("document_type")
   documentNumber  String   @unique @map("document_number")
   names           String
-  legalName       String?  @map("legal_name")
-  address         String?
   phone           String?
-  email           String?
   status          EntityStatus @default(ACTIVE)
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
@@ -128,10 +124,8 @@ model Store {
   id                String   @id @default(uuid())
   businessName      String   @map("business_name")
   ruc               String   @unique
-  legalName         String   @map("legal_name")
   address           String?
   phone             String?
-  email             String?
   logoUrl           String?  @map("logo_url")
   status            EntityStatus @default(ACTIVE)
   registeredAt      DateTime @default(now()) @map("registered_at")

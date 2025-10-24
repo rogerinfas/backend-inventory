@@ -8,10 +8,8 @@ export class Store {
     private readonly _id: string,
     private _businessName: string,
     private readonly _ruc: string,
-    private _legalName: string,
     private _address: string | null,
     private _phone: string | null,
-    private _email: string | null,
     private _logoUrl: string | null,
     private _status: EntityStatus,
     private readonly _registeredAt: Date,
@@ -22,10 +20,8 @@ export class Store {
     id: string,
     businessName: string,
     ruc: string,
-    legalName: string,
     address?: string,
     phone?: string,
-    email?: string,
     logoUrl?: string
   ): Store {
     const now = new Date();
@@ -34,10 +30,8 @@ export class Store {
       id,
       businessName,
       ruc,
-      legalName,
       address || null,
       phone || null,
-      email || null,
       logoUrl || null,
       EntityStatus.ACTIVE,
       now,
@@ -49,10 +43,8 @@ export class Store {
     id: string,
     businessName: string,
     ruc: string,
-    legalName: string,
     address: string | null,
     phone: string | null,
-    email: string | null,
     logoUrl: string | null,
     status: EntityStatus,
     registeredAt: Date,
@@ -62,10 +54,8 @@ export class Store {
       id,
       businessName,
       ruc,
-      legalName,
       address,
       phone,
-      email,
       logoUrl,
       status,
       registeredAt,
@@ -86,20 +76,12 @@ export class Store {
     return this._ruc;
   }
 
-  get legalName(): string {
-    return this._legalName;
-  }
-
   get address(): string | null {
     return this._address;
   }
 
   get phone(): string | null {
     return this._phone;
-  }
-
-  get email(): string | null {
-    return this._email;
   }
 
   get logoUrl(): string | null {
@@ -127,14 +109,6 @@ export class Store {
     this._updatedAt = new Date();
   }
 
-  updateLegalName(legalName: string): void {
-    if (!legalName || legalName.trim().length === 0) {
-      throw new Error('La razón social no puede estar vacía');
-    }
-    this._legalName = legalName.trim();
-    this._updatedAt = new Date();
-  }
-
   updateAddress(address: string | null): void {
     this._address = address?.trim() || null;
     this._updatedAt = new Date();
@@ -142,14 +116,6 @@ export class Store {
 
   updatePhone(phone: string | null): void {
     this._phone = phone?.trim() || null;
-    this._updatedAt = new Date();
-  }
-
-  updateEmail(email: string | null): void {
-    if (email && !this.isValidEmail(email)) {
-      throw new Error('El formato del email no es válido');
-    }
-    this._email = email?.trim() || null;
     this._updatedAt = new Date();
   }
 
@@ -190,9 +156,4 @@ export class Store {
     return this._id === other._id;
   }
 
-  // Métodos privados de validación
-  private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
 }

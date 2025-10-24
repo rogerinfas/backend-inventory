@@ -31,12 +31,6 @@ export interface StoreRepository {
    */
   findByRuc(ruc: string): Promise<Store | null>;
 
-  /**
-   * Buscar una tienda por su email
-   * @param email - Email de la tienda
-   * @returns La tienda encontrada o null si no existe
-   */
-  findByEmail(email: string): Promise<Store | null>;
 
   /**
    * Buscar múltiples tiendas con filtros opcionales

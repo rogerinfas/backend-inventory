@@ -14,13 +14,6 @@ export class CreatePersonUseCase {
       throw new PersonAlreadyExistsError('número de documento', dto.documentNumber);
     }
 
-    // Verificar que no exista otra persona con el mismo email (si se proporciona)
-    if (dto.email) {
-      const existingEmail = await this.personRepository.findByEmail(dto.email);
-      if (existingEmail) {
-        throw new PersonAlreadyExistsError('email', dto.email);
-      }
-    }
 
     // Generar ID único
     const id = crypto.randomUUID();

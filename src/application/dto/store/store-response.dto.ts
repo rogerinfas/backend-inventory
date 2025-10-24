@@ -20,12 +20,6 @@ export class StoreResponseDto {
   })
   ruc: string;
 
-  @ApiProperty({
-    description: 'Razón social de la tienda',
-    example: 'Mi Tienda de Tecnología S.A.C.'
-  })
-  legalName: string;
-
   @ApiPropertyOptional({
     description: 'Dirección de la tienda',
     example: 'Av. Principal 123, Lima, Perú'
@@ -37,12 +31,6 @@ export class StoreResponseDto {
     example: '+51987654321'
   })
   phone: string | null;
-
-  @ApiPropertyOptional({
-    description: 'Email de la tienda',
-    example: 'contacto@mitienda.com'
-  })
-  email: string | null;
 
   @ApiPropertyOptional({
     description: 'URL del logo de la tienda',

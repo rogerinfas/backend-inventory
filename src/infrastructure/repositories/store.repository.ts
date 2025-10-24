@@ -21,10 +21,8 @@ export class StorePrismaRepository implements StoreRepository {
       storeData.id,
       storeData.businessName,
       storeData.ruc,
-      storeData.legalName,
       storeData.address,
       storeData.phone,
-      storeData.email,
       storeData.logoUrl,
       storeData.status as EntityStatus,
       storeData.registeredAt,
@@ -45,10 +43,8 @@ export class StorePrismaRepository implements StoreRepository {
       storeData.id,
       storeData.businessName,
       storeData.ruc,
-      storeData.legalName,
       storeData.address,
       storeData.phone,
-      storeData.email,
       storeData.logoUrl,
       storeData.status as EntityStatus,
       storeData.registeredAt,
@@ -56,34 +52,6 @@ export class StorePrismaRepository implements StoreRepository {
     );
   }
 
-  async findByEmail(email: string): Promise<Store | null> {
-    const storeData = await this.prisma.store.findFirst({
-      where: { 
-        email: {
-          equals: email,
-          mode: 'insensitive'
-        }
-      },
-    });
-
-    if (!storeData) {
-      return null;
-    }
-
-    return Store.fromPersistence(
-      storeData.id,
-      storeData.businessName,
-      storeData.ruc,
-      storeData.legalName,
-      storeData.address,
-      storeData.phone,
-      storeData.email,
-      storeData.logoUrl,
-      storeData.status as EntityStatus,
-      storeData.registeredAt,
-      storeData.updatedAt
-    );
-  }
 
   async findMany(filters?: StoreQueryFilters): Promise<Store[]> {
     const where: any = {};
@@ -95,7 +63,6 @@ export class StorePrismaRepository implements StoreRepository {
     if (filters?.search) {
       where.OR = [
         { businessName: { contains: filters.search, mode: 'insensitive' } },
-        { legalName: { contains: filters.search, mode: 'insensitive' } },
         { ruc: { contains: filters.search } },
       ];
     }
@@ -114,10 +81,8 @@ export class StorePrismaRepository implements StoreRepository {
         storeData.id,
         storeData.businessName,
         storeData.ruc,
-        storeData.legalName,
         storeData.address,
         storeData.phone,
-        storeData.email,
         storeData.logoUrl,
         storeData.status as EntityStatus,
         storeData.registeredAt,
@@ -132,10 +97,8 @@ export class StorePrismaRepository implements StoreRepository {
         id: store.id,
         businessName: store.businessName,
         ruc: store.ruc,
-        legalName: store.legalName,
         address: store.address,
         phone: store.phone,
-        email: store.email,
         logoUrl: store.logoUrl,
         status: store.status,
         registeredAt: store.registeredAt,
@@ -147,10 +110,8 @@ export class StorePrismaRepository implements StoreRepository {
       storeData.id,
       storeData.businessName,
       storeData.ruc,
-      storeData.legalName,
       storeData.address,
       storeData.phone,
-      storeData.email,
       storeData.logoUrl,
       storeData.status as EntityStatus,
       storeData.registeredAt,
@@ -163,10 +124,8 @@ export class StorePrismaRepository implements StoreRepository {
       where: { id: store.id },
       data: {
         businessName: store.businessName,
-        legalName: store.legalName,
         address: store.address,
         phone: store.phone,
-        email: store.email,
         logoUrl: store.logoUrl,
         status: store.status,
         updatedAt: store.updatedAt,
@@ -177,10 +136,8 @@ export class StorePrismaRepository implements StoreRepository {
       storeData.id,
       storeData.businessName,
       storeData.ruc,
-      storeData.legalName,
       storeData.address,
       storeData.phone,
-      storeData.email,
       storeData.logoUrl,
       storeData.status as EntityStatus,
       storeData.registeredAt,
@@ -211,7 +168,6 @@ export class StorePrismaRepository implements StoreRepository {
     if (filters?.search) {
       where.OR = [
         { businessName: { contains: filters.search, mode: 'insensitive' } },
-        { legalName: { contains: filters.search, mode: 'insensitive' } },
         { ruc: { contains: filters.search } },
       ];
     }

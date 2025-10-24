@@ -33,30 +33,6 @@ export class CreateSupplierWithPersonDto {
   names: string;
 
   @ApiProperty({
-    description: 'Razón social (opcional)',
-    example: 'María González S.A.C.',
-    required: false
-  })
-  @IsOptional()
-  @IsString({ message: 'La razón social debe ser una cadena de texto' })
-  @MinLength(2, { message: 'La razón social debe tener al menos 2 caracteres' })
-  @MaxLength(100, { message: 'La razón social no puede exceder 100 caracteres' })
-  @Matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,-]+$/, { message: 'La razón social contiene caracteres no válidos' })
-  legalName?: string;
-
-  @ApiProperty({
-    description: 'Dirección de la persona',
-    example: 'Av. Comercial 456, Lima',
-    required: false
-  })
-  @IsOptional()
-  @IsString({ message: 'La dirección debe ser una cadena de texto' })
-  @MinLength(5, { message: 'La dirección debe tener al menos 5 caracteres' })
-  @MaxLength(200, { message: 'La dirección no puede exceder 200 caracteres' })
-  @Matches(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,#-]+$/, { message: 'La dirección contiene caracteres no válidos' })
-  address?: string;
-
-  @ApiProperty({
     description: 'Teléfono de la persona',
     example: '+51987654322',
     required: false
@@ -65,16 +41,6 @@ export class CreateSupplierWithPersonDto {
   @IsString({ message: 'El teléfono debe ser una cadena de texto' })
   @Matches(/^\+?[1-9]\d{1,14}$/, { message: 'El formato del teléfono no es válido. Use formato internacional: +51987654321' })
   phone?: string;
-
-  @ApiProperty({
-    description: 'Email de la persona',
-    example: 'maria@example.com',
-    required: false
-  })
-  @IsOptional()
-  @IsEmail({}, { message: 'El formato del email no es válido' })
-  @MaxLength(254, { message: 'El email no puede exceder 254 caracteres' })
-  email?: string;
 
   @ApiProperty({
     description: 'ID de la tienda',

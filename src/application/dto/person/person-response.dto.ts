@@ -15,17 +15,8 @@ export class PersonResponseDto {
   @ApiProperty({ description: 'Nombres completos', example: 'Juan Carlos Pérez García' })
   names: string;
 
-  @ApiPropertyOptional({ description: 'Nombre legal o razón social', example: 'Empresa ABC S.A.C.' })
-  legalName: string | null;
-
-  @ApiPropertyOptional({ description: 'Dirección', example: 'Av. Principal 123, Lima, Perú' })
-  address: string | null;
-
   @ApiPropertyOptional({ description: 'Teléfono', example: '+51987654321' })
   phone: string | null;
-
-  @ApiPropertyOptional({ description: 'Email', example: 'juan.perez@email.com' })
-  email: string | null;
 
   @ApiProperty({ description: 'Estado de la persona', enum: EntityStatus, example: EntityStatus.ACTIVE })
   status: EntityStatus;

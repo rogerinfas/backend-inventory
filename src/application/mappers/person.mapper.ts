@@ -8,10 +8,7 @@ export class PersonMapper {
       dto.documentType,
       dto.documentNumber,
       dto.names,
-      dto.legalName,
-      dto.address,
-      dto.phone,
-      dto.email
+      dto.phone
     );
   }
 
@@ -21,10 +18,7 @@ export class PersonMapper {
       documentType: person.document.type,
       documentNumber: person.document.number,
       names: person.names,
-      legalName: person.legalName,
-      address: person.address,
       phone: person.phone?.value || null,
-      email: person.email?.value || null,
       status: person.status,
       createdAt: person.createdAt,
       updatedAt: person.updatedAt,
@@ -42,17 +36,8 @@ export class PersonMapper {
     if (dto.names !== undefined) {
       existingPerson.updateNames(dto.names);
     }
-    if (dto.legalName !== undefined) {
-      existingPerson.updateLegalName(dto.legalName);
-    }
-    if (dto.address !== undefined) {
-      existingPerson.updateAddress(dto.address);
-    }
     if (dto.phone !== undefined) {
       existingPerson.updatePhone(dto.phone);
-    }
-    if (dto.email !== undefined) {
-      existingPerson.updateEmail(dto.email);
     }
 
     // Retornar la entidad actualizada
@@ -80,10 +65,7 @@ export class PersonMapper {
   static toUpdateDto(person: Person): Partial<UpdatePersonDto> {
     return {
       names: person.names,
-      legalName: person.legalName || undefined,
-      address: person.address || undefined,
       phone: person.phone?.value || undefined,
-      email: person.email?.value || undefined,
     };
   }
 
@@ -107,10 +89,7 @@ export class PersonMapper {
     documentType: string;
     documentNumber: string;
     names: string;
-    legalName: string | null;
-    address: string | null;
     phone: string | null;
-    email: string | null;
     status: string;
     createdAt: Date;
     updatedAt: Date;
@@ -120,10 +99,7 @@ export class PersonMapper {
       data.documentType as any, // El enum se valida en la entidad
       data.documentNumber,
       data.names,
-      data.legalName,
-      data.address,
       data.phone,
-      data.email,
       data.status as any, // El enum se valida en la entidad
       data.createdAt,
       data.updatedAt

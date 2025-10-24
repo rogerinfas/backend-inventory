@@ -16,17 +16,8 @@ export class PersonDataDto {
   @ApiProperty({ description: 'Nombres completos' })
   names: string;
 
-  @ApiProperty({ description: 'Razón social', required: false })
-  legalName?: string;
-
-  @ApiProperty({ description: 'Dirección', required: false })
-  address?: string;
-
   @ApiProperty({ description: 'Teléfono' })
   phone: string;
-
-  @ApiProperty({ description: 'Correo electrónico' })
-  email: string;
 
   @ApiProperty({ enum: EntityStatus, description: 'Estado de la entidad' })
   status: EntityStatus;

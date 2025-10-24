@@ -12,10 +12,8 @@ export class StoreMapper {
       id,
       dto.businessName,
       dto.ruc,
-      dto.legalName,
       dto.address,
       dto.phone,
-      dto.email,
       dto.logoUrl
     );
   }
@@ -28,10 +26,8 @@ export class StoreMapper {
       id: store.id,
       businessName: store.businessName,
       ruc: store.ruc,
-      legalName: store.legalName,
       address: store.address,
       phone: store.phone,
-      email: store.email,
       logoUrl: store.logoUrl,
       status: store.status,
       registeredAt: store.registeredAt,
@@ -50,17 +46,11 @@ export class StoreMapper {
     if (dto.businessName !== undefined) {
       existingStore.updateBusinessName(dto.businessName);
     }
-    if (dto.legalName !== undefined) {
-      existingStore.updateLegalName(dto.legalName);
-    }
     if (dto.address !== undefined) {
       existingStore.updateAddress(dto.address);
     }
     if (dto.phone !== undefined) {
       existingStore.updatePhone(dto.phone);
-    }
-    if (dto.email !== undefined) {
-      existingStore.updateEmail(dto.email);
     }
     if (dto.logoUrl !== undefined) {
       existingStore.updateLogoUrl(dto.logoUrl);

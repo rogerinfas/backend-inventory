@@ -32,6 +32,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000', // Frontend Next.js
+      'http://localhost:3001',
       'http://localhost:5000', // Backend (por si acaso)
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

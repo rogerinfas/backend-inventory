@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsEmail, IsOptional, MinLength, MaxLength, Matches } from 'class-validator';
+import { IsString, IsOptional, MinLength, MaxLength, Matches } from 'class-validator';
 
 export class CreateStoreDto {
   @ApiProperty({
@@ -22,17 +22,6 @@ export class CreateStoreDto {
   @Matches(/^[0-9]{11}$/, { message: 'El RUC debe tener exactamente 11 dígitos' })
   ruc: string;
 
-  @ApiProperty({
-    description: 'Razón social de la tienda',
-    example: 'Mi Tienda de Tecnología S.A.C.',
-    minLength: 2,
-    maxLength: 100
-  })
-  @IsString()
-  @MinLength(2, { message: 'La razón social debe tener al menos 2 caracteres' })
-  @MaxLength(100, { message: 'La razón social no puede exceder 100 caracteres' })
-  legalName: string;
-
   @ApiPropertyOptional({
     description: 'Dirección de la tienda',
     example: 'Av. Principal 123, Lima, Perú',
@@ -52,16 +41,6 @@ export class CreateStoreDto {
   @IsString()
   @MaxLength(20, { message: 'El teléfono no puede exceder 20 caracteres' })
   phone?: string;
-
-  @ApiPropertyOptional({
-    description: 'Email de la tienda',
-    example: 'contacto@mitienda.com',
-    maxLength: 254
-  })
-  @IsOptional()
-  @IsEmail({}, { message: 'El formato del email no es válido' })
-  @MaxLength(254, { message: 'El email no puede exceder 254 caracteres' })
-  email?: string;
 
   @ApiPropertyOptional({
     description: 'URL del logo de la tienda',

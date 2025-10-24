@@ -19,13 +19,6 @@ export class UpdatePersonUseCase {
       throw new PersonDeletedError(id);
     }
 
-    // Verificar email único si se está actualizando
-    if (dto.email && dto.email !== existingPerson.email?.value) {
-      const existingEmail = await this.personRepository.findByEmail(dto.email);
-      if (existingEmail && existingEmail.id !== id) {
-        throw new PersonAlreadyExistsError('email', dto.email);
-      }
-    }
 
     // Aplicar las actualizaciones
     const updatedPerson = PersonMapper.toUpdateDomain(dto, existingPerson);

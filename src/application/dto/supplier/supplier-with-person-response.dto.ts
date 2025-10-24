@@ -29,28 +29,10 @@ export class PersonDataDto {
   names: string;
 
   @ApiPropertyOptional({
-    description: 'Razón social',
-    example: 'María González S.A.C.',
-  })
-  legalName?: string;
-
-  @ApiPropertyOptional({
-    description: 'Dirección',
-    example: 'Av. Comercial 456, Lima',
-  })
-  address?: string;
-
-  @ApiPropertyOptional({
     description: 'Teléfono',
     example: '+51987654322',
   })
   phone?: string;
-
-  @ApiPropertyOptional({
-    description: 'Email',
-    example: 'maria@example.com',
-  })
-  email?: string;
 
   @ApiProperty({
     description: 'Estado de la persona',

@@ -102,13 +102,6 @@ export class User {
   }
 
   /**
-   * Verifica si el usuario es administrador
-   */
-  isAdmin(): boolean {
-    return this.role === UserRole.ADMIN;
-  }
-
-  /**
    * Verifica si el usuario es administrador general (sin tienda asociada)
    */
   isGeneralAdmin(): boolean {
@@ -123,31 +116,45 @@ export class User {
   }
 
   /**
-   * Verifica si el usuario es gerente
+   * Verifica si el usuario es super administrador
    */
-  isManager(): boolean {
-    return this.role === UserRole.MANAGER;
+  isSuperAdmin(): boolean {
+    return this.role === UserRole.SUPERADMIN;
+  }
+
+  /**
+   * Verifica si el usuario es administrador de tienda
+   */
+  isAdmin(): boolean {
+    return this.role === UserRole.ADMIN;
   }
 
   /**
    * Verifica si el usuario puede vender
    */
   canSell(): boolean {
-    return [UserRole.ADMIN, UserRole.MANAGER, UserRole.SELLER].includes(this.role);
+    return [UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.SELLER].includes(this.role);
   }
 
   /**
    * Verifica si el usuario puede gestionar inventario
    */
   canManageInventory(): boolean {
-    return [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE].includes(this.role);
+    return [UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.SELLER].includes(this.role);
   }
 
   /**
    * Verifica si el usuario puede gestionar usuarios
    */
   canManageUsers(): boolean {
-    return [UserRole.ADMIN, UserRole.MANAGER].includes(this.role);
+    return [UserRole.SUPERADMIN, UserRole.ADMIN].includes(this.role);
+  }
+
+  /**
+   * Verifica si el usuario puede gestionar tiendas (solo super admin)
+   */
+  canManageStores(): boolean {
+    return this.role === UserRole.SUPERADMIN;
   }
 
   /**

@@ -60,10 +60,7 @@ export class CreateCustomerWithPersonUseCase {
         dto.documentType,
         dto.documentNumber,
         dto.names,
-        dto.legalName,
-        dto.address,
-        dto.phone,
-        dto.email
+        dto.phone
       );
 
       const savedPerson = await this.personRepository.createWithTransaction(person, tx);

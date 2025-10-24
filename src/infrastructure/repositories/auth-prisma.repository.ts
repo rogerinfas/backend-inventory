@@ -24,10 +24,7 @@ interface UserWithRelations {
     documentType: DocumentType;
     documentNumber: string;
     names: string;
-    legalName: string | null;
-    address: string | null;
     phone: string | null;
-    email: string | null;
     status: EntityStatus;
     createdAt: Date;
     updatedAt: Date;
@@ -36,10 +33,8 @@ interface UserWithRelations {
     id: string;
     businessName: string;
     ruc: string;
-    legalName: string;
     address: string | null;
     phone: string | null;
-    email: string | null;
     logoUrl: string | null;
     status: EntityStatus;
     registeredAt: Date;
@@ -83,10 +78,7 @@ export class AuthPrismaRepository implements AuthRepository {
         documentType: user.person.documentType as DocumentType,
         documentNumber: user.person.documentNumber,
         names: user.person.names,
-        legalName: user.person.legalName,
-        address: user.person.address,
         phone: user.person.phone,
-        email: user.person.email,
         status: user.person.status as EntityStatus,
         createdAt: user.person.createdAt,
         updatedAt: user.person.updatedAt,
@@ -95,10 +87,8 @@ export class AuthPrismaRepository implements AuthRepository {
         id: user.store.id,
         businessName: user.store.businessName,
         ruc: user.store.ruc,
-        legalName: user.store.legalName,
         address: user.store.address,
         phone: user.store.phone,
-        email: user.store.email,
         logoUrl: user.store.logoUrl,
         status: user.store.status as EntityStatus,
         registeredAt: user.store.registeredAt,

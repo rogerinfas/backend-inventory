@@ -34,12 +34,11 @@ export class GetMeUseCase {
       const person = await this.userRepository.findPersonById(user.personId);
       if (person) {
         firstName = person.names;
-        lastName = person.legalName || '';
-        fullName = `${person.names} ${person.legalName || ''}`.trim();
+        lastName = '';
+        fullName = person.names;
         phone = person.phone?.value;
         documentType = person.document.type;
         documentNumber = person.document.number;
-        address = person.address || undefined;
       }
     }
 

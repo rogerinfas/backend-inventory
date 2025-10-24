@@ -18,13 +18,6 @@ export class UpdateStoreUseCase {
       throw new StoreDeletedError(id);
     }
 
-    // 3. Verificar email único si se actualiza
-    if (dto.email && dto.email !== existingStore.email) {
-      const existingStoreByEmail = await this.storeRepository.findByEmail(dto.email);
-      if (existingStoreByEmail && existingStoreByEmail.id !== id) {
-        throw new StoreAlreadyExistsError('email', dto.email);
-      }
-    }
 
     // 4. Aplicar actualizaciones
     const updatedStore = StoreMapper.toUpdateDomain(dto, existingStore);

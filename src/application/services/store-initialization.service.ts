@@ -27,7 +27,7 @@ export class StoreInitializationService {
       // Verificar si ya existe alguna tienda
       const existingStores = await this.storeRepository.findMany();
       if (existingStores.length > 0) {
-        this.logger.log('Ya existen tiendas en el sistema, saltando inicialización de tienda demo');
+        this.logger.log('Ya existen tiendas, saltando inicialización de tienda demo');
         return;
       }
 
@@ -35,10 +35,8 @@ export class StoreInitializationService {
       const storeResult = await this.createStoreUseCase.execute({
         businessName: 'TechStore Perú',
         ruc: '20123456789',
-        legalName: 'TechStore Perú S.A.C.',
         address: 'Av. Javier Prado Este 4200, San Borja, Lima',
         phone: '+51987654321',
-        email: 'contacto@techstoreperu.com',
         logoUrl: 'https://techstoreperu.com/logo.png'
       });
 
@@ -47,16 +45,14 @@ export class StoreInitializationService {
       // Crear usuarios de demostración
       const users = [
         {
-          role: UserRole.MANAGER,
+          role: UserRole.ADMIN,
           data: {
             documentType: DocumentType.DNI,
             documentNumber: '12345678',
             names: 'María Elena Rodríguez',
-            legalName: 'María Elena Rodríguez',
-            address: 'Av. Arequipa 1234, Miraflores, Lima',
             phone: '+51987654320',
             email: 'maria.rodriguez@techstoreperu.com',
-            password: 'Manager123!',
+            password: 'Admin123!',
             storeId: storeResult.id
           }
         },
@@ -66,8 +62,6 @@ export class StoreInitializationService {
             documentType: DocumentType.DNI,
             documentNumber: '87654321',
             names: 'Carlos Alberto Mendoza',
-            legalName: 'Carlos Alberto Mendoza',
-            address: 'Jr. Los Olivos 456, San Miguel, Lima',
             phone: '+51987654319',
             email: 'carlos.mendoza@techstoreperu.com',
             password: 'Seller123!',
@@ -75,16 +69,14 @@ export class StoreInitializationService {
           }
         },
         {
-          role: UserRole.WAREHOUSE,
+          role: UserRole.SELLER,
           data: {
             documentType: DocumentType.DNI,
             documentNumber: '11223344',
             names: 'Ana Patricia Silva',
-            legalName: 'Ana Patricia Silva',
-            address: 'Calle Las Flores 789, La Molina, Lima',
             phone: '+51987654318',
             email: 'ana.silva@techstoreperu.com',
-            password: 'Warehouse123!',
+            password: 'Seller123!',
             storeId: storeResult.id
           }
         }

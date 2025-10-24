@@ -13,13 +13,6 @@ export class CreateStoreUseCase {
       throw new StoreAlreadyExistsError('RUC', dto.ruc);
     }
 
-    // 2. Verificar unicidad de email (si se proporciona)
-    if (dto.email) {
-      const existingStoreByEmail = await this.storeRepository.findByEmail(dto.email);
-      if (existingStoreByEmail) {
-        throw new StoreAlreadyExistsError('email', dto.email);
-      }
-    }
 
     // 3. Crear entidad
     const id = crypto.randomUUID();
