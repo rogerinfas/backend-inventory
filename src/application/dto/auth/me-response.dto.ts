@@ -14,22 +14,11 @@ export class MeResponseDto {
   email: string;
 
   @ApiProperty({
-    description: 'Nombre completo del usuario',
-    example: 'Juan Pérez'
+    description: 'Nombres de la persona asociada',
+    example: 'Juan Pérez',
+    required: false
   })
-  fullName: string;
-
-  @ApiProperty({
-    description: 'Primer nombre del usuario',
-    example: 'Juan'
-  })
-  firstName: string;
-
-  @ApiProperty({
-    description: 'Apellido del usuario',
-    example: 'Pérez'
-  })
-  lastName: string;
+  names?: string;
 
   @ApiProperty({
     description: 'Rol del usuario',
@@ -44,30 +33,25 @@ export class MeResponseDto {
   isActive: boolean;
 
   @ApiProperty({
-    description: 'Teléfono del usuario',
+    description: 'Teléfono de la persona asociada',
     example: '999888777',
     required: false
   })
   phone?: string;
 
   @ApiProperty({
-    description: 'Tipo de documento',
-    example: 'DNI'
-  })
-  documentType: string;
-
-  @ApiProperty({
-    description: 'Número de documento',
-    example: '12345678'
-  })
-  documentNumber: string;
-
-  @ApiProperty({
-    description: 'Dirección del usuario',
-    example: 'Av. Principal 123',
+    description: 'Tipo de documento de la persona asociada',
+    example: 'DNI',
     required: false
   })
-  address?: string;
+  documentType?: string;
+
+  @ApiProperty({
+    description: 'Número de documento de la persona asociada',
+    example: '12345678',
+    required: false
+  })
+  documentNumber?: string;
 
   @ApiProperty({
     description: 'ID de la tienda asociada',

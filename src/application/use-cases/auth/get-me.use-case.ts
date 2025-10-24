@@ -22,20 +22,15 @@ export class GetMeUseCase {
     }
 
     // Obtener información de la persona asociada si existe
-    let firstName = '';
-    let lastName = '';
-    let fullName = '';
+    let names: string | undefined;
     let phone: string | undefined;
-    let documentType = '';
-    let documentNumber = '';
-    let address: string | undefined;
+    let documentType: string | undefined;
+    let documentNumber: string | undefined;
     
     if (user.personId) {
       const person = await this.userRepository.findPersonById(user.personId);
       if (person) {
-        firstName = person.names;
-        lastName = '';
-        fullName = person.names;
+        names = person.names;
         phone = person.phone?.value;
         documentType = person.document.type;
         documentNumber = person.document.number;
@@ -45,15 +40,12 @@ export class GetMeUseCase {
     return {
       id: user.id,
       email: user.email,
-      fullName,
-      firstName,
-      lastName,
+      names,
       role: user.role,
       isActive: user.isActive(),
       phone,
       documentType,
       documentNumber,
-      address,
       storeId: user.storeId || undefined,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
