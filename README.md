@@ -28,10 +28,56 @@
 ## Project setup
 
 ```bash
+# Instalar dependencias
 $ pnpm install
+
+# Copiar archivo de entorno de ejemplo
+$ cp .env.example .env
+
+# Configurar las variables de entorno en .env
+# Especialmente DATABASE_URL para tu entorno local
 ```
 
-## Compile and run the project
+## Configuración de la Base de Datos
+
+### Requisitos Previos
+- Docker y Docker Compose instalados
+- Node.js 16+ y pnpm
+
+### Iniciar la base de datos con Docker
+
+```bash
+# Iniciar la base de datos PostgreSQL
+$ docker-compose up -d
+
+# Verificar que el contenedor está en ejecución
+$ docker ps
+```
+
+### Migraciones de Base de Datos
+
+```bash
+# Generar migraciones (después de cambios en schema.prisma)
+$ npx prisma migrate dev --name init
+
+# Aplicar migraciones existentes
+$ npx prisma migrate deploy
+
+# Reiniciar la base de datos (elimina todos los datos)
+$ npx prisma migrate reset --force
+
+# Generar el cliente de Prisma
+$ npx prisma generate
+```
+
+### Acceso a la base de datos
+
+```bash
+# Abrir interfaz de Prisma Studio para ver y editar datos
+$ npx prisma studio
+```
+
+## Compilar y ejecutar el proyecto
 
 ```bash
 # development
