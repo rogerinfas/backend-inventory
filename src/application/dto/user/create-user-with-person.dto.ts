@@ -60,10 +60,13 @@ export class CreateUserWithPersonDto {
   })
   password: string;
 
+  @IsOptional()
   @IsUUID('4', { message: 'El ID de la tienda debe ser un UUID válido' })
   @ApiProperty({ 
-    description: 'ID de la tienda',
-    example: '550e8400-e29b-41d4-a716-446655440000'
+    description: 'ID de la tienda (opcional para superadmins)',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    nullable: true,
+    required: false
   })
-  storeId: string;
+  storeId: string | null;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../../../infrastructure/database/prisma.service';
 import type { PersonRepository, UserRepository, StoreRepository } from '../../../domain/repositories';
 import { CreateUserWithPersonDto } from '../../dto/user/create-user-with-person.dto';
@@ -19,18 +19,23 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class CreateUserWithPersonUseCase {
   constructor(
+    @Inject('PersonRepository')
     private readonly personRepository: PersonRepository,
+    @Inject('UserRepository')
     private readonly userRepository: UserRepository,
+    @Inject('StoreRepository')
     private readonly storeRepository: StoreRepository,
     private readonly prismaService: PrismaService,
   ) {}
 
   async execute(dto: CreateUserWithPersonDto): Promise<UserWithPersonResponseDto> {
     return await this.prismaService.$transaction(async (tx) => {
-      // 1. Verificar que la tienda existe
-      const store = await this.storeRepository.findById(dto.storeId);
-      if (!store) {
-        throw new StoreNotFoundError(dto.storeId);
+      // 1. Verificar que la tienda existe si se proporciona un storeId
+      if (dto.storeId) {
+        const store = await this.storeRepository.findById(dto.storeId);
+        if (!store) {
+          throw new StoreNotFoundError(dto.storeId);
+        }
       }
 
       // 2. Verificar que no exista Person con el mismo documento
@@ -50,15 +55,17 @@ export class CreateUserWithPersonUseCase {
         throw new UserAlreadyExistsError('email', dto.email);
       }
 
-      // 4. Verificar que no exista User para esta tienda y email
-      const existingUserByStore = await this.userRepository.findByStoreAndEmail(
-        dto.storeId,
-        dto.email,
-        tx
-      );
-      
-      if (existingUserByStore) {
-        throw new UserAlreadyExistsError('email', dto.email);
+      // 4. Verificar que no exista User para esta tienda y email (solo si storeId no es nulo)
+      if (dto.storeId) {
+        const existingUserByStore = await this.userRepository.findByStoreAndEmail(
+          dto.storeId,
+          dto.email,
+          tx
+        );
+        
+        if (existingUserByStore) {
+          throw new UserAlreadyExistsError('email', dto.email);
+        }
       }
 
       // 5. Crear Person

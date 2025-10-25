@@ -37,11 +37,11 @@ export class UserMapper {
   ): User {
     return User.create(
       userId,
-      dto.storeId,
+      dto.storeId || null, // Asegurarse de que sea null si es undefined
       personId,
       dto.email,
       passwordHash,
-      UserRole.SELLER // Rol por defecto para seguridad
+      UserRole.SUPERADMIN // Establecer como SUPERADMIN para usuarios creados desde aquí
     );
   }
 

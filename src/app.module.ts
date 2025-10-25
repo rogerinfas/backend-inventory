@@ -14,10 +14,27 @@ import { PurchaseModule } from './infrastructure/modules/purchase.module';
 import { SaleModule } from './infrastructure/modules/sale.module';
 import { DatabaseModule } from './infrastructure/modules/database.module';
 import { AuthModule } from './infrastructure/modules/auth.module';
+import { DataInitializationModule } from './infrastructure/modules/data-initialization.module';
 import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
 
 @Module({
-  imports: [DatabaseModule, PersonModule, StoreModule, CustomerModule, SupplierModule, UserModule, CategoryModule, VoucherSeriesModule, BrandModule, ProductModule, SunatConfigModule, PurchaseModule, SaleModule, AuthModule],
+  imports: [
+    DatabaseModule, 
+    PersonModule, 
+    StoreModule, 
+    CustomerModule, 
+    SupplierModule, 
+    UserModule, 
+    CategoryModule, 
+    VoucherSeriesModule, 
+    BrandModule, 
+    ProductModule, 
+    SunatConfigModule, 
+    PurchaseModule, 
+    SaleModule, 
+    AuthModule,
+    DataInitializationModule, // Add the new module here
+  ],
   controllers: [],
   providers: [
     {
