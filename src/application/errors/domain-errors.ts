@@ -244,6 +244,30 @@ export class ForbiddenError extends DomainError {
   }
 }
 
+// Store Scope Filtering specific errors
+export class StoreAccessDeniedError extends DomainError {
+  readonly code = 'STORE_ACCESS_DENIED';
+  readonly statusCode = 403;
+  readonly isOperational = true;
+
+  constructor(resourceType: string, resourceId: string, userStoreId: string) {
+    super(
+      `No tiene permisos para acceder a este ${resourceType}. ` +
+      `El recurso pertenece a otra tienda (Recurso ID: ${resourceId}, Su tienda: ${userStoreId})`
+    );
+  }
+}
+
+export class ResourceAccessDeniedError extends DomainError {
+  readonly code = 'RESOURCE_ACCESS_DENIED';
+  readonly statusCode = 403;
+  readonly isOperational = true;
+
+  constructor(resourceType: string) {
+    super(`No tiene permisos para acceder a este ${resourceType}`);
+  }
+}
+
 // Category specific errors
 export class CategoryNotFoundError extends DomainError {
   readonly code = 'CATEGORY_NOT_FOUND';

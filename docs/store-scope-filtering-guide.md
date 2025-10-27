@@ -805,6 +805,141 @@ describe('Products (e2e)', () => {
 
 ---
 
+## 🚨 Errores de Dominio
+
+### Errores Específicos del Store Scope Filtering
+
+El sistema utiliza **errores de dominio** propios en lugar de excepciones de NestJS, respetando Clean Architecture:
+
+#### 1. ResourceAccessDeniedError
+
+**Código**: `RESOURCE_ACCESS_DENIED`  
+**Status HTTP**: `403 Forbidden`  
+**Cuándo se lanza**: Cuando un ADMIN/SELLER intenta acceder a un recurso de otra tienda
+
+```typescript
+// En use-cases
+if (storeFilter && storeFilter.storeId && resource.storeId !== storeFilter.storeId) {
+  throw new ResourceAccessDeniedError('producto');
+}
+```
+
+**Respuesta HTTP**:
+```json
+{
+  "code": "RESOURCE_ACCESS_DENIED",
+  "message": "No tiene permisos para acceder a este producto",
+  "statusCode": 403,
+  "timestamp": "2025-10-27T18:30:00.000Z",
+  "path": "/products/abc-123",
+  "isOperational": true
+}
+```
+
+#### 2. StoreAccessDeniedError (Opcional - Más detallado)
+
+**Código**: `STORE_ACCESS_DENIED`  
+**Status HTTP**: `403 Forbidden`  
+**Cuándo se lanza**: Cuando necesitas información detallada sobre el recurso
+
+```typescript
+// Versión más detallada con IDs
+if (storeFilter && storeFilter.storeId && resource.storeId !== storeFilter.storeId) {
+  throw new StoreAccessDeniedError('producto', resource.id, storeFilter.storeId);
+}
+```
+
+**Respuesta HTTP**:
+```json
+{
+  "code": "STORE_ACCESS_DENIED",
+  "message": "No tiene permisos para acceder a este producto. El recurso pertenece a otra tienda (Recurso ID: abc-123, Su tienda: store-456)",
+  "statusCode": 403,
+  "timestamp": "2025-10-27T18:30:00.000Z",
+  "path": "/products/abc-123",
+  "isOperational": true
+}
+```
+
+### Implementación en Use-Cases
+
+```typescript
+// src/application/use-cases/product/get-product-by-id.use-case.ts
+import { ResourceAccessDeniedError } from '../../errors/domain-errors';
+import type { StoreFilter } from '../../../domain/value-objects';
+
+export class GetProductByIdUseCase {
+  async execute(id: string, storeFilter?: StoreFilter): Promise<ProductResponseDto | null> {
+    const product = await this.productRepository.findById(id);
+    
+    if (!product) {
+      return null;
+    }
+
+    // ✅ CORRECTO: Usar error de dominio
+    if (storeFilter && storeFilter.storeId && product.storeId !== storeFilter.storeId) {
+      throw new ResourceAccessDeniedError('producto');
+    }
+
+    return ProductMapper.toResponseDto(product);
+  }
+}
+```
+
+### ❌ Anti-patrón: NO usar excepciones de NestJS en use-cases
+
+```typescript
+// ❌ INCORRECTO: Viola Clean Architecture
+import { ForbiddenException } from '@nestjs/common';
+
+if (resource.storeId !== userStoreId) {
+  throw new ForbiddenException('No autorizado'); // ❌ Dependencia de infraestructura
+}
+
+// ✅ CORRECTO: Usar errores de dominio
+import { ResourceAccessDeniedError } from '../../errors/domain-errors';
+
+if (resource.storeId !== userStoreId) {
+  throw new ResourceAccessDeniedError('recurso'); // ✅ Independiente de framework
+}
+```
+
+### Tabla de Errores de Store Filtering
+
+| Error | Código | HTTP Status | Descripción |
+|-------|--------|-------------|-------------|
+| `ResourceAccessDeniedError` | `RESOURCE_ACCESS_DENIED` | 403 | Acceso denegado a recurso de otra tienda (mensaje simple) |
+| `StoreAccessDeniedError` | `STORE_ACCESS_DENIED` | 403 | Acceso denegado con detalles de IDs (mensaje detallado) |
+| `ForbiddenError` | `FORBIDDEN` | 403 | Error genérico de acceso denegado |
+
+### Manejo Global de Errores
+
+Todos los errores de dominio son capturados automáticamente por el `GlobalExceptionFilter`:
+
+```typescript
+// src/infrastructure/filters/global-exception.filter.ts
+@Catch()
+export class GlobalExceptionFilter implements ExceptionFilter {
+  catch(exception: unknown, host: ArgumentsHost): void {
+    if (exception instanceof DomainError) {
+      // ✅ Convierte errores de dominio a respuestas HTTP
+      status = exception.statusCode;
+      errorResponse = {
+        code: exception.code,
+        message: exception.message,
+        statusCode: exception.statusCode,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+        isOperational: exception.isOperational,
+      };
+    }
+    // ...
+  }
+}
+```
+
+---
+
 ## 🔍 Troubleshooting
 
 ### Problema 1: "Usuario no autenticado"

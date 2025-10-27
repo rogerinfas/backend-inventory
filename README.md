@@ -111,7 +111,8 @@ Este proyecto incluye documentación completa en la carpeta `/docs`:
 - **[Architecture & Project Structure](./docs/architecture-and-project-structure.md)** - Arquitectura general del proyecto, Clean Architecture implementation, y estructura de carpetas
 
 ### Guías de Implementación
-- **[Store Scope Filtering Guide](./docs/store-scope-filtering-guide.md)** - 🔐 Sistema de filtrado automático por tienda basado en roles (NUEVO)
+- **[Store Scope Filtering Guide](./docs/store-scope-filtering-guide.md)** - 🔐 Sistema de filtrado automático por tienda basado en roles
+- **[Domain Errors Guide](./docs/domain-errors-guide.md)** - 🚨 Errores de dominio y manejo de excepciones (NUEVO)
 - **[Atomic Creation Implementation](./docs/atomic-creation-implementation.md)** - Creación atómica de entidades relacionadas
 - **[Person Implementation Guide](./docs/person-implementation-guide.md)** - Implementación de la entidad Person
 - **[Store Implementation Guide](./docs/store-implementation-guide.md)** - Implementación de tiendas multi-inquilino

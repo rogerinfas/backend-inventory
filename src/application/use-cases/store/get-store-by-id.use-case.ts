@@ -1,8 +1,7 @@
-import { ForbiddenException } from '@nestjs/common';
 import { StoreRepository } from '../../../domain/repositories/store.repository';
 import { StoreResponseDto } from '../../dto/store';
 import { StoreMapper } from '../../mappers/store.mapper';
-import { StoreNotFoundError } from '../../errors/domain-errors';
+import { ResourceAccessDeniedError } from '../../errors/domain-errors';
 import type { StoreFilter } from '../../../domain/value-objects';
 
 export class GetStoreByIdUseCase {
@@ -21,9 +20,7 @@ export class GetStoreByIdUseCase {
     // Validar que el ADMIN solo pueda ver su tienda
     // SUPERADMIN puede ver cualquier tienda
     if (storeFilter && storeFilter.storeId && store.id !== storeFilter.storeId) {
-      throw new ForbiddenException(
-        'No tiene permisos para acceder a esta tienda'
-      );
+      throw new ResourceAccessDeniedError('tienda');
     }
 
     return StoreMapper.toResponseDto(store);
