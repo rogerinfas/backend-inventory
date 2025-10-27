@@ -41,7 +41,7 @@ export class UserMapper {
       personId,
       dto.email,
       passwordHash,
-      UserRole.SUPERADMIN // Establecer como SUPERADMIN para usuarios creados desde aquí
+      dto.role // Use the role from DTO
     );
   }
 

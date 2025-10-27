@@ -60,6 +60,14 @@ export class CreateUserWithPersonDto {
   })
   password: string;
 
+  @IsEnum(UserRole, { message: 'El rol debe ser SUPERADMIN, ADMIN o SELLER' })
+  @ApiProperty({ 
+    enum: UserRole, 
+    description: 'Rol del usuario en el sistema',
+    example: UserRole.ADMIN
+  })
+  role: UserRole;
+
   @IsOptional()
   @IsUUID('4', { message: 'El ID de la tienda debe ser un UUID válido' })
   @ApiProperty({ 
