@@ -27,6 +27,8 @@
     "@nestjs/platform-express": "^11.1.6",
     "@nestjs/swagger": "^11.2.1",
     "@prisma/client": "^6.17.1",
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@scalar/nestjs-api-reference": "^1.0.5",
     "@types/bcrypt": "^6.0.0",
     "@types/bcryptjs": "^3.0.0",

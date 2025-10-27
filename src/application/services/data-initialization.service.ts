@@ -16,15 +16,15 @@ export class DataInitializationService {
   
   // SUPERADMIN credentials (no store)
   private readonly SUPERADMIN_EMAIL = 'superadmin@inventario.com';
-  private readonly SUPERADMIN_PASSWORD = 'SuperAdmin123!';
+  private readonly SUPERADMIN_PASSWORD = 'superadmin123';
   
   // ADMIN credentials (associated to default store)
   private readonly ADMIN_EMAIL = 'admin@inventario.com';
-  private readonly ADMIN_PASSWORD = 'Admin123!';
+  private readonly ADMIN_PASSWORD = 'admin123';
   
   // SELLER credentials (associated to default store)
   private readonly SELLER_EMAIL = 'seller@inventario.com';
-  private readonly SELLER_PASSWORD = 'Seller123!';
+  private readonly SELLER_PASSWORD = 'seller123';
   
   // Default store configuration
   private readonly DEFAULT_STORE_ID = '00000000-0000-0000-0000-000000000000';
