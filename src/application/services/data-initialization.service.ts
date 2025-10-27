@@ -10,9 +10,9 @@ export class DataInitializationService {
   private readonly SUPERADMIN_EMAIL = 'superadmin@inventario.com';
   private readonly SUPERADMIN_PASSWORD = 'superadmin123';
   private readonly DEFAULT_STORE_ID = '00000000-0000-0000-0000-000000000000';
-  private readonly DEFAULT_STORE_NAME = 'Tienda Principal';
+  private readonly DEFAULT_STORE_NAME = 'Tienda de Prueba';
   private readonly DEFAULT_STORE_RUC = '20123456781';
-  private readonly DEFAULT_STORE_ADDRESS = 'Dirección de la tienda principal';
+  private readonly DEFAULT_STORE_ADDRESS = 'Dirección de la tienda de prueba';
   private readonly DEFAULT_STORE_PHONE = '+51999999999';
 
   constructor(
@@ -28,11 +28,9 @@ export class DataInitializationService {
       this.logger.log('Checking for superadmin user...');
       
       // 1. Ensure default store exists
-      let store: Store | null = null;
       try {
-        store = await this.storeRepository.findById(this.DEFAULT_STORE_ID);
+        let store = await this.storeRepository.findById(this.DEFAULT_STORE_ID);
         if (!store) {
-          // Create default store if it doesn't exist
           store = Store.create(
             this.DEFAULT_STORE_ID,
             this.DEFAULT_STORE_NAME,
@@ -40,14 +38,14 @@ export class DataInitializationService {
             this.DEFAULT_STORE_ADDRESS,
             this.DEFAULT_STORE_PHONE
           );
-          // Save the store (you'll need to implement the save method in the repository)
-          // For now, we'll just log that we're skipping store creation
-          this.logger.warn('⚠️  Store creation not implemented. Using default store ID.');
+          // Save the store if repository implements save method
+          // await this.storeRepository.save(store);
+          this.logger.warn('ℹ️  Store creation not fully implemented. Using default store ID.');
         }
         this.logger.log('✅ Default store is ready');
       } catch (error) {
-        this.logger.error('❌ Error checking/creating default store', error);
-        // Continue with default store ID even if there's an error
+        this.logger.warn(`⚠️  Could not verify default store: ${error.message}`);
+        // Continue with initialization
       }
 
       // 2. Create superadmin user (without store association)
@@ -59,21 +57,31 @@ export class DataInitializationService {
           documentNumber: '00000000',
           names: 'Super Administrador',
           phone: this.DEFAULT_STORE_PHONE,
-          storeId: null, // Superadmin is not associated with any store
+          storeId: null,
         });
 
-        this.logger.log('✅ Superadmin user created successfully'); 
+        this.logger.log('✅ Superadmin user created successfully');
         this.logger.warn('⚠️  IMPORTANT: Change the default superadmin password in production');
       } catch (error) {
-        if (error.message.includes('already exists')) {
+        // Handle specific error for existing user/person
+        if (error.message.includes('already exists') || 
+            error.message.includes('Ya existe una persona') ||
+            error.name === 'PersonAlreadyExistsError') {
           this.logger.log('ℹ️ Superadmin user already exists');
-        } else {
-          this.logger.error(`❌ Error creating superadmin: ${error.message}`);
-          throw error; // Re-throw to be caught by the outer try-catch
+          return; // Exit early since this is an expected case
+        }
+        
+        // Log other errors but don't crash the app
+        this.logger.error(`❌ Error during superadmin initialization: ${error.message}`);
+        if (process.env.NODE_ENV === 'development') {
+          this.logger.debug(error.stack);
         }
       }
     } catch (error) {
-      this.logger.error('❌ Error during superadmin initialization', error.stack);
+      this.logger.error(`❌ Unexpected error in initializeSuperadmin: ${error.message}`);
+      if (process.env.NODE_ENV === 'development') {
+        this.logger.debug(error.stack);
+      }
     }
   }
 }
