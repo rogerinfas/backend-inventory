@@ -52,7 +52,8 @@ export class CreateSaleUseCase {
           throw new UserNotFoundError(dto.userId);
         }
 
-        // 4. Verificar que todos los productos existen, pertenecen a la tienda y tienen stock suficiente
+        // 4. Verificar que todos los productos existen y pertenecen a la tienda
+        // NO validamos stock aquí, solo al completar la venta
         for (const detail of dto.details) {
           const product = await this.productRepository.findById(detail.productId);
           if (!product) {
@@ -60,9 +61,6 @@ export class CreateSaleUseCase {
           }
           if (product.storeId !== dto.storeId) {
             throw new Error(`Producto ${detail.productId} no pertenece a la tienda ${dto.storeId}`);
-          }
-          if (!product.hasStockAvailable(detail.quantity)) {
-            throw new InsufficientStockError(detail.quantity, product.currentStock);
           }
         }
 
@@ -77,45 +75,24 @@ export class CreateSaleUseCase {
           }
         }
 
-        // 6. Obtener el siguiente número de documento automáticamente
-        const documentNumber = await this.saleRepository.getNextDocumentNumber(
-          dto.storeId,
-          dto.documentType,
-          dto.series
-        );
-
-        // 7. Crear la venta y sus detalles usando el mapper
+        // 6. Crear la venta y sus detalles usando el mapper
+        // El número de documento se generará al completar la venta
         const { sale, details } = SaleMapper.toDomain({
           ...dto,
-          documentNumber: dto.documentNumber || documentNumber,
+          documentNumber: dto.documentNumber, // Puede ser undefined
         });
 
-        // 8. Persistir la venta con sus detalles de forma atómica
+        // 7. Persistir la venta con sus detalles de forma atómica
         const result = await this.saleRepository.createWithDetailsTransaction(
           sale,
           details,
           tx
         );
 
-        // 9. Decrementar stock de productos dentro de la misma transacción
-        for (const detail of details) {
-          await this.productRepository.decreaseStock(
-            detail.productId, 
-            detail.quantity, 
-            dto.storeId, 
-            tx
-          );
-        }
+        // ❌ NO decrementar stock aquí - se hará al completar la venta
+        // ❌ NO incrementar número de serie aquí - se hará al completar la venta
 
-        // 10. Incrementar número de serie de comprobante
-        await this.saleRepository.incrementDocumentNumber(
-          dto.storeId,
-          dto.documentType,
-          dto.series,
-          tx
-        );
-
-        // 11. Retornar la respuesta con todos los datos
+        // 8. Retornar la respuesta con todos los datos
         return SaleMapper.toResponseDto(result.sale, result.details);
       });
     } catch (error) {

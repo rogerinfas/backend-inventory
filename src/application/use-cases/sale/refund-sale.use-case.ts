@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import type { SaleRepository, ProductRepository } from '../../../domain/repositories';
 import { SaleResponseDto } from '../../dto/sale';
 import { SaleMapper } from '../../mappers/sale.mapper';
-import { SaleNotFoundError, SaleCancelledError } from '../../errors/domain-errors';
+import { SaleNotFoundError } from '../../errors/domain-errors';
 import { PrismaService } from '../../../infrastructure/database/prisma.service';
 import { SaleStatus } from '../../../domain/enums';
 
 @Injectable()
-export class CancelSaleUseCase {
+export class RefundSaleUseCase {
   constructor(
     private readonly saleRepository: SaleRepository,
     private readonly productRepository: ProductRepository,
@@ -24,32 +24,31 @@ export class CancelSaleUseCase {
 
       const { sale, details } = saleWithDetails;
 
-      // 2. Verificar que se puede cancelar
-      if (sale.status === SaleStatus.CANCELLED) {
-        throw new SaleCancelledError(id);
+      // 2. Verificar que se puede procesar devolución
+      if (sale.status !== SaleStatus.COMPLETED) {
+        throw new Error(
+          `No se puede procesar devolución de una venta en estado ${sale.status}. ` +
+          'Solo se pueden procesar devoluciones de ventas completadas.'
+        );
       }
 
-      // 3. Si la venta estaba COMPLETED, restaurar el stock
-      if (sale.status === SaleStatus.COMPLETED) {
-        for (const detail of details) {
-          await this.productRepository.increaseStock(
-            detail.productId,
-            detail.quantity,
-            sale.storeId,
-            tx
-          );
-        }
+      // 3. Restaurar el stock de todos los productos
+      for (const detail of details) {
+        await this.productRepository.increaseStock(
+          detail.productId,
+          detail.quantity,
+          sale.storeId,
+          tx
+        );
       }
 
-      // 4. Si la venta estaba en PENDING, no hay stock que restaurar
-      // porque no se había decrementado
+      // 4. Cambiar estado a REFUNDED
+      sale.refund();
 
-      // 5. Cancelar la venta
-      sale.cancel();
-
-      // 6. Guardar y retornar
+      // 5. Guardar y retornar
       const savedSale = await this.saleRepository.updateWithTransaction(sale, tx);
       return SaleMapper.toResponseDto(savedSale, details);
     });
   }
 }
+

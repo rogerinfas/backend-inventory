@@ -432,8 +432,8 @@ export class SaleController {
   @Post(':id/refund')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Procesar devolución',
-    description: 'Procesa una devolución parcial o total de una venta. Solo se pueden procesar devoluciones de ventas completadas.',
+    summary: 'Procesar devolución total',
+    description: 'Procesa una devolución total de una venta. Restaura el stock de todos los productos y cambia el estado a REFUNDED. Solo se pueden procesar devoluciones de ventas completadas.',
   })
   @ApiParam({
     name: 'id',
@@ -441,43 +441,9 @@ export class SaleController {
     example: '123e4567-e89b-12d3-a456-426614174000',
     format: 'uuid'
   })
-  @ApiBody({
-    type: RefundSaleDto,
-    description: 'Detalles de la devolución',
-    examples: {
-      partialRefund: {
-        summary: 'Devolución parcial',
-        value: {
-          details: [
-            {
-              productId: '123e4567-e89b-12d3-a456-426614174003',
-              quantity: 1
-            }
-          ],
-          reason: 'Producto defectuoso'
-        }
-      },
-      fullRefund: {
-        summary: 'Devolución total',
-        value: {
-          details: [
-            {
-              productId: '123e4567-e89b-12d3-a456-426614174003',
-              quantity: 2
-            },
-            {
-              productId: '123e4567-e89b-12d3-a456-426614174004',
-              quantity: 1
-            }
-          ],
-          reason: 'Cliente no satisfecho'
-        }
-      }
-    }
-  })
   @ApiResponse({
     status: 200,
-    description: 'Devolución procesada exitosamente',
+    description: 'Devolución procesada exitosamente. El stock de todos los productos ha sido restaurado.',
     type: SaleResponseDto
   })
   @ApiNotFoundResponse({
@@ -490,16 +456,15 @@ export class SaleController {
         summary: 'Venta no completada',
         value: {
           statusCode: 400,
-          message: 'No se puede procesar devolución de la venta 123e4567-e89b-12d3-a456-426614174000 en su estado actual',
+          message: 'No se puede procesar devolución de una venta en estado PENDING. Solo se pueden procesar devoluciones de ventas completadas.',
           error: 'Bad Request'
         }
       }
     }
   })
   async refundSale(
-    @Param('id') id: string,
-    @Body() refundSaleDto: RefundSaleDto
+    @Param('id') id: string
   ): Promise<SaleResponseDto> {
-    return this.saleService.refundSale(id, refundSaleDto);
+    return this.saleService.refundSale(id);
   }
 }

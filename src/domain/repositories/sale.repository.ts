@@ -24,11 +24,13 @@ export interface SaleWithDetails {
 
 export interface SaleRepository {
   findById(id: string): Promise<Sale | null>;
+  findByIdWithDetails(id: string): Promise<SaleWithDetails | null>;
   findByStoreAndDocument(storeId: string, documentNumber: string): Promise<Sale | null>;
   findByFilters(filters?: SaleQueryFilters): Promise<Sale[]>;
   countByFilters(filters?: SaleQueryFilters): Promise<number>;
   save(sale: Sale): Promise<Sale>;
   update(sale: Sale): Promise<Sale>;
+  updateWithTransaction(sale: Sale, tx?: any): Promise<Sale>;
   delete(id: string): Promise<void>;
   exists(id: string): Promise<boolean>;
   existsByStoreAndDocument(storeId: string, documentNumber: string): Promise<boolean>;

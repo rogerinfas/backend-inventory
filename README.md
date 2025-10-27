@@ -112,7 +112,8 @@ Este proyecto incluye documentación completa en la carpeta `/docs`:
 
 ### Guías de Implementación
 - **[Store Scope Filtering Guide](./docs/store-scope-filtering-guide.md)** - 🔐 Sistema de filtrado automático por tienda basado en roles
-- **[Domain Errors Guide](./docs/domain-errors-guide.md)** - 🚨 Errores de dominio y manejo de excepciones (NUEVO)
+- **[Domain Errors Guide](./docs/domain-errors-guide.md)** - 🚨 Errores de dominio y manejo de excepciones
+- **[Sales Workflow Guide](./docs/sales-workflow-guide.md)** - 📊 Sistema de ventas con flujo mejorado (NUEVO)
 - **[Atomic Creation Implementation](./docs/atomic-creation-implementation.md)** - Creación atómica de entidades relacionadas
 - **[Person Implementation Guide](./docs/person-implementation-guide.md)** - Implementación de la entidad Person
 - **[Store Implementation Guide](./docs/store-implementation-guide.md)** - Implementación de tiendas multi-inquilino

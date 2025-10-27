@@ -18,6 +18,7 @@ export class SaleService {
   private readonly listSalesUseCase: any;
   private readonly cancelSaleUseCase: any;
   private readonly completeSaleUseCase: any;
+  private readonly refundSaleUseCase: any;
 
   constructor(
     @Inject('SaleRepository') saleRepository: SaleRepository,
@@ -34,11 +35,13 @@ export class SaleService {
       GetSaleByIdUseCase,
       ListSalesUseCase,
       CancelSaleUseCase,
-      CompleteSaleUseCase
+      CompleteSaleUseCase,
+      RefundSaleUseCase
     } = require('../use-cases/sale');
 
     // Importar PrismaService dinámicamente
     const { PrismaService } = require('../../infrastructure/database/prisma.service');
+    const prismaService = new PrismaService();
 
     this.createSaleUseCase = new CreateSaleUseCase(
       saleRepository,
@@ -47,13 +50,26 @@ export class SaleService {
       userRepository,
       productRepository,
       voucherSeriesRepository,
-      new PrismaService()
+      prismaService
     );
     this.updateSaleUseCase = new UpdateSaleUseCase(saleRepository);
     this.getSaleByIdUseCase = new GetSaleByIdUseCase(saleRepository);
     this.listSalesUseCase = new ListSalesUseCase(saleRepository);
-    this.cancelSaleUseCase = new CancelSaleUseCase(saleRepository);
-    this.completeSaleUseCase = new CompleteSaleUseCase(saleRepository);
+    this.cancelSaleUseCase = new CancelSaleUseCase(
+      saleRepository,
+      productRepository,
+      prismaService
+    );
+    this.completeSaleUseCase = new CompleteSaleUseCase(
+      saleRepository,
+      productRepository,
+      prismaService
+    );
+    this.refundSaleUseCase = new RefundSaleUseCase(
+      saleRepository,
+      productRepository,
+      prismaService
+    );
   }
 
   async createSale(dto: CreateSaleDto): Promise<SaleResponseDto> {
@@ -80,8 +96,7 @@ export class SaleService {
     return this.completeSaleUseCase.execute(id);
   }
 
-  // TODO: Implementar refundSale cuando se necesite
-  async refundSale(id: string, dto: RefundSaleDto): Promise<SaleResponseDto> {
-    throw new Error('Refund functionality not implemented yet');
+  async refundSale(id: string): Promise<SaleResponseDto> {
+    return this.refundSaleUseCase.execute(id);
   }
 }

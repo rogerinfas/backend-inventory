@@ -114,6 +114,38 @@ export class SalePrismaRepository implements SaleRepository {
     }) : null;
   }
 
+  async findByIdWithDetails(id: string): Promise<SaleWithDetails | null> {
+    const found = await this.prisma.sale.findUnique({
+      where: { id },
+      include: {
+        details: true,
+      },
+    });
+
+    if (!found) {
+      return null;
+    }
+
+    const sale = Sale.fromPersistence({
+      ...found,
+      documentNumber: found.documentNumber || undefined,
+      notes: found.notes || undefined,
+      documentType: found.documentType as any,
+      status: found.status as any,
+    });
+
+    const details = found.details.map(detail => SaleDetail.fromPersistence({
+      id: detail.id,
+      saleId: detail.saleId,
+      productId: detail.productId,
+      quantity: detail.quantity,
+      unitPrice: detail.unitPrice,
+      discount: detail.discount,
+    }));
+
+    return { sale, details };
+  }
+
   async findByStoreAndDocument(storeId: string, documentNumber: string): Promise<Sale | null> {
     const found = await this.prisma.sale.findFirst({
       where: {
@@ -197,6 +229,31 @@ export class SalePrismaRepository implements SaleRepository {
 
   async update(sale: Sale): Promise<Sale> {
     const updated = await this.prisma.sale.update({
+      where: { id: sale.id },
+      data: {
+        documentNumber: sale.documentNumber,
+        subtotal: sale.subtotal,
+        tax: sale.tax,
+        discount: sale.discount,
+        total: sale.total,
+        status: sale.status,
+        notes: sale.notes,
+        updatedAt: new Date(),
+      },
+    });
+
+    return Sale.fromPersistence({
+      ...updated,
+      documentNumber: updated.documentNumber || undefined,
+      notes: updated.notes || undefined,
+      documentType: updated.documentType as any,
+      status: updated.status as any,
+    });
+  }
+
+  async updateWithTransaction(sale: Sale, tx?: any): Promise<Sale> {
+    const prisma = tx || this.prisma;
+    const updated = await prisma.sale.update({
       where: { id: sale.id },
       data: {
         documentNumber: sale.documentNumber,
