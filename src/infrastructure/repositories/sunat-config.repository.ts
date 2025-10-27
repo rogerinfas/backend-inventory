@@ -95,7 +95,7 @@ export class SunatConfigPrismaRepository implements SunatConfigRepository {
         storeId: sunatConfig.storeId,
         solUsername: sunatConfig.solUsername,
         solPassword: sunatConfig.solPassword,
-        digitalCertificate: sunatConfig.digitalCertificate,
+        digitalCertificate: null,
         certificatePassword: sunatConfig.certificatePassword,
         apiUrl: sunatConfig.apiUrl,
         environment: sunatConfig.environment,
@@ -124,7 +124,7 @@ export class SunatConfigPrismaRepository implements SunatConfigRepository {
       data: {
         solUsername: sunatConfig.solUsername,
         solPassword: sunatConfig.solPassword,
-        digitalCertificate: sunatConfig.digitalCertificate,
+        digitalCertificate: null,
         certificatePassword: sunatConfig.certificatePassword,
         apiUrl: sunatConfig.apiUrl,
         environment: sunatConfig.environment,
