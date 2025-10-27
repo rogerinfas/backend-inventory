@@ -10,8 +10,10 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { CustomerService } from '../../application/services/customer.service';
 import {
   CreateCustomerDto,
@@ -23,6 +25,8 @@ import {
   ChangeCustomerStatusDto,
 } from '../../application/dto/customer';
 import { ListCustomersResult } from '../../application/use-cases/customer';
+import type { StoreFilter } from '../../domain/value-objects';
+import { StoreScoped } from '../decorators';
 
 @ApiTags('customers')
 @Controller('customers')
@@ -57,8 +61,13 @@ export class CustomerController {
   @ApiParam({ name: 'id', description: 'ID único del cliente', type: 'string' })
   @ApiResponse({ status: 200, description: 'Cliente encontrado exitosamente', type: CustomerResponseDto })
   @ApiResponse({ status: 404, description: 'Cliente no encontrado' })
-  async getCustomerById(@Param('id') id: string): Promise<CustomerResponseDto> {
-    return this.customerService.getCustomerById(id);
+  @StoreScoped()
+  async getCustomerById(
+    @Param('id') id: string,
+    @Req() request: Request
+  ): Promise<CustomerResponseDto> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.customerService.getCustomerById(id, storeFilter);
   }
 
   @Patch(':id')
@@ -86,8 +95,13 @@ export class CustomerController {
   @ApiQuery({ name: 'sortBy', required: false, description: 'Campo por el cual ordenar' })
   @ApiQuery({ name: 'sortOrder', required: false, description: 'Dirección del ordenamiento' })
   @ApiResponse({ status: 200, description: 'Lista de clientes obtenida exitosamente' })
-  async listCustomers(@Query() query: CustomerQueryDto): Promise<ListCustomersResult> {
-    return this.customerService.listCustomers(query);
+  @StoreScoped()
+  async listCustomers(
+    @Query() query: CustomerQueryDto,
+    @Req() request: Request
+  ): Promise<ListCustomersResult> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.customerService.listCustomers(query, storeFilter);
   }
 
   @Patch(':id/status')

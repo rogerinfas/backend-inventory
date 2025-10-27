@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { ProductRepository } from '../../../domain/repositories/product.repository';
 import { ProductQueryDto, ProductResponseDto } from '../../dto/product';
 import { ProductMapper } from '../../mappers/product.mapper';
+import type { StoreFilter } from '../../../domain/value-objects';
 
 export interface ListProductsResult {
   data: ProductResponseDto[];
@@ -15,8 +16,18 @@ export interface ListProductsResult {
 export class ListProductsUseCase {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  async execute(query: ProductQueryDto): Promise<ListProductsResult> {
+  async execute(
+    query: ProductQueryDto,
+    storeFilter?: StoreFilter
+  ): Promise<ListProductsResult> {
     const filters = ProductMapper.toQueryFilters(query);
+    
+    // Aplicar filtro de storeId según el rol del usuario
+    // SUPERADMIN (storeFilter.storeId = null): Ve todos los productos
+    // ADMIN/SELLER: Solo ve productos de su tienda
+    if (storeFilter && storeFilter.storeId) {
+      filters.storeId = storeFilter.storeId;
+    }
     
     // Obtener datos paginados
     const products = await this.productRepository.findMany(filters);

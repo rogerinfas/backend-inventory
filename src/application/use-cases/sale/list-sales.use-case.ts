@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { SaleRepository, SaleQueryFilters } from '../../../domain/repositories';
 import { SaleQueryDto, ListSalesResponseDto } from '../../dto/sale';
 import { SaleMapper } from '../../mappers/sale.mapper';
+import type { StoreFilter } from '../../../domain/value-objects';
 
 export interface ListSalesResult {
   data: any[];
@@ -17,9 +18,19 @@ export interface ListSalesResult {
 export class ListSalesUseCase {
   constructor(private readonly saleRepository: SaleRepository) {}
 
-  async execute(query: SaleQueryDto): Promise<ListSalesResult> {
+  async execute(
+    query: SaleQueryDto,
+    storeFilter?: StoreFilter
+  ): Promise<ListSalesResult> {
     // 1. Construir filtros
     const filters: SaleQueryFilters = SaleMapper.toQueryFilters(query);
+
+    // Aplicar filtro de storeId según el rol del usuario
+    // SUPERADMIN (storeFilter.storeId = null): Ve todas las ventas
+    // ADMIN/SELLER: Solo ve ventas de su tienda
+    if (storeFilter && storeFilter.storeId) {
+      filters.storeId = storeFilter.storeId;
+    }
 
     // 2. Obtener ventas con paginación
     const sales = await this.saleRepository.findByFilters(filters);

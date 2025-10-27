@@ -9,7 +9,8 @@ import {
   Param, 
   Query, 
   HttpCode, 
-  HttpStatus 
+  HttpStatus,
+  Req
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -23,6 +24,7 @@ import {
   ApiConflictResponse,
   ApiGoneResponse
 } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { PurchaseService } from '../../application/services/purchase.service';
 import { 
   CreatePurchaseDto, 
@@ -32,6 +34,8 @@ import {
   ListPurchasesResponseDto
 } from '../../application/dto/purchase';
 import { ListPurchasesResult } from '../../application/use-cases/purchase';
+import type { StoreFilter } from '../../domain/value-objects';
+import { StoreScoped } from '../decorators';
 
 @ApiTags('Purchases')
 @Controller('purchases')
@@ -319,8 +323,13 @@ export class PurchaseController {
       }
     }
   })
-  async listPurchases(@Query() query: PurchaseQueryDto): Promise<ListPurchasesResult> {
-    return this.purchaseService.listPurchases(query);
+  @StoreScoped()
+  async listPurchases(
+    @Query() query: PurchaseQueryDto,
+    @Req() request: Request
+  ): Promise<ListPurchasesResult> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.purchaseService.listPurchases(query, storeFilter);
   }
 
   @Get(':id')
@@ -385,8 +394,13 @@ export class PurchaseController {
       }
     }
   })
-  async findById(@Param('id') id: string): Promise<PurchaseResponseDto> {
-    return this.purchaseService.findById(id);
+  @StoreScoped()
+  async findById(
+    @Param('id') id: string,
+    @Req() request: Request
+  ): Promise<PurchaseResponseDto> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.purchaseService.findById(id, storeFilter);
   }
 
   @Put(':id')

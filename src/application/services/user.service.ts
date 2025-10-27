@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { UserRepository } from '../../domain/repositories/user.repository';
 import type { PersonRepository } from '../../domain/repositories/person.repository';
 import type { StoreRepository } from '../../domain/repositories/store.repository';
+import type { StoreFilter } from '../../domain/value-objects';
 import { PrismaService } from '../../infrastructure/database/prisma.service';
 import {
   CreateUserDto,
@@ -65,12 +66,12 @@ export class UserService {
     return this.updateUserUseCase.execute(id, dto);
   }
 
-  async getUserById(id: string): Promise<UserResponseDto> {
-    return this.getUserByIdUseCase.execute(id);
+  async getUserById(id: string, storeFilter?: StoreFilter): Promise<UserResponseDto> {
+    return this.getUserByIdUseCase.execute(id, storeFilter);
   }
 
-  async listUsers(query: UserQueryDto): Promise<ListUsersResult> {
-    return this.listUsersUseCase.execute(query);
+  async listUsers(query: UserQueryDto, storeFilter?: StoreFilter): Promise<ListUsersResult> {
+    return this.listUsersUseCase.execute(query, storeFilter);
   }
 
   async changeUserStatus(id: string, dto: ChangeUserStatusDto): Promise<UserResponseDto> {

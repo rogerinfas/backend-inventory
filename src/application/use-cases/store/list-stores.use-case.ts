@@ -1,6 +1,7 @@
 import { StoreRepository } from '../../../domain/repositories/store.repository';
 import { StoreQueryDto, StoreResponseDto } from '../../dto/store';
 import { StoreMapper } from '../../mappers/store.mapper';
+import type { StoreFilter } from '../../../domain/value-objects';
 
 export interface ListStoresResult {
   data: StoreResponseDto[];
@@ -13,10 +14,23 @@ export interface ListStoresResult {
 export class ListStoresUseCase {
   constructor(private readonly storeRepository: StoreRepository) {}
 
-  async execute(query: StoreQueryDto): Promise<ListStoresResult> {
-    const filters = StoreMapper.toQueryFilters(query);
+  async execute(
+    query: StoreQueryDto,
+    storeFilter?: StoreFilter
+  ): Promise<ListStoresResult> {
+    // Si es ADMIN, solo puede ver su tienda
+    if (storeFilter && storeFilter.storeId) {
+      const store = await this.storeRepository.findById(storeFilter.storeId);
+      if (!store) {
+        return { data: [], total: 0, page: 1, limit: 10, totalPages: 0 };
+      }
+      
+      const data = [StoreMapper.toResponseDto(store)];
+      return { data, total: 1, page: 1, limit: 1, totalPages: 1 };
+    }
     
-    // Obtener datos paginados
+    // SUPERADMIN: Ve todas las tiendas con filtros y paginación
+    const filters = StoreMapper.toQueryFilters(query);
     const stores = await this.storeRepository.findMany(filters);
     const total = await this.storeRepository.count(filters);
 

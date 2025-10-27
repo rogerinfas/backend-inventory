@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { SupplierRepository } from '../../domain/repositories/supplier.repository';
 import type { PersonRepository } from '../../domain/repositories/person.repository';
 import type { StoreRepository } from '../../domain/repositories/store.repository';
+import type { StoreFilter } from '../../domain/value-objects';
 import { PrismaService } from '../../infrastructure/database/prisma.service';
 import {
   CreateSupplierDto,
@@ -65,12 +66,12 @@ export class SupplierService {
     return this.updateSupplierUseCase.execute(id, dto);
   }
 
-  async getSupplierById(id: string): Promise<SupplierResponseDto> {
-    return this.getSupplierByIdUseCase.execute(id);
+  async getSupplierById(id: string, storeFilter?: StoreFilter): Promise<SupplierResponseDto> {
+    return this.getSupplierByIdUseCase.execute(id, storeFilter);
   }
 
-  async listSuppliers(query: SupplierQueryDto): Promise<ListSuppliersResult> {
-    return this.listSuppliersUseCase.execute(query);
+  async listSuppliers(query: SupplierQueryDto, storeFilter?: StoreFilter): Promise<ListSuppliersResult> {
+    return this.listSuppliersUseCase.execute(query, storeFilter);
   }
 
   async changeSupplierStatus(id: string, dto: ChangeSupplierStatusDto): Promise<SupplierResponseDto> {

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from '../controllers/auth.controller';
@@ -10,8 +10,10 @@ import { AuthPrismaRepository } from '../repositories/auth-prisma.repository';
 import { UserPrismaRepository } from '../repositories/user.repository';
 import { AuthInfrastructureService } from '../services/auth-infrastructure.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { StoreScopeGuard } from '../guards/store-scope.guard';
 import { DatabaseModule } from './database.module';
 
+@Global()
 @Module({
   imports: [
     DatabaseModule,
@@ -54,10 +56,12 @@ import { DatabaseModule } from './database.module';
     
     // Guards
     JwtAuthGuard,
+    StoreScopeGuard,
   ],
   exports: [
     AuthApplicationService,
     JwtAuthGuard,
+    StoreScopeGuard,
     JwtModule,
   ],
 })

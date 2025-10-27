@@ -1,4 +1,5 @@
 import type { StoreRepository } from '../../domain/repositories';
+import type { StoreFilter } from '../../domain/value-objects';
 import { Inject } from '@nestjs/common';
 import {
   CreateStoreDto,
@@ -45,16 +46,16 @@ export class StoreService {
     return this.updateStoreUseCase.execute(id, dto);
   }
 
-  async getStoreById(id: string): Promise<StoreResponseDto | null> {
-    return this.getStoreByIdUseCase.execute(id);
+  async getStoreById(id: string, storeFilter?: StoreFilter): Promise<StoreResponseDto | null> {
+    return this.getStoreByIdUseCase.execute(id, storeFilter);
   }
 
-  async getStoreByRuc(ruc: string): Promise<StoreResponseDto | null> {
-    return this.getStoreByRucUseCase.execute(ruc);
+  async getStoreByRuc(ruc: string, storeFilter?: StoreFilter): Promise<StoreResponseDto | null> {
+    return this.getStoreByRucUseCase.execute(ruc, storeFilter);
   }
 
-  async listStores(query: StoreQueryDto): Promise<ListStoresResult> {
-    return this.listStoresUseCase.execute(query);
+  async listStores(query: StoreQueryDto, storeFilter?: StoreFilter): Promise<ListStoresResult> {
+    return this.listStoresUseCase.execute(query, storeFilter);
   }
 
   async changeStoreStatus(id: string, dto: ChangeStoreStatusDto): Promise<StoreResponseDto> {

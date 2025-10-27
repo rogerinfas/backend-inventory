@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import type { SaleRepository } from '../../domain/repositories';
+import type { StoreFilter } from '../../domain/value-objects';
 import { 
   CreateSaleDto, 
   UpdateSaleDto, 
@@ -63,12 +64,12 @@ export class SaleService {
     return this.updateSaleUseCase.execute(id, dto);
   }
 
-  async getSaleById(id: string): Promise<SaleResponseDto> {
-    return this.getSaleByIdUseCase.execute(id);
+  async getSaleById(id: string, storeFilter?: StoreFilter): Promise<SaleResponseDto> {
+    return this.getSaleByIdUseCase.execute(id, storeFilter);
   }
 
-  async listSales(query: SaleQueryDto): Promise<ListSalesResult> {
-    return this.listSalesUseCase.execute(query);
+  async listSales(query: SaleQueryDto, storeFilter?: StoreFilter): Promise<ListSalesResult> {
+    return this.listSalesUseCase.execute(query, storeFilter);
   }
 
   async cancelSale(id: string): Promise<SaleResponseDto> {

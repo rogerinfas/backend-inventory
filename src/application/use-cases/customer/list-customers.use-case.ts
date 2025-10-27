@@ -1,6 +1,7 @@
 import { CustomerRepository } from '../../../domain/repositories/customer.repository';
 import { CustomerQueryDto } from '../../dto/customer';
 import { CustomerMapper } from '../../mappers/customer.mapper';
+import type { StoreFilter } from '../../../domain/value-objects';
 
 export interface ListCustomersResult {
   data: any[];
@@ -13,9 +14,19 @@ export interface ListCustomersResult {
 export class ListCustomersUseCase {
   constructor(private readonly customerRepository: CustomerRepository) {}
 
-  async execute(query: CustomerQueryDto): Promise<ListCustomersResult> {
+  async execute(
+    query: CustomerQueryDto,
+    storeFilter?: StoreFilter
+  ): Promise<ListCustomersResult> {
     // 1. Convertir DTO a filtros
     const filters = CustomerMapper.toQueryFilters(query);
+    
+    // Aplicar filtro de storeId según el rol del usuario
+    // SUPERADMIN (storeFilter.storeId = null): Ve todos los clientes
+    // ADMIN/SELLER: Solo ve clientes de su tienda
+    if (storeFilter && storeFilter.storeId) {
+      filters.storeId = storeFilter.storeId;
+    }
     
     // 2. Obtener datos paginados
     const customers = await this.customerRepository.findMany(filters);

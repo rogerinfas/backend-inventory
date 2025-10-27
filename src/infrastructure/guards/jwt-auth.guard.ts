@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import type { Request } from 'express';
 import { AuthPayload } from '../../domain/entities/auth.entity';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 

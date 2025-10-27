@@ -8,7 +8,8 @@ import {
   Delete, 
   Query, 
   HttpCode, 
-  HttpStatus 
+  HttpStatus,
+  Req
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -22,6 +23,7 @@ import {
   ApiConflictResponse,
   ApiGoneResponse
 } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { ProductService } from '../../application/services/product.service';
 import { 
   CreateProductDto, 
@@ -34,6 +36,8 @@ import {
   UpdateStockDto
 } from '../../application/dto/product';
 import type { ListProductsResult } from '../../application/use-cases/product';
+import type { StoreFilter } from '../../domain/value-objects';
+import { StoreScoped } from '../decorators';
 
 @ApiTags('products')
 @Controller('products')
@@ -139,8 +143,13 @@ export class ProductController {
       }
     }
   })
-  async getProductById(@Param('id') id: string): Promise<ProductResponseDto | null> {
-    return this.productService.getProductById(id);
+  @StoreScoped()
+  async getProductById(
+    @Param('id') id: string,
+    @Req() request: Request
+  ): Promise<ProductResponseDto | null> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.productService.getProductById(id, storeFilter);
   }
 
   @Get()
@@ -233,8 +242,13 @@ export class ProductController {
     description: 'Lista de productos con metadatos de paginación', 
     type: ListProductsResponseDto 
   })
-  async listProducts(@Query() query: ProductQueryDto): Promise<ListProductsResult> {
-    return this.productService.listProducts(query);
+  @StoreScoped()
+  async listProducts(
+    @Query() query: ProductQueryDto,
+    @Req() request: Request
+  ): Promise<ListProductsResult> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.productService.listProducts(query, storeFilter);
   }
 
   @Patch(':id')

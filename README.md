@@ -103,18 +103,33 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
+## 📚 Documentación del Proyecto
+
+Este proyecto incluye documentación completa en la carpeta `/docs`:
+
+### Arquitectura y Estructura
+- **[Architecture & Project Structure](./docs/architecture-and-project-structure.md)** - Arquitectura general del proyecto, Clean Architecture implementation, y estructura de carpetas
+
+### Guías de Implementación
+- **[Store Scope Filtering Guide](./docs/store-scope-filtering-guide.md)** - 🔐 Sistema de filtrado automático por tienda basado en roles (NUEVO)
+- **[Atomic Creation Implementation](./docs/atomic-creation-implementation.md)** - Creación atómica de entidades relacionadas
+- **[Person Implementation Guide](./docs/person-implementation-guide.md)** - Implementación de la entidad Person
+- **[Store Implementation Guide](./docs/store-implementation-guide.md)** - Implementación de tiendas multi-inquilino
+- **[SUNAT Config Implementation](./docs/sunat-config-implementation-guide.md)** - Configuración de integración con SUNAT
+
+### Sistema de Seguridad por Roles
+
+El proyecto implementa un **sistema de filtrado automático por tienda** que garantiza que:
+
+- 🌍 **SUPERADMIN**: Acceso total a todas las tiendas
+- 🏪 **ADMIN**: Solo accede a recursos de su tienda asignada
+- 🏪 **SELLER**: Solo accede a recursos de su tienda asignada
+
+Ver la [guía completa de Store Scope Filtering](./docs/store-scope-filtering-guide.md) para más detalles.
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
 ## Resources
 

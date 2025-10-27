@@ -8,7 +8,8 @@ import {
   Delete, 
   Query,
   HttpCode,
-  HttpStatus
+  HttpStatus,
+  Req
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -19,7 +20,10 @@ import {
   ApiBody,
   ApiBearerAuth
 } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { UserService } from '../../application/services/user.service';
+import type { StoreFilter } from '../../domain/value-objects';
+import { StoreScoped } from '../decorators';
 import {
   CreateUserDto,
   CreateUserWithPersonDto,
@@ -120,8 +124,13 @@ export class UserController {
     status: 401, 
     description: 'Token de acceso requerido o inválido' 
   })
-  async listUsers(@Query() query: UserQueryDto): Promise<ListUsersResult> {
-    return this.userService.listUsers(query);
+  @StoreScoped()
+  async listUsers(
+    @Query() query: UserQueryDto,
+    @Req() request: Request
+  ): Promise<ListUsersResult> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.userService.listUsers(query, storeFilter);
   }
 
   @Get(':id')
@@ -143,8 +152,13 @@ export class UserController {
     status: 404, 
     description: 'Usuario no encontrado' 
   })
-  async getUserById(@Param('id') id: string): Promise<UserResponseDto> {
-    return this.userService.getUserById(id);
+  @StoreScoped()
+  async getUserById(
+    @Param('id') id: string,
+    @Req() request: Request
+  ): Promise<UserResponseDto> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.userService.getUserById(id, storeFilter);
   }
 
   @Patch(':id')

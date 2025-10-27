@@ -9,7 +9,8 @@ import {
   Param, 
   Query, 
   HttpCode, 
-  HttpStatus 
+  HttpStatus,
+  Req
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -23,6 +24,7 @@ import {
   ApiConflictResponse,
   ApiGoneResponse
 } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { SaleService } from '../../application/services/sale.service';
 import { 
   CreateSaleDto, 
@@ -33,6 +35,8 @@ import {
   RefundSaleDto
 } from '../../application/dto/sale';
 import { ListSalesResult } from '../../application/use-cases/sale';
+import type { StoreFilter } from '../../domain/value-objects';
+import { StoreScoped } from '../decorators';
 
 @ApiTags('Sales')
 @Controller('sales')
@@ -246,8 +250,13 @@ export class SaleController {
     description: 'Lista de ventas obtenida exitosamente',
     type: ListSalesResponseDto
   })
-  async listSales(@Query() query: SaleQueryDto): Promise<ListSalesResult> {
-    return this.saleService.listSales(query);
+  @StoreScoped()
+  async listSales(
+    @Query() query: SaleQueryDto,
+    @Req() request: Request
+  ): Promise<ListSalesResult> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.saleService.listSales(query, storeFilter);
   }
 
   @Get(':id')
@@ -279,8 +288,13 @@ export class SaleController {
       }
     }
   })
-  async getSaleById(@Param('id') id: string): Promise<SaleResponseDto> {
-    return this.saleService.getSaleById(id);
+  @StoreScoped()
+  async getSaleById(
+    @Param('id') id: string,
+    @Req() request: Request
+  ): Promise<SaleResponseDto> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.saleService.getSaleById(id, storeFilter);
   }
 
   @Put(':id')

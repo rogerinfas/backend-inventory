@@ -16,6 +16,7 @@ import { DatabaseModule } from './infrastructure/modules/database.module';
 import { AuthModule } from './infrastructure/modules/auth.module';
 import { DataInitializationModule } from './infrastructure/modules/data-initialization.module';
 import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
+import { StoreScopeGuard } from './infrastructure/guards/store-scope.guard';
 
 @Module({
   imports: [
@@ -37,9 +38,15 @@ import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
   ],
   controllers: [],
   providers: [
+    // Guards aplicados globalmente
+    // El orden importa: primero autenticación, luego filtrado por store
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: StoreScopeGuard,
     },
   ],
 })

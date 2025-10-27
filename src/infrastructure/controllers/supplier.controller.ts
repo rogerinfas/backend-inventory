@@ -10,8 +10,10 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { SupplierService } from '../../application/services/supplier.service';
 import {
   CreateSupplierDto,
@@ -23,6 +25,8 @@ import {
   ChangeSupplierStatusDto,
 } from '../../application/dto/supplier';
 import { ListSuppliersResult } from '../../application/use-cases/supplier';
+import type { StoreFilter } from '../../domain/value-objects';
+import { StoreScoped } from '../decorators';
 
 @ApiTags('suppliers')
 @Controller('suppliers')
@@ -57,8 +61,13 @@ export class SupplierController {
   @ApiParam({ name: 'id', description: 'ID único del proveedor', type: 'string' })
   @ApiResponse({ status: 200, description: 'Proveedor encontrado exitosamente', type: SupplierResponseDto })
   @ApiResponse({ status: 404, description: 'Proveedor no encontrado' })
-  async getSupplierById(@Param('id') id: string): Promise<SupplierResponseDto> {
-    return this.supplierService.getSupplierById(id);
+  @StoreScoped()
+  async getSupplierById(
+    @Param('id') id: string,
+    @Req() request: Request
+  ): Promise<SupplierResponseDto> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.supplierService.getSupplierById(id, storeFilter);
   }
 
   @Patch(':id')
@@ -86,8 +95,13 @@ export class SupplierController {
   @ApiQuery({ name: 'sortBy', required: false, description: 'Campo por el cual ordenar' })
   @ApiQuery({ name: 'sortOrder', required: false, description: 'Dirección del ordenamiento' })
   @ApiResponse({ status: 200, description: 'Lista de proveedores obtenida exitosamente' })
-  async listSuppliers(@Query() query: SupplierQueryDto): Promise<ListSuppliersResult> {
-    return this.supplierService.listSuppliers(query);
+  @StoreScoped()
+  async listSuppliers(
+    @Query() query: SupplierQueryDto,
+    @Req() request: Request
+  ): Promise<ListSuppliersResult> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.supplierService.listSuppliers(query, storeFilter);
   }
 
   @Patch(':id/status')

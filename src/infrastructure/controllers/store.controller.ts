@@ -10,8 +10,10 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { StoreService } from '../../application/services/store.service';
 import {
   CreateStoreDto,
@@ -21,6 +23,8 @@ import {
   ChangeStoreStatusDto,
 } from '../../application/dto/store';
 import { ListStoresResult } from '../../application/use-cases/store';
+import type { StoreFilter } from '../../domain/value-objects';
+import { StoreScoped } from '../decorators';
 
 @ApiTags('stores')
 @Controller('stores')
@@ -42,8 +46,13 @@ export class StoreController {
   @ApiParam({ name: 'id', description: 'ID único de la tienda', type: 'string' })
   @ApiResponse({ status: 200, description: 'Tienda encontrada', type: StoreResponseDto })
   @ApiResponse({ status: 404, description: 'Tienda no encontrada' })
-  async getStoreById(@Param('id') id: string): Promise<StoreResponseDto | null> {
-    return this.storeService.getStoreById(id);
+  @StoreScoped()
+  async getStoreById(
+    @Param('id') id: string,
+    @Req() request: Request
+  ): Promise<StoreResponseDto | null> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.storeService.getStoreById(id, storeFilter);
   }
 
   @Get('ruc/:ruc')
@@ -51,8 +60,13 @@ export class StoreController {
   @ApiParam({ name: 'ruc', description: 'RUC de la tienda', type: 'string' })
   @ApiResponse({ status: 200, description: 'Tienda encontrada', type: StoreResponseDto })
   @ApiResponse({ status: 404, description: 'Tienda no encontrada' })
-  async getStoreByRuc(@Param('ruc') ruc: string): Promise<StoreResponseDto | null> {
-    return this.storeService.getStoreByRuc(ruc);
+  @StoreScoped()
+  async getStoreByRuc(
+    @Param('ruc') ruc: string,
+    @Req() request: Request
+  ): Promise<StoreResponseDto | null> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.storeService.getStoreByRuc(ruc, storeFilter);
   }
 
   @Get()
@@ -64,8 +78,13 @@ export class StoreController {
   @ApiQuery({ name: 'sortBy', required: false, description: 'Campo de ordenamiento' })
   @ApiQuery({ name: 'sortOrder', required: false, description: 'Orden (asc/desc)' })
   @ApiResponse({ status: 200, description: 'Lista de tiendas obtenida exitosamente' })
-  async listStores(@Query() query: StoreQueryDto): Promise<ListStoresResult> {
-    return this.storeService.listStores(query);
+  @StoreScoped()
+  async listStores(
+    @Query() query: StoreQueryDto,
+    @Req() request: Request
+  ): Promise<ListStoresResult> {
+    const storeFilter = request['storeFilter'] as StoreFilter;
+    return this.storeService.listStores(query, storeFilter);
   }
 
   @Patch(':id')
