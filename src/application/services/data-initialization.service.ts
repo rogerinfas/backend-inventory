@@ -1,7 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserWithPersonUseCase } from '../use-cases/user/create-user-with-person.use-case';
+import { CreateCategoryUseCase } from '../use-cases/category/create-category.use-case';
+import { CreateBrandUseCase } from '../use-cases/brand/create-brand.use-case';
+import { CreateProductUseCase } from '../use-cases/product/create-product.use-case';
+import { AddStockUseCase } from '../use-cases/product/add-stock.use-case';
 import { DocumentType } from '../../domain/enums/document-type.enum';
 import { UserRole } from '../../domain/enums/user-role.enum';
+import { UnitOfMeasure } from '../../domain/enums/unit-of-measure.enum';
 import { StorePrismaRepository } from '../../infrastructure/repositories/store.repository';
 import { Store } from '../../domain/entities/store.entity';
 
@@ -30,6 +35,10 @@ export class DataInitializationService {
 
   constructor(
     private readonly createUserWithPersonUseCase: CreateUserWithPersonUseCase,
+    private readonly createCategoryUseCase: CreateCategoryUseCase,
+    private readonly createBrandUseCase: CreateBrandUseCase,
+    private readonly createProductUseCase: CreateProductUseCase,
+    private readonly addStockUseCase: AddStockUseCase,
     private readonly storeRepository: StorePrismaRepository,
   ) {}
 
@@ -60,6 +69,13 @@ export class DataInitializationService {
         await this.ensureSellerUser(storeId);
       } else {
         this.logger.warn('⚠️ Skipping SELLER user creation - no default store available');
+      }
+
+      // 5. Create default categories, brands and products
+      if (storeId) {
+        await this.ensureDefaultCatalog(storeId);
+      } else {
+        this.logger.warn('⚠️ Skipping catalog creation - no default store available');
       }
 
       this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -228,6 +244,169 @@ export class DataInitializationService {
       errorName.includes('alreadyexists') ||
       errorName === 'personalreadyexistserror'
     );
+  }
+
+  /**
+   * Ensure default catalog (categories, brands, products) exists
+   */
+  private async ensureDefaultCatalog(storeId: string): Promise<void> {
+    try {
+      this.logger.log('📦 Initializing default catalog...');
+
+      // Create categories
+      const categories = await this.ensureDefaultCategories();
+      
+      // Create brands
+      const brands = await this.ensureDefaultBrands();
+      
+      // Create products
+      await this.ensureDefaultProducts(storeId, categories, brands);
+
+      this.logger.log('✅ Default catalog initialized');
+    } catch (error) {
+      this.logger.warn(`⚠️ Could not initialize catalog: ${error.message}`);
+    }
+  }
+
+  private async ensureDefaultCategories(): Promise<Map<string, string>> {
+    const categoryMap = new Map<string, string>();
+    const categories = [
+      { name: 'Laptops', description: 'Computadoras portátiles' },
+      { name: 'Smartphones', description: 'Teléfonos inteligentes' },
+      { name: 'Accesorios', description: 'Accesorios tecnológicos' },
+      { name: 'Periféricos', description: 'Teclados, mouse, audífonos' },
+    ];
+
+    for (const cat of categories) {
+      try {
+        const result = await this.createCategoryUseCase.execute(cat);
+        categoryMap.set(cat.name, result.id);
+        this.logger.log(`   ✓ Category: ${cat.name}`);
+      } catch (error) {
+        if (error.message?.includes('ya existe')) {
+          this.logger.log(`   ℹ️ Category already exists: ${cat.name}`);
+        }
+      }
+    }
+
+    return categoryMap;
+  }
+
+  private async ensureDefaultBrands(): Promise<Map<string, string>> {
+    const brandMap = new Map<string, string>();
+    const brands = ['Apple', 'Samsung', 'Lenovo', 'HP', 'Logitech'];
+
+    for (const brandName of brands) {
+      try {
+        const result = await this.createBrandUseCase.execute({ name: brandName });
+        brandMap.set(brandName, result.id);
+        this.logger.log(`   ✓ Brand: ${brandName}`);
+      } catch (error) {
+        if (error.message?.includes('ya existe')) {
+          this.logger.log(`   ℹ️ Brand already exists: ${brandName}`);
+        }
+      }
+    }
+
+    return brandMap;
+  }
+
+  private async ensureDefaultProducts(
+    storeId: string,
+    categories: Map<string, string>,
+    brands: Map<string, string>
+  ): Promise<void> {
+    const products = [
+      {
+        sku: 'LAP-HP-001',
+        name: 'Laptop HP Pavilion 15',
+        description: 'Intel i5, 8GB RAM, 256GB SSD',
+        categoryName: 'Laptops',
+        brandName: 'HP',
+        purchasePrice: 1500.00,
+        salePrice: 1899.00,
+        minimumStock: 3,
+      },
+      {
+        sku: 'LAP-LEN-002',
+        name: 'Laptop Lenovo IdeaPad 3',
+        description: 'AMD Ryzen 5, 8GB RAM, 512GB SSD',
+        categoryName: 'Laptops',
+        brandName: 'Lenovo',
+        purchasePrice: 1400.00,
+        salePrice: 1799.00,
+        minimumStock: 3,
+      },
+      {
+        sku: 'PHN-SAM-001',
+        name: 'Samsung Galaxy A54',
+        description: '128GB, 6GB RAM, 5G',
+        categoryName: 'Smartphones',
+        brandName: 'Samsung',
+        purchasePrice: 800.00,
+        salePrice: 999.00,
+        minimumStock: 5,
+      },
+      {
+        sku: 'PHN-APP-001',
+        name: 'iPhone 13',
+        description: '128GB, Negro',
+        categoryName: 'Smartphones',
+        brandName: 'Apple',
+        purchasePrice: 2000.00,
+        salePrice: 2499.00,
+        minimumStock: 2,
+      },
+      {
+        sku: 'ACC-LOG-001',
+        name: 'Mouse Logitech MX Master 3',
+        description: 'Inalámbrico, Ergonómico',
+        categoryName: 'Accesorios',
+        brandName: 'Logitech',
+        purchasePrice: 80.00,
+        salePrice: 119.00,
+        minimumStock: 10,
+      },
+      {
+        sku: 'ACC-LOG-002',
+        name: 'Teclado Logitech K380',
+        description: 'Bluetooth, Multi-dispositivo',
+        categoryName: 'Periféricos',
+        brandName: 'Logitech',
+        purchasePrice: 60.00,
+        salePrice: 89.00,
+        minimumStock: 10,
+      },
+    ];
+
+    for (const prod of products) {
+      try {
+        const createdProduct = await this.createProductUseCase.execute({
+          storeId,
+          categoryId: categories.get(prod.categoryName),
+          brandId: brands.get(prod.brandName),
+          sku: prod.sku,
+          name: prod.name,
+          description: prod.description,
+          purchasePrice: prod.purchasePrice,
+          salePrice: prod.salePrice,
+          minimumStock: prod.minimumStock,
+          unitOfMeasure: UnitOfMeasure.UNIT,
+        });
+        
+        // Agregar stock inicial de 10 unidades
+        await this.addStockUseCase.execute(createdProduct.id, {
+          quantity: 10,
+          reason: 'Stock inicial'
+        });
+        
+        this.logger.log(`   ✓ Product: ${prod.name} (Stock: 10)`);
+      } catch (error) {
+        if (error.message?.includes('ya existe')) {
+          this.logger.log(`   ℹ️ Product already exists: ${prod.name}`);
+        }
+      }
+    }
   }
 
   /**

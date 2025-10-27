@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import type { ProductRepository } from '../../../domain/repositories/product.repository';
 import { AddStockDto, ProductResponseDto } from '../../dto/product';
 import { ProductMapper } from '../../mappers/product.mapper';
@@ -6,7 +6,10 @@ import { ProductNotFoundError, ProductInactiveError } from '../../errors/domain-
 
 @Injectable()
 export class AddStockUseCase {
-  constructor(private readonly productRepository: ProductRepository) {}
+  constructor(
+    @Inject('ProductRepository')
+    private readonly productRepository: ProductRepository
+  ) {}
 
   async execute(id: string, dto: AddStockDto): Promise<ProductResponseDto> {
     // 1. Buscar producto existente

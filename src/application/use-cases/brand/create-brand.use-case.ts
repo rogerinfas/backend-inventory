@@ -1,11 +1,16 @@
+import { Injectable, Inject } from '@nestjs/common';
 import { Brand } from '../../../domain/entities/brand.entity';
 import { CreateBrandDto, BrandResponseDto } from '../../dto/brand';
-import { BrandRepository } from '../../../domain/repositories';
+import type { BrandRepository } from '../../../domain/repositories';
 import { BrandMapper } from '../../mappers';
 import { BrandAlreadyExistsError } from '../../errors';
 
+@Injectable()
 export class CreateBrandUseCase {
-  constructor(private readonly brandRepository: BrandRepository) {}
+  constructor(
+    @Inject('BrandRepository')
+    private readonly brandRepository: BrandRepository
+  ) {}
 
   async execute(dto: CreateBrandDto): Promise<BrandResponseDto> {
     // Verificar que no exista otra marca con el mismo nombre

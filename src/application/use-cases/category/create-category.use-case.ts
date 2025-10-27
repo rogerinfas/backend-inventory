@@ -1,11 +1,16 @@
+import { Injectable, Inject } from '@nestjs/common';
 import { Category } from '../../../domain/entities/category.entity';
 import { CreateCategoryDto, CategoryResponseDto } from '../../dto/category';
-import { CategoryRepository } from '../../../domain/repositories';
+import type { CategoryRepository } from '../../../domain/repositories';
 import { CategoryMapper } from '../../mappers';
 import { CategoryAlreadyExistsError } from '../../errors';
 
+@Injectable()
 export class CreateCategoryUseCase {
-  constructor(private readonly categoryRepository: CategoryRepository) {}
+  constructor(
+    @Inject('CategoryRepository')
+    private readonly categoryRepository: CategoryRepository
+  ) {}
 
   async execute(dto: CreateCategoryDto): Promise<CategoryResponseDto> {
     // Verificar que no exista otra categoría con el mismo nombre

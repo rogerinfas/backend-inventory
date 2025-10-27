@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import type { ProductRepository } from '../../../domain/repositories/product.repository';
 import { CreateProductDto, ProductResponseDto } from '../../dto/product';
 import { ProductMapper } from '../../mappers/product.mapper';
@@ -6,7 +6,10 @@ import { ProductAlreadyExistsError } from '../../errors/domain-errors';
 
 @Injectable()
 export class CreateProductUseCase {
-  constructor(private readonly productRepository: ProductRepository) {}
+  constructor(
+    @Inject('ProductRepository')
+    private readonly productRepository: ProductRepository
+  ) {}
 
   async execute(dto: CreateProductDto): Promise<ProductResponseDto> {
     // 1. Verificar unicidad de SKU
