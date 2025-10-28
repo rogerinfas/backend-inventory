@@ -41,7 +41,7 @@ export class DataInitializationService {
   private readonly SELLER_PASSWORD = 'seller123';
   
   // Default store configuration
-  private readonly DEFAULT_STORE_ID = '00000000-0000-0000-0000-000000000000';
+  private readonly DEFAULT_STORE_ID = '123e4567-e89b-12d3-a456-426614174000';
   private readonly DEFAULT_STORE_NAME = 'Tienda de Prueba';
   private readonly DEFAULT_STORE_RUC = '20123456781';
   private readonly DEFAULT_STORE_ADDRESS = 'Dirección de la tienda de prueba';
