@@ -336,4 +336,11 @@ export class UserPrismaRepository implements UserRepository {
       personData.updatedAt,
     );
   }
+
+  async countByStatus(status: EntityStatus, tx?: PrismaTransaction): Promise<number> {
+    const client = tx || this.prisma;
+    return client.user.count({
+      where: { status },
+    });
+  }
 }

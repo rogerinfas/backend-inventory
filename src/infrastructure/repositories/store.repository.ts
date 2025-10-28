@@ -174,4 +174,10 @@ export class StorePrismaRepository implements StoreRepository {
 
     return this.prisma.store.count({ where });
   }
+
+  async countByStatus(status: EntityStatus): Promise<number> {
+    return this.prisma.store.count({
+      where: { status },
+    });
+  }
 }

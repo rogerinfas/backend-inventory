@@ -330,4 +330,59 @@ export class SalePrismaRepository implements SaleRepository {
       },
     });
   }
+
+  async getTotalSalesByDateRange(
+    startDate: Date,
+    endDate: Date,
+    storeId: string | null,
+    status?: string
+  ): Promise<number> {
+    const where: any = {
+      saleDate: {
+        gte: startDate,
+        lte: endDate,
+      },
+    };
+
+    if (storeId) {
+      where.storeId = storeId;
+    }
+
+    if (status) {
+      where.status = status;
+    }
+
+    const result = await this.prisma.sale.aggregate({
+      where,
+      _sum: {
+        total: true,
+      },
+    });
+
+    return Number(result._sum.total) || 0;
+  }
+
+  async countSalesByDateRange(
+    startDate: Date,
+    endDate: Date,
+    storeId: string | null,
+    status?: string
+  ): Promise<number> {
+    const where: any = {
+      saleDate: {
+        gte: startDate,
+        lte: endDate,
+      },
+    };
+
+    if (storeId) {
+      where.storeId = storeId;
+    }
+
+    if (status) {
+      where.status = status;
+    }
+
+    return this.prisma.sale.count({ where });
+  }
 }

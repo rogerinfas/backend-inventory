@@ -15,6 +15,7 @@ import { SaleModule } from './infrastructure/modules/sale.module';
 import { DatabaseModule } from './infrastructure/modules/database.module';
 import { AuthModule } from './infrastructure/modules/auth.module';
 import { DataInitializationModule } from './infrastructure/modules/data-initialization.module';
+import { DashboardModule } from './infrastructure/modules/dashboard.module';
 import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
 import { StoreScopeGuard } from './infrastructure/guards/store-scope.guard';
 
@@ -34,7 +35,8 @@ import { StoreScopeGuard } from './infrastructure/guards/store-scope.guard';
     PurchaseModule, 
     SaleModule, 
     AuthModule,
-    DataInitializationModule, // Add the new module here
+    DataInitializationModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [

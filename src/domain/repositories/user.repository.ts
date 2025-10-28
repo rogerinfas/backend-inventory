@@ -126,4 +126,12 @@ export interface UserRepository {
    * @returns Persona encontrada o null
    */
   findPersonById(personId: string, tx?: PrismaTransaction): Promise<Person | null>;
+  
+  /**
+   * Contar usuarios por estado
+   * @param status - Estado de los usuarios
+   * @param tx - Transacción opcional
+   * @returns Número de usuarios con ese estado
+   */
+  countByStatus(status: EntityStatus, tx?: PrismaTransaction): Promise<number>;
 }

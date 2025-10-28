@@ -271,4 +271,17 @@ export class CustomerPrismaRepository implements CustomerRepository {
     const prisma = tx || this.prisma;
     return prisma.customer.count({ where });
   }
+
+  async countByStatus(status: EntityStatus, storeId: string | null, tx?: PrismaTransaction): Promise<number> {
+    const where: any = {
+      status,
+    };
+
+    if (storeId) {
+      where.storeId = storeId;
+    }
+
+    const prisma = tx || this.prisma;
+    return prisma.customer.count({ where });
+  }
 }

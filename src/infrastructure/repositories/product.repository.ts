@@ -587,4 +587,19 @@ export class ProductPrismaRepository implements ProductRepository {
       updated.brandId
     );
   }
+
+  async countProductsInStock(storeId: string | null): Promise<number> {
+    const where: any = {
+      currentStock: {
+        gt: 0,
+      },
+      isActive: true,
+    };
+
+    if (storeId) {
+      where.storeId = storeId;
+    }
+
+    return this.prisma.product.count({ where });
+  }
 }

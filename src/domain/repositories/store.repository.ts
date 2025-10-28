@@ -72,4 +72,11 @@ export interface StoreRepository {
    * @returns Número total de tiendas que coinciden
    */
   count(filters?: StoreQueryFilters): Promise<number>;
+  
+  /**
+   * Contar tiendas por estado
+   * @param status - Estado de las tiendas
+   * @returns Número de tiendas con ese estado
+   */
+  countByStatus(status: EntityStatus): Promise<number>;
 }

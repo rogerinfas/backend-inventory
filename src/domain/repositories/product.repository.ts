@@ -36,4 +36,7 @@ export interface ProductRepository {
   decreaseStock(productId: string, quantity: number, storeId: string, tx?: any): Promise<Product>;
   // Establecer reservedStock (validando que sea <= currentStock y tienda)
   setReservedStock(productId: string, reservedStock: number, storeId: string, tx?: any): Promise<Product>;
+  
+  // Métodos para dashboard/estadísticas
+  countProductsInStock(storeId: string | null): Promise<number>;
 }

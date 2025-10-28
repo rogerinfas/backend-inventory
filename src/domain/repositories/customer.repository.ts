@@ -26,4 +26,7 @@ export interface CustomerRepository {
   delete(id: string, tx?: PrismaTransaction): Promise<void>;
   exists(id: string, tx?: PrismaTransaction): Promise<boolean>;
   count(filters?: CustomerQueryFilters, tx?: PrismaTransaction): Promise<number>;
+  
+  // Métodos para dashboard/estadísticas
+  countByStatus(status: EntityStatus, storeId: string | null, tx?: PrismaTransaction): Promise<number>;
 }

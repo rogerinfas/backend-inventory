@@ -45,4 +45,19 @@ export interface SaleRepository {
   // Métodos para gestión de series
   getNextDocumentNumber(storeId: string, documentType: string, series: string): Promise<string>;
   incrementDocumentNumber(storeId: string, documentType: string, series: string, tx?: any): Promise<void>;
+  
+  // Métodos para dashboard/estadísticas
+  getTotalSalesByDateRange(
+    startDate: Date,
+    endDate: Date,
+    storeId: string | null,
+    status?: string
+  ): Promise<number>;
+  
+  countSalesByDateRange(
+    startDate: Date,
+    endDate: Date,
+    storeId: string | null,
+    status?: string
+  ): Promise<number>;
 }

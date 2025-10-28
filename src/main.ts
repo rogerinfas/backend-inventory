@@ -44,6 +44,7 @@ async function bootstrap() {
     .setDescription('API para gestión de inventario con Clean Architecture')
     .setVersion('1.0')
     .addTag('auth', 'Autenticación')
+    .addTag('dashboard', 'Dashboard')
     .addTag('users', 'Gestión de usuarios')
     .addTag('persons', 'Gestión de personas')
     .addTag('stores', 'Gestión de tiendas')
