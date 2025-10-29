@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import type { SunatConfigRepository, StoreRepository } from '../../../domain/repositories';
 import { CreateSunatConfigDto, SunatConfigResponseDto } from '../../dto/sunat-config';
 import { SunatConfigMapper } from '../../mappers/sunat-config.mapper';
@@ -11,8 +11,8 @@ import {
 @Injectable()
 export class CreateSunatConfigUseCase {
   constructor(
-    private readonly sunatConfigRepository: SunatConfigRepository,
-    private readonly storeRepository: StoreRepository,
+    @Inject('SunatConfigRepository') private readonly sunatConfigRepository: SunatConfigRepository,
+    @Inject('StoreRepository') private readonly storeRepository: StoreRepository,
   ) {}
 
   async execute(dto: CreateSunatConfigDto): Promise<SunatConfigResponseDto> {

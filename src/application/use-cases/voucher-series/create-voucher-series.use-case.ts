@@ -1,11 +1,15 @@
+import { Injectable, Inject } from '@nestjs/common';
 import { VoucherSeries } from '../../../domain/entities/voucher-series.entity';
 import { CreateVoucherSeriesDto, VoucherSeriesResponseDto } from '../../dto/voucher-series';
-import { VoucherSeriesRepository } from '../../../domain/repositories';
+import type { VoucherSeriesRepository } from '../../../domain/repositories';
 import { VoucherSeriesMapper } from '../../mappers';
 import { VoucherSeriesAlreadyExistsError } from '../../errors';
 
+@Injectable()
 export class CreateVoucherSeriesUseCase {
-  constructor(private readonly voucherSeriesRepository: VoucherSeriesRepository) {}
+  constructor(
+    @Inject('VoucherSeriesRepository') private readonly voucherSeriesRepository: VoucherSeriesRepository
+  ) {}
 
   async execute(dto: CreateVoucherSeriesDto): Promise<VoucherSeriesResponseDto> {
     // Verificar que no exista otra serie con el mismo storeId, voucherType y series

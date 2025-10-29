@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../../../infrastructure/database/prisma.service';
 import type { PersonRepository, CustomerRepository, StoreRepository } from '../../../domain/repositories';
 import { CreateCustomerWithPersonDto } from '../../dto/customer/create-customer-with-person.dto';
@@ -18,9 +18,9 @@ import * as crypto from 'crypto';
 @Injectable()
 export class CreateCustomerWithPersonUseCase {
   constructor(
-    private readonly personRepository: PersonRepository,
-    private readonly customerRepository: CustomerRepository,
-    private readonly storeRepository: StoreRepository,
+    @Inject('PersonRepository') private readonly personRepository: PersonRepository,
+    @Inject('CustomerRepository') private readonly customerRepository: CustomerRepository,
+    @Inject('StoreRepository') private readonly storeRepository: StoreRepository,
     private readonly prismaService: PrismaService,
   ) {}
 

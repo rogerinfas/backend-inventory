@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import type { PurchaseRepository, StoreRepository, SupplierRepository, UserRepository, ProductRepository } from '../../../domain/repositories';
 import { CreatePurchaseDto, PurchaseResponseDto } from '../../dto/purchase';
 import { PurchaseMapper } from '../../mappers';
@@ -16,11 +16,11 @@ import { PrismaService } from '../../../infrastructure/database/prisma.service';
 @Injectable()
 export class CreatePurchaseUseCase {
   constructor(
-    private readonly purchaseRepository: PurchaseRepository,
-    private readonly storeRepository: StoreRepository,
-    private readonly supplierRepository: SupplierRepository,
-    private readonly userRepository: UserRepository,
-    private readonly productRepository: ProductRepository,
+    @Inject('PurchaseRepository') private readonly purchaseRepository: PurchaseRepository,
+    @Inject('StoreRepository') private readonly storeRepository: StoreRepository,
+    @Inject('SupplierRepository') private readonly supplierRepository: SupplierRepository,
+    @Inject('UserRepository') private readonly userRepository: UserRepository,
+    @Inject('ProductRepository') private readonly productRepository: ProductRepository,
     private readonly prismaService: PrismaService,
   ) {}
 

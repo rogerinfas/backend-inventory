@@ -1,10 +1,15 @@
-import { SupplierRepository } from '../../../domain/repositories/supplier.repository';
+import { Injectable, Inject } from '@nestjs/common';
+import type{ SupplierRepository } from '../../../domain/repositories/supplier.repository';
 import { CreateSupplierDto, SupplierResponseDto } from '../../dto/supplier';
 import { SupplierMapper } from '../../mappers/supplier.mapper';
 import { SupplierAlreadyExistsError } from '../../errors/domain-errors';
 
+@Injectable()
 export class CreateSupplierUseCase {
-  constructor(private readonly supplierRepository: SupplierRepository) {}
+  constructor(
+    @Inject('SupplierRepository')
+    private readonly supplierRepository: SupplierRepository
+  ) {}
 
   async execute(dto: CreateSupplierDto): Promise<SupplierResponseDto> {
     // 1. Verificar que no exista ya un proveedor para esta tienda y persona
