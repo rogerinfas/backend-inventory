@@ -37,15 +37,8 @@ export class VoucherSeriesController {
     return this.voucherSeriesService.createVoucherSeries(createVoucherSeriesDto);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Obtener serie de comprobantes por ID' })
-  @ApiParam({ name: 'id', description: 'ID único de la serie de comprobantes', type: 'string' })
-  @ApiResponse({ status: 200, description: 'Serie de comprobantes encontrada', type: VoucherSeriesResponseDto })
-  @ApiResponse({ status: 404, description: 'Serie de comprobantes no encontrada' })
-  async getVoucherSeriesById(@Param('id') id: string): Promise<VoucherSeriesResponseDto | null> {
-    return this.voucherSeriesService.getVoucherSeriesById(id);
-  }
-
+  // IMPORTANTE: La ruta genérica @Get() debe ir ANTES que @Get(':id')
+  // para que NestJS pueda hacer match correctamente
   @Get()
   @ApiOperation({ summary: 'Listar series de comprobantes con filtros y paginación' })
   @ApiQuery({ name: 'storeId', required: false, description: 'Filtrar por ID de tienda' })
@@ -60,18 +53,23 @@ export class VoucherSeriesController {
     return this.voucherSeriesService.listVoucherSeries(query);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar datos de una serie de comprobantes (actualización parcial)' })
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtener serie de comprobantes por ID' })
   @ApiParam({ name: 'id', description: 'ID único de la serie de comprobantes', type: 'string' })
-  @ApiResponse({ status: 200, description: 'Serie de comprobantes actualizada exitosamente', type: VoucherSeriesResponseDto })
-  @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
+  @ApiResponse({ status: 200, description: 'Serie de comprobantes encontrada', type: VoucherSeriesResponseDto })
   @ApiResponse({ status: 404, description: 'Serie de comprobantes no encontrada' })
-  @ApiResponse({ status: 409, description: 'Ya existe una serie con el mismo tipo y serie' })
-  async updateVoucherSeries(
-    @Param('id') id: string,
-    @Body() updateVoucherSeriesDto: UpdateVoucherSeriesDto,
-  ): Promise<VoucherSeriesResponseDto> {
-    return this.voucherSeriesService.updateVoucherSeries(id, updateVoucherSeriesDto);
+  async getVoucherSeriesById(@Param('id') id: string): Promise<VoucherSeriesResponseDto | null> {
+    return this.voucherSeriesService.getVoucherSeriesById(id);
+  }
+
+  // Rutas específicas PRIMERO (con segmentos fijos como ':id/next-number')
+  @Get(':id/next-number')
+  @ApiOperation({ summary: 'Obtener el siguiente número de una serie de comprobantes' })
+  @ApiParam({ name: 'id', description: 'ID único de la serie de comprobantes', type: 'string' })
+  @ApiResponse({ status: 200, description: 'Siguiente número obtenido exitosamente' })
+  @ApiResponse({ status: 404, description: 'Serie de comprobantes no encontrada' })
+  async getNextNumber(@Param('id') id: string): Promise<NextNumberResult> {
+    return this.voucherSeriesService.getNextNumber(id);
   }
 
   @Put(':id/increment')
@@ -87,13 +85,18 @@ export class VoucherSeriesController {
     return this.voucherSeriesService.incrementVoucherSeries(id, incrementDto);
   }
 
-  @Get(':id/next-number')
-  @ApiOperation({ summary: 'Obtener el siguiente número de una serie de comprobantes' })
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar datos de una serie de comprobantes (actualización parcial)' })
   @ApiParam({ name: 'id', description: 'ID único de la serie de comprobantes', type: 'string' })
-  @ApiResponse({ status: 200, description: 'Siguiente número obtenido exitosamente' })
+  @ApiResponse({ status: 200, description: 'Serie de comprobantes actualizada exitosamente', type: VoucherSeriesResponseDto })
+  @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
   @ApiResponse({ status: 404, description: 'Serie de comprobantes no encontrada' })
-  async getNextNumber(@Param('id') id: string): Promise<NextNumberResult> {
-    return this.voucherSeriesService.getNextNumber(id);
+  @ApiResponse({ status: 409, description: 'Ya existe una serie con el mismo tipo y serie' })
+  async updateVoucherSeries(
+    @Param('id') id: string,
+    @Body() updateVoucherSeriesDto: UpdateVoucherSeriesDto,
+  ): Promise<VoucherSeriesResponseDto> {
+    return this.voucherSeriesService.updateVoucherSeries(id, updateVoucherSeriesDto);
   }
 
   @Delete(':id')
